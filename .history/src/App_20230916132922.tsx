@@ -10,8 +10,8 @@ export default function App() {
     <>
     <Stack gap={5}>
       <Navbar />
-      <Home/>
       <Titlebar />
+      <Home/>
       <Container>hello world!</Container>
     </Stack>
     </>
