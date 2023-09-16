@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Box } from "@mui/material";
 
 export default function Home() {
@@ -9,7 +9,7 @@ export default function Home() {
     { difficulty: "Hard", count: 15 },
   ];
   // State to hold the practice questions data
-  const [questionsData, setQuestionsData] = useState(practiceQuestions);
+  // const [questionsData, setQuestionsData] = useState(practiceQuestions);
 
   // You can fetch the actual data from your API using useEffect
 
@@ -28,8 +28,8 @@ export default function Home() {
         <div>
           <h2>Practice Questions</h2>
           <ul>
-            {questionsData.map((question, index) => (
-              <li key={index}>
+            {practiceQuestions.map((question) => (
+              <li key={question.difficulty}>
                 {question.difficulty}: {question.count} questions
               </li>
             ))}
