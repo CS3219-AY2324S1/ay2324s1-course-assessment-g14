@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Box } from "@mui/material";
-import { useData } from "../data/data.context";
 
 export default function Home() {
   // Sample data for practice questions (you can replace this with actual data)
@@ -9,8 +8,6 @@ export default function Home() {
     { difficulty: "Medium", count: 20 },
     { difficulty: "Hard", count: 15 },
   ];
-  const { getQuestions } = useData();
-
   // State to hold the practice questions data
   const [questionsData, setQuestionsData] = useState(practiceQuestions);
 
