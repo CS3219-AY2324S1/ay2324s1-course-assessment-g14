@@ -25,6 +25,7 @@ export default function SignUp() {
       <Navbar />
       <CenteredContainer>
         <TextField
+          sx={{ width: "25ch" }}
           label="email"
           variant="outlined"
           value={email}

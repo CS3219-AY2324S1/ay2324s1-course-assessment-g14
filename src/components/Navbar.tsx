@@ -1,6 +1,7 @@
-import * as React from "react";
+import { MouseEvent, useState } from "react";
 import {
   AppBar,
+  Avatar,
   Box,
   Button,
   Container,
@@ -8,10 +9,12 @@ import {
   Menu,
   MenuItem,
   Toolbar,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import AdbIcon from "@mui/icons-material/Adb";
+import { useAuth } from "../auth/auth.context";
 
 const pages = ["Products", "Pricing", "Blog"];
 const authPages = [
@@ -24,20 +27,17 @@ const authPages = [
     link: "/signup",
   },
 ];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
-function Navbar() {
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-    null
-  );
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-    null
-  );
+export default function Navbar() {
+  const { user, logout } = useAuth();
+  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
-  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
+  const handleOpenNavMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+
+  const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };
 
@@ -48,6 +48,13 @@ function Navbar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const settings = [
+    { name: "Profile", onclick: handleCloseUserMenu },
+    { name: "Account", onclick: handleCloseUserMenu },
+    { name: "Dashboard", onclick: handleCloseUserMenu },
+    { name: "Logout", onclick: logout },
+  ];
 
   return (
     <AppBar position="static">
@@ -62,7 +69,7 @@ function Navbar() {
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
+              fontFamily: "Roboto",
               fontWeight: 700,
               letterSpacing: ".3rem",
               color: "inherit",
@@ -145,18 +152,27 @@ function Navbar() {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-              {authPages.map((page) => (
-                <Button
-                  key={page.name}
-                  // onClick={handleCloseNavMenu}
-                  href={page.link}
-                  sx={{ my: 2, color: "white", display: "block" }}
-                >
-                  {page.name}
-                </Button>
-              ))}
-            </Box>
+            {!user && (
+              <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+                {authPages.map((page) => (
+                  <Button
+                    key={page.name}
+                    // onClick={handleCloseNavMenu}
+                    href={page.link}
+                    sx={{ my: 2, color: "white", display: "block" }}
+                  >
+                    {page.name}
+                  </Button>
+                ))}
+              </Box>
+            )}
+            {user && (
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                </IconButton>
+              </Tooltip>
+            )}
             <Menu
               sx={{ mt: "45px" }}
               id="menu-appbar"
@@ -174,8 +190,8 @@ function Navbar() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+                <MenuItem key={setting.name} onClick={setting.onclick}>
+                  <Typography textAlign="center">{setting.name}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -185,4 +201,3 @@ function Navbar() {
     </AppBar>
   );
 }
-export default Navbar;

@@ -10,7 +10,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleClickSignUp = () => login(email, password);
+  const handleClickLogin = () => login(email, password);
 
   return (
     <Box height="100vh">
@@ -18,13 +18,14 @@ export default function Login() {
       <Navbar />
       <CenteredContainer>
         <TextField
+          sx={{ width: "25ch" }}
           label="email"
           variant="outlined"
           value={email}
           onChange={(e) => setEmail(e.currentTarget.value)}
         />
         <PasswordField password={password} setPassword={setPassword} />
-        <Button variant="contained" onClick={handleClickSignUp}>
+        <Button variant="contained" onClick={handleClickLogin}>
           Login
         </Button>
         {error && <Typography>{error}</Typography>}

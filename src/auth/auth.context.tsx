@@ -55,7 +55,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       signInWithEmailAndPassword(auth, email, password)
         .then((u) => {
           setUser(u.user);
-          navigate("/");
+          navigate("/home", { replace: true });
         })
         .catch((e) => setError(e.message));
     },
@@ -64,9 +64,12 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
   const logout = useCallback(() => {
     signOut(auth)
-      .then(() => setUser(undefined))
+      .then(() => {
+        setUser(undefined);
+        navigate("/", { replace: true });
+      })
       .catch((e) => setError(e.message));
-  }, [setUser]);
+  }, [setUser, navigate]);
 
   const authContextProviderValue = useMemo(
     () => ({ user, error, signUp, login, logout }),
@@ -80,6 +83,6 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   );
 }
 
-export function useAuth() {
+export const useAuth = () => {
   return useContext(AuthContext);
-}
+};
