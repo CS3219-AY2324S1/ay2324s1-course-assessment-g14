@@ -114,7 +114,7 @@ export default function Navbar() {
                 </MenuItem>
               ))}
               {authPages.map((page) => (
-                <MenuItem key={page.name} href={page.link}>
+                <MenuItem key={page.name} onClick={() => (window as Window).location = page.link}>
                   <Typography textAlign="center">{page.name}</Typography>
                 </MenuItem>
               ))}
