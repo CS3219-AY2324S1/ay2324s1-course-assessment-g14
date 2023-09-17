@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import { useEffect } from "react";
+import { Box } from "@mui/material";
 
-function Home() {
+export default function Home() {
   // Sample data for practice questions (you can replace this with actual data)
   const practiceQuestions = [
-    { difficulty: 'Easy', count: 10 },
-    { difficulty: 'Medium', count: 20 },
-    { difficulty: 'Hard', count: 15 },
+    { difficulty: "Easy", count: 10 },
+    { difficulty: "Medium", count: 20 },
+    { difficulty: "Hard", count: 15 },
   ];
-
   // State to hold the practice questions data
-  const [questionsData, setQuestionsData] = useState(practiceQuestions);
+  // const [questionsData, setQuestionsData] = useState(practiceQuestions);
 
   // You can fetch the actual data from your API using useEffect
 
@@ -22,22 +22,20 @@ function Home() {
   }, []);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center' }}>
+    <Box>
       <div>
         <h1>Welcome to the Technical Interview Preparation Portal</h1>
         <div>
           <h2>Practice Questions</h2>
           <ul>
-            {questionsData.map((question, index) => (
-              <li key={index}>
+            {practiceQuestions.map((question) => (
+              <li key={question.difficulty}>
                 {question.difficulty}: {question.count} questions
               </li>
             ))}
           </ul>
         </div>
       </div>
-    </div>
+    </Box>
   );
 }
-
-export default Home;
