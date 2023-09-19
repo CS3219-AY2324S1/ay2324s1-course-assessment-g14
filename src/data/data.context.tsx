@@ -1,11 +1,12 @@
 import { createContext, ReactNode, useContext, useMemo, useState } from "react";
 import { db } from "../firebase/firebase";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query } from "firebase/firestore";
 
 interface Response {
   type: "success" | "error" | undefined;
   message: any;
   result: any;
+  //result2: any;
 }
 
 interface DataContextData {
@@ -22,6 +23,7 @@ const emptyResponse: Response = {
   type: undefined,
   message: "",
   result: undefined,
+  //result2: undefined,
 };
 
 const DataContext = createContext<DataContextData>({
@@ -37,14 +39,21 @@ export function DataContextProvider({ children }: DataContextProviderProps) {
   const getQuestions = async () => {
     try {
       let questions: any[] = [];
+      //let examples: any[] = [];
       setLoading(true);
-      const query = await getDocs(collection(db, "questions"));
-      query.forEach((doc) => questions.push(doc.data()));
+      const questionsQuery = await getDocs(collection(db, "questions"));
+      
+      //TODO: get examples for questions
+      //const examplesQuery = await getDocs(query(collection(db, "questions", "1", "examples")));
+      //examplesQuery.forEach((doc) => examples.push(doc.data()));
+      
+      questionsQuery.forEach((doc) => questions.push(doc.data()));
       setLoading(false);
       setResponse({
         type: "success",
         message: "successfully retreived questions",
         result: questions,
+        //result2: examples,
       });
     } catch (e) {
       setLoading(false);
@@ -52,6 +61,7 @@ export function DataContextProvider({ children }: DataContextProviderProps) {
         type: "error",
         message: e,
         result: undefined,
+        //result2: undefined,
       });
     }
   };

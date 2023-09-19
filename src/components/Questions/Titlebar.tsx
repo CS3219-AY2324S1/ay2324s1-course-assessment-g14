@@ -22,6 +22,7 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
+import { useData } from "../../data/data.context";
 
 interface Data {
   title: string;
@@ -47,8 +48,8 @@ function createData(
   };
 }
 
+/*
 const rows = [
-  // TODO: Pull data from Firebase
   createData(1, "question 1", "Easy", "Algo", "desc"),
   createData(2, "question 2", "Medium", "ML", "desc"),
   createData(3, "question 3", "Hard", "ML", "desc"),
@@ -61,7 +62,8 @@ const rows = [
   createData(10, "question 10", "Medium", "ML", "desc"),
   createData(11, "question 11", "Hard", "ML", "desc"),
   createData(12, "question 12", "Medium", "ML", "desc"),
-];
+]; 
+*/
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -272,6 +274,40 @@ export default function EnhancedTable() {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
+  const { loading, response, getQuestions } = useData();
+  const [rows, setRows] = React.useState<any[]>([]);
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await getQuestions();
+        console.log("useEffect");
+        if (response.type === "error") {
+          console.log("error");
+          // Handle errors, display messages, or update state accordingly
+        } else if (response.type === "success") {
+          console.log("success");
+          //console.log(response.result);
+  
+          // Process and set the data in the state
+          const processedRows = response.result.map((question: { title: any; difficulty: any; categories: any[]; description: any; }, index: number) => {
+            const questionId = index + 1;
+            const questionTitle = question.title;
+            const questionComplexity = question.difficulty;
+            const questionCategory = question.categories.join(", "); // Join categories
+            const questionDesc = question.description;
+            return createData(questionId, questionTitle, questionComplexity, questionCategory, questionDesc);
+          });
+          setRows(processedRows);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        // Handle other errors or show a generic error message
+      }
+    };
+  
+    fetchData();
+  }, []); 
+  
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
     property: keyof Data
@@ -360,13 +396,13 @@ export default function EnhancedTable() {
             />
             <TableBody>
               {visibleRows.map((row, index) => {
-                const isItemSelected = isSelected(row.id);
+                const isItemSelected = isSelected(Number(row.id));
                 const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
                   <TableRow
                     hover
-                    onClick={(event) => handleClick(event, row.id)}
+                    onClick={(event) => handleClick(event, Number(row.id))}
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
