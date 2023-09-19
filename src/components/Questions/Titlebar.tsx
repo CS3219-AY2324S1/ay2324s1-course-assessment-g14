@@ -48,22 +48,21 @@ function createData(
   };
 }
 
-/*
-const rows = [
-  createData(1, "question 1", "Easy", "Algo", "desc"),
-  createData(2, "question 2", "Medium", "ML", "desc"),
-  createData(3, "question 3", "Hard", "ML", "desc"),
-  createData(4, "question 4", "Easy", "ML", "desc"),
-  createData(5, "question 5", "Medium", "ML", "desc"),
-  createData(6, "question 6", "Easy", "ML", "desc"),
-  createData(7, "question 7", "Medium", "ML", "desc"),
-  createData(8, "question 8", "Medium", "ML", "desc"),
-  createData(9, "question 9", "Hard", "ML", "desc"),
-  createData(10, "question 10", "Medium", "ML", "desc"),
-  createData(11, "question 11", "Hard", "ML", "desc"),
-  createData(12, "question 12", "Medium", "ML", "desc"),
-]; 
-*/
+//const rows = [
+  // TODO: Pull data from Firebase
+  // createData(1, "question 1", "Easy", "Algo", "desc"),
+  // createData(2, "question 2", "Medium", "ML", "desc"),
+  // createData(3, "question 3", "Hard", "ML", "desc"),
+  // createData(4, "question 4", "Easy", "ML", "desc"),
+  // createData(5, "question 5", "Medium", "ML", "desc"),
+  // createData(6, "question 6", "Easy", "ML", "desc"),
+  // createData(7, "question 7", "Medium", "ML", "desc"),
+  // createData(8, "question 8", "Medium", "ML", "desc"),
+  // createData(9, "question 9", "Hard", "ML", "desc"),
+  // createData(10, "question 10", "Medium", "ML", "desc"),
+  // createData(11, "question 11", "Hard", "ML", "desc"),
+  // createData(12, "question 12", "Medium", "ML", "desc"),
+//];
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -274,39 +273,31 @@ export default function EnhancedTable() {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-  const { loading, response, getQuestions } = useData();
-  const [rows, setRows] = React.useState<any[]>([]);
+  const [rows, setRows] = React.useState<Data[]>([]);
+  const { response, loading, questions, getQuestions } = useData();
+  const [refreshKey, setRefreshKey] = React.useState(0); //trying to trigger a re-render
+
   React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        await getQuestions();
-        console.log("useEffect");
-        if (response.type === "error") {
-          console.log("error");
-          // Handle errors, display messages, or update state accordingly
-        } else if (response.type === "success") {
-          console.log("success");
-          //console.log(response.result);
-  
-          // Process and set the data in the state
-          const processedRows = response.result.map((question: { title: any; difficulty: any; categories: any[]; description: any; }, index: number) => {
-            const questionId = index + 1;
-            const questionTitle = question.title;
-            const questionComplexity = question.difficulty;
-            const questionCategory = question.categories.join(", "); // Join categories
-            const questionDesc = question.description;
-            return createData(questionId, questionTitle, questionComplexity, questionCategory, questionDesc);
-          });
-          setRows(processedRows);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        // Handle other errors or show a generic error message
-      }
-    };
-  
-    fetchData();
-  }, []); 
+    getQuestions();
+  }, []);
+  console.log(questions);
+
+  React.useEffect(() => {
+    if (questions.length) {
+      const result = questions.map((q, i) => {
+        const id = i + 1;
+        const title =  q.title;
+        const complexity = q.difficulty;
+        const category = q.categories.join(", ");
+        const desc = q.description;
+        return createData(id, title, complexity, category, desc);
+      });
+      setRows(result);
+      if (!loading) setRefreshKey(refreshKey + 1); //remove if necessary
+    }
+  }, [questions]);
+
+  React.useEffect(() => {}, [questions]);
   
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -378,83 +369,87 @@ export default function EnhancedTable() {
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Paper sx={{ width: "100%", mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
-        <TableContainer>
-          <Table
-            sx={{ minWidth: 750 }}
-            aria-labelledby="tabletitle"
-            size={dense ? "small" : "medium"}
-          >
-            <EnhancedTableHead
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
-              onRequestSort={handleRequestSort}
-              rowCount={rows.length}
-            />
-            <TableBody>
-              {visibleRows.map((row, index) => {
-                const isItemSelected = isSelected(Number(row.id));
-                const labelId = `enhanced-table-checkbox-${index}`;
+      {/* {!!questions.length && questions.map((q) => <p>{q.title}</p>)} */}
+      {loading && <p>Loading...</p>} {/* Show loading message */}
+      {!loading && rows.length === 0 && <p>No data available.</p>} {/* Show a message when no data */}
+      {!loading && rows.length > 0 && (
+        <Paper sx={{ width: "100%", mb: 2 }}>
+          <EnhancedTableToolbar numSelected={selected.length} />
+          <TableContainer>
+            <Table
+              sx={{ minWidth: 750 }}
+              aria-labelledby="tabletitle"
+              size={dense ? "small" : "medium"}
+            >
+              <EnhancedTableHead
+                numSelected={selected.length}
+                order={order}
+                orderBy={orderBy}
+                onSelectAllClick={handleSelectAllClick}
+                onRequestSort={handleRequestSort}
+                rowCount={rows.length}
+              />
+              <TableBody>
+                {visibleRows.map((row, index) => {
+                  const isItemSelected = isSelected(row.id);
+                  const labelId = `enhanced-table-checkbox-${index}`;
 
-                return (
-                  <TableRow
-                    hover
-                    onClick={(event) => handleClick(event, Number(row.id))}
-                    role="checkbox"
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={row.id}
-                    selected={isItemSelected}
-                    sx={{ cursor: "pointer" }}
-                  >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          "aria-labelledby": labelId,
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell
-                      component="th"
-                      id={labelId}
-                      scope="row"
-                      padding="none"
+                  return (
+                    <TableRow
+                      hover
+                      onClick={(event) => handleClick(event, row.id)}
+                      role="checkbox"
+                      aria-checked={isItemSelected}
+                      tabIndex={-1}
+                      key={row.id}
+                      selected={isItemSelected}
+                      sx={{ cursor: "pointer" }}
                     >
-                      {row.id}
-                    </TableCell>
-                    <TableCell align="left">{row.title}</TableCell>
-                    <TableCell align="left">{row.complexity}</TableCell>
-                    <TableCell align="left">{row.category}</TableCell>
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          color="primary"
+                          checked={isItemSelected}
+                          inputProps={{
+                            "aria-labelledby": labelId,
+                          }}
+                        />
+                      </TableCell>
+                      <TableCell
+                        component="th"
+                        id={labelId}
+                        scope="row"
+                        padding="none"
+                      >
+                        {row.id}
+                      </TableCell>
+                      <TableCell align="left">{row.title}</TableCell>
+                      <TableCell align="left">{row.complexity}</TableCell>
+                      <TableCell align="left">{row.category}</TableCell>
+                    </TableRow>
+                  );
+                })}
+                {emptyRows > 0 && (
+                  <TableRow
+                    style={{
+                      height: (dense ? 33 : 53) * emptyRows,
+                    }}
+                  >
+                    <TableCell colSpan={6} />
                   </TableRow>
-                );
-              })}
-              {emptyRows > 0 && (
-                <TableRow
-                  style={{
-                    height: (dense ? 33 : 53) * emptyRows,
-                  }}
-                >
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Paper>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={rows.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Paper> )}
       <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"
@@ -462,3 +457,40 @@ export default function EnhancedTable() {
     </Box>
   );
 }
+
+// export default function ParentComponent() {
+  
+//   const [rows, setRows] = React.useState<Data[]>([]);
+//   const { response, loading, questions, getQuestions } = useData();
+
+//   React.useEffect(() => {
+//     getQuestions();
+//   }, []);
+
+//   React.useEffect(() => {}, [questions]);
+//   console.log(questions);
+
+//   React.useEffect(() => {
+//     if (questions.length) {
+//       const result = questions.map((q, i) => {
+//         const id = i + 1;
+//         const title =  q.title;
+//         const complexity = q.difficulty;
+//         const category = q.categories.join(", ");
+//         const desc = q.description;
+//         return createData(id, title, complexity, category, desc);
+//       });
+//       setRows(result);
+//     }
+//   }, [questions]);
+
+//   return (
+//     <div>
+//       {loading ? (
+//         <p>Loading...</p>
+//       ) : (
+//         <EnhancedTable rows={rows}/>
+//       )}
+//     </div>
+//   );
+// }
