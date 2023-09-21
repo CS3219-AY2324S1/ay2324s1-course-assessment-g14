@@ -6,16 +6,18 @@ import Titlebar from "../components/Questions/Titlebar";
 import CenteredContainer from "../components/CenteredContainer";
 import ProblemSolver from "../components/ProblemSolver";
 
+const appStyle = {
+  display: "flex",
+  flexDirection: "column",
+  minHeight: "100vh", // Make the container at least 100vh in height
+};
+
 export default function App() {
   return (
-    <Box>
+    <Box style={appStyle}>
       <CssBaseline />
-      <Navbar />    
-      <ProblemSolver /> 
-      {/* <CenteredContainer>
-        <Home />
-        <Titlebar />
-      </CenteredContainer> */}
+      <Navbar />
+      <ProblemSolver style={{ flex: "1" }} />
     </Box>
   );
 }

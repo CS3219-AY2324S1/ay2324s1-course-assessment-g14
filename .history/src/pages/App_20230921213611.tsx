@@ -10,8 +10,8 @@ export default function App() {
   return (
     <Box>
       <CssBaseline />
-      <Navbar />    
-      <ProblemSolver /> 
+      {/* <Navbar /> */}
+      <ProblemSolver style={{ flex: "1", width: "100%" }} />
       {/* <CenteredContainer>
         <Home />
         <Titlebar />

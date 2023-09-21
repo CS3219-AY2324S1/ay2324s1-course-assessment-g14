@@ -10,8 +10,8 @@ export default function App() {
   return (
     <Box>
       <CssBaseline />
-      <Navbar />    
-      <ProblemSolver /> 
+      <Navbar />
+      {/* <ProblemSolver />  */}
       {/* <CenteredContainer>
         <Home />
         <Titlebar />

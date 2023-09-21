@@ -9,8 +9,8 @@ import ProblemSolver from "../components/ProblemSolver";
 export default function App() {
   return (
     <Box>
-      <CssBaseline />
-      <Navbar />    
+      {/* <CssBaseline /> */}
+      <Navbar />
       <ProblemSolver /> 
       {/* <CenteredContainer>
         <Home />

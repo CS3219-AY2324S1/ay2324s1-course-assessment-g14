@@ -10,7 +10,7 @@ export default function App() {
   return (
     <Box>
       <CssBaseline />
-      <Navbar />    
+      {/* <Navbar /> */}
       <ProblemSolver /> 
       {/* <CenteredContainer>
         <Home />

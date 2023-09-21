@@ -10,8 +10,14 @@ export default function App() {
   return (
     <Box>
       <CssBaseline />
-      <Navbar />    
-      <ProblemSolver /> 
+      <Navbar />
+      <Container
+        maxWidth="xl"
+        style={{ margin: '0', padding: '0', height: '100vh' }}
+      >
+        <ProblemSolver />
+      </Container>
+
       {/* <CenteredContainer>
         <Home />
         <Titlebar />

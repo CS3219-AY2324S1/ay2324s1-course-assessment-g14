@@ -8,14 +8,14 @@ import ProblemSolver from "../components/ProblemSolver";
 
 export default function App() {
   return (
+        <ProblemSolver />x
     <Box>
       <CssBaseline />
-      <Navbar />    
-      <ProblemSolver /> 
-      {/* <CenteredContainer>
+      <Navbar />
+      <CenteredContainer>
         <Home />
         <Titlebar />
-      </CenteredContainer> */}
+      </CenteredContainer>
     </Box>
   );
 }

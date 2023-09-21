@@ -1,4 +1,4 @@
-import { Box, CssBaseline } from "@mui/material";
+import { Box, CssBaseline, Container } from "@mui/material";
 import Navbar from "../components/Navbar";
 import Home from "../components/Home";
 import "./App.css";
@@ -10,8 +10,14 @@ export default function App() {
   return (
     <Box>
       <CssBaseline />
-      <Navbar />    
-      <ProblemSolver /> 
+      <Navbar />
+      <Container
+        maxWidth="xl"
+        style={{ margin: '0', padding: '0', height: '100vh' }}
+      >
+        <ProblemSolver />
+      </Container>
+
       {/* <CenteredContainer>
         <Home />
         <Titlebar />

@@ -10,12 +10,12 @@ export default function App() {
   return (
     <Box>
       <CssBaseline />
-      <Navbar />    
-      <ProblemSolver /> 
-      {/* <CenteredContainer>
+      <Navbar />
+      <CenteredContainer>
         <Home />
+        <ProblemSolver />
         <Titlebar />
-      </CenteredContainer> */}
+      </CenteredContainer>
     </Box>
   );
 }
