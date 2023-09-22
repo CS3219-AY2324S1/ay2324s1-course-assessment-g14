@@ -27,6 +27,7 @@ const InterviewQuestionsTable: React.FC = () => {
     }
     getInterviewQuestions();
     console.log("here");
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
