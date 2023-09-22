@@ -25,9 +25,9 @@ const InterviewQuestionsTable: React.FC = () => {
     async function getInterviewQuestions() {
       await getQuestions();
     }
-
     getInterviewQuestions();
-  }, [getQuestions]);
+    console.log("here");
+  }, []);
 
   useEffect(() => {
     setQuestions(questions);
