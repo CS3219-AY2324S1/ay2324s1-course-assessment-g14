@@ -6,7 +6,6 @@ import {
   Container,
   Paper,
   Grid,
-  Link,
 } from "@mui/material";
 
 function Landing() {
