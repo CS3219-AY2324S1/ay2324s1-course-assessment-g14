@@ -31,7 +31,7 @@ const InterviewQuestionsTable: React.FC = () => {
 
   useEffect(() => {
     setQuestions(questions);
-    console.log(questionsData);
+    //console.log(questionsData);
   }, [questions]);
 
   const handlePageChange = (event: unknown, newPage: number) => {
