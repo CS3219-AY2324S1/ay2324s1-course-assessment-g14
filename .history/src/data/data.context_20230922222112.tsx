@@ -88,9 +88,8 @@ export function DataContextProvider({ children }: DataContextProviderProps) {
           examples: examplesArray
         };
       });
-      const finalResult = await Promise.all(result);
       setLoading(false);
-      setQuestions(finalResult);
+      setQuestions(result);
       setResponse({
         type: "success",
         message: "successfully retreived questions",

@@ -4,7 +4,7 @@ import Home from "../components/Home";
 import "./App.css";
 import Titlebar from "../components/Questions/QuestionsTable";
 import CenteredContainer from "../components/CenteredContainer";
-import ProblemSolver from "./ProblemSolver";
+import ProblemSolver from "../components/ProblemSolver";
 import QuestionsTable from "../components/Questions/QuestionsTable";
 
 export default function App() {
@@ -12,11 +12,11 @@ export default function App() {
     <Box>
       <CssBaseline />
       <Navbar />    
-      <ProblemSolver /> 
-      {/* <CenteredContainer>
+      {/* <ProblemSolver />  */}
+      <CenteredContainer>
         <Home />
         <QuestionsTable />
-      </CenteredContainer> */}
+      </CenteredContainer>
     </Box>
   );
 }

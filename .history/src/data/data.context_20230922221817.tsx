@@ -58,6 +58,7 @@ export function DataContextProvider({ children }: DataContextProviderProps) {
       const query = await getDocs(collection(db, "questions"));
       const result = query.docs.map(async (d) => {
         const q = d.data();
+
         
         const getExamples = async () => {
         const examplesSnapshot = await getDocs(collection(db, "questions", q.id, "examples"));
@@ -88,9 +89,8 @@ export function DataContextProvider({ children }: DataContextProviderProps) {
           examples: examplesArray
         };
       });
-      const finalResult = await Promise.all(result);
       setLoading(false);
-      setQuestions(finalResult);
+      setQuestions(result);
       setResponse({
         type: "success",
         message: "successfully retreived questions",

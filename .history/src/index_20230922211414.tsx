@@ -7,7 +7,7 @@ import Login from "./pages/login";
 import SignUp from "./pages/signup";
 import AuthGuard from "./auth/AuthGuard";
 import { DataContextProvider } from "./data/data.context";
-import ProblemSolver from "./pages/ProblemSolver";
+import ProblemSolver from "./components/ProblemSolver";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

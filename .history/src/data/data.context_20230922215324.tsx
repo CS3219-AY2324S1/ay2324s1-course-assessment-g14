@@ -56,27 +56,8 @@ export function DataContextProvider({ children }: DataContextProviderProps) {
     try {
       setLoading(true);
       const query = await getDocs(collection(db, "questions"));
-      const result = query.docs.map(async (d) => {
+      const result = query.docs.map((d) => {
         const q = d.data();
-        
-        const getExamples = async () => {
-        const examplesSnapshot = await getDocs(collection(db, "questions", q.id, "examples"));
-
-        const examplesResult = examplesSnapshot.docs.map((data) => {
-          const exampleData = data.data();
-          return {
-            input: exampleData.input,
-            output: exampleData.output,
-            image: exampleData.image || '', // Use an empty string if image is missing
-          };
-
-        
-        
-        })
-        return examplesResult;
-      }
-        const examplesArray = await getExamples();
-        
         return {
           id: q.id,
           title: q.title,
@@ -85,12 +66,10 @@ export function DataContextProvider({ children }: DataContextProviderProps) {
           constraints: q.constraints,
           difficulty: q.difficulty,
           description: q.description,
-          examples: examplesArray
         };
       });
-      const finalResult = await Promise.all(result);
       setLoading(false);
-      setQuestions(finalResult);
+      setQuestions(result);
       setResponse({
         type: "success",
         message: "successfully retreived questions",
