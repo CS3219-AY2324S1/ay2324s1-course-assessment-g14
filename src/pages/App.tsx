@@ -2,9 +2,8 @@ import { Box, CssBaseline } from "@mui/material";
 import Navbar from "../components/Navbar";
 import Home from "../components/Home";
 import "./App.css";
-import Titlebar from "../components/Questions/Titlebar";
 import CenteredContainer from "../components/CenteredContainer";
-import ButtonModal from "../components/MatchingService/MatchButton";
+import QuestionsTable from "../components/Questions/QuestionsTable";
 
 export default function App() {
   return (
@@ -13,8 +12,7 @@ export default function App() {
       <Navbar />
       <CenteredContainer>
         <Home />
-        <Titlebar />
-        <ButtonModal />
+        <QuestionsTable />
       </CenteredContainer>
     </Box>
   );
