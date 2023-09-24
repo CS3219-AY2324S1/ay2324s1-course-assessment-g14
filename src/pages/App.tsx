@@ -4,6 +4,7 @@ import Home from "../components/Home";
 import "./App.css";
 import Titlebar from "../components/Questions/Titlebar";
 import CenteredContainer from "../components/CenteredContainer";
+import ButtonModal from "../components/MatchingService/MatchButton";
 
 export default function App() {
   return (
@@ -13,6 +14,7 @@ export default function App() {
       <CenteredContainer>
         <Home />
         <Titlebar />
+        <ButtonModal />
       </CenteredContainer>
     </Box>
   );
