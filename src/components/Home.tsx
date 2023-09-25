@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Box } from "@mui/material";
+import ButtonModal from "./MatchingService/MatchButton";
 
 export default function Home() {
   // Sample data for practice questions (you can replace this with actual data)
@@ -34,6 +35,7 @@ export default function Home() {
               </li>
             ))}
           </ul>
+          <ButtonModal />
         </div>
       </div>
     </Box>
