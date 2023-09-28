@@ -43,11 +43,10 @@ function ProblemSolverRight() {
         Code Editor:
       </Typography>
       <Editor
-      height="900px"
-      language={selectedLanguage.toLowerCase()}
+      height="100px"
+      language="javascript"
       theme="vs-dark"
       value={code}
-     
     />
       <Button
         variant="contained"

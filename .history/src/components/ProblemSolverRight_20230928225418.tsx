@@ -1,6 +1,14 @@
 import React, { useState } from 'react';
 import { Paper, Typography, TextField, MenuItem, Button } from '@mui/material';
-import Editor from "@monaco-editor/react";
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+
+import Editor from 'react-simple-code-editor';
+import { highlight, languages } from 'prismjs/components/prism-core';
+import 'prismjs/components/prism-clike';
+import 'prismjs/components/prism-javascript';
+import 'prismjs/themes/prism.css'; //Example style, you can use another
+
 
 const languages: string[] = ['C++', 'Java', 'JavaScript', 'Python'];
 
@@ -42,13 +50,17 @@ function ProblemSolverRight() {
       <Typography variant="h6" gutterBottom style={{ marginTop: '16px' }}>
         Code Editor:
       </Typography>
-      <Editor
-      height="900px"
-      language={selectedLanguage.toLowerCase()}
-      theme="vs-dark"
-      value={code}
-     
-    />
+      <SyntaxHighlighter language="javascript" style={docco}>
+      <TextField
+        multiline
+        fullWidth
+        variant="outlined"
+        rows={40}
+        value={code}
+        onChange={handleCodeChange}
+        style={{ flex: 1, marginTop: '16px' }}
+      />
+        </SyntaxHighlighter>
       <Button
         variant="contained"
         color="primary"

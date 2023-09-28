@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { Paper, Typography, TextField, MenuItem, Button } from '@mui/material';
-import Editor from "@monaco-editor/react";
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+
+
+
 
 const languages: string[] = ['C++', 'Java', 'JavaScript', 'Python'];
 
@@ -42,13 +46,9 @@ function ProblemSolverRight() {
       <Typography variant="h6" gutterBottom style={{ marginTop: '16px' }}>
         Code Editor:
       </Typography>
-      <Editor
-      height="900px"
-      language={selectedLanguage.toLowerCase()}
-      theme="vs-dark"
-      value={code}
-     
-    />
+      <SyntaxHighlighter language="javascript" style={docco}>
+        {code}
+        </SyntaxHighlighter>
       <Button
         variant="contained"
         color="primary"

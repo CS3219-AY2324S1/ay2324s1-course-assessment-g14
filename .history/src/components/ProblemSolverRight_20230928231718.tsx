@@ -44,7 +44,7 @@ function ProblemSolverRight() {
       </Typography>
       <Editor
       height="900px"
-      language={selectedLanguage.toLowerCase()}
+      language="javascript"
       theme="vs-dark"
       value={code}
      

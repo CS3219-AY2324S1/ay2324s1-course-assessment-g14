@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { Paper, Typography, TextField, MenuItem, Button } from '@mui/material';
-import Editor from "@monaco-editor/react";
+import CodeMirror from "@uiw/react-codemirror";
+import { vscodeDark } from "@uiw/codemirror-theme-vscode";
+require('codemirror/mode/javascript/javascript');
+
 
 const languages: string[] = ['C++', 'Java', 'JavaScript', 'Python'];
 
@@ -42,12 +45,10 @@ function ProblemSolverRight() {
       <Typography variant="h6" gutterBottom style={{ marginTop: '16px' }}>
         Code Editor:
       </Typography>
-      <Editor
-      height="900px"
-      language={selectedLanguage.toLowerCase()}
-      theme="vs-dark"
+      <CodeMirror
       value={code}
-     
+      height="900px"
+      theme={vscodeDark}
     />
       <Button
         variant="contained"

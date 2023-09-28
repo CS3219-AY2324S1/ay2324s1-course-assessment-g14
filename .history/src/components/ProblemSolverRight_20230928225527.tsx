@@ -1,6 +1,14 @@
 import React, { useState } from 'react';
 import { Paper, Typography, TextField, MenuItem, Button } from '@mui/material';
-import Editor from "@monaco-editor/react";
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+
+import Editor from 'react-simple-code-editor';
+import { highlight, languages } from 'prismjs/components/prism-core';
+import 'prismjs/components/prism-clike';
+import 'prismjs/components/prism-javascript';
+import 'prismjs/themes/prism.css'; //Example style, you can use another
+
 
 const languages: string[] = ['C++', 'Java', 'JavaScript', 'Python'];
 
@@ -43,11 +51,14 @@ function ProblemSolverRight() {
         Code Editor:
       </Typography>
       <Editor
-      height="900px"
-      language={selectedLanguage.toLowerCase()}
-      theme="vs-dark"
       value={code}
-     
+      onValueChange={code => setCode(code)}
+      highlight={code => highlight(code, languages.js)}
+      padding={10}
+      style={{
+        fontFamily: '"Fira code", "Fira Mono", monospace',
+        fontSize: 12,
+      }}
     />
       <Button
         variant="contained"
