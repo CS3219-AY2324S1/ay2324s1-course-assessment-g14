@@ -8,6 +8,7 @@ import {
   CardMedia,
 } from '@mui/material';
 import { useData } from '../data/data.context';
+import { ClosedCaptionDisabledSharp } from '@mui/icons-material';
 
 const ProblemSolverLeft = () => {
   const { questionId } = useParams();
@@ -46,6 +47,7 @@ const ProblemSolverLeft = () => {
       <Paper elevation={3} sx={{ flex: 1, display: 'flex', flexDirection: 'column', padding: 2 }}>
       <Typography variant="h4" gutterBottom>
         Question not found
+        {questionId}
       </Typography>
     </Paper>
   );

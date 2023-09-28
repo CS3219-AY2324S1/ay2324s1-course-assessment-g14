@@ -28,16 +28,17 @@ root.render(
                   <App />
                 </AuthGuard>
               }
-            />
-            <Route
-              path="/questions/:questionId"
+              />
+              <Route
+              path="/:questionId"
               element={
                 <AuthGuard>
                   <ProblemSolver />
                 </AuthGuard>
               }
-            />
+              />
           </Routes>
+
         </DataContextProvider>
       </AuthContextProvider>
     </Router>

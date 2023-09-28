@@ -99,7 +99,7 @@ const InterviewQuestionsTable: React.FC = () => {
                   page={currentPage - 1}
                   onPageChange={handlePageChange} />
           </div></>
-    
+
   );
 };
 

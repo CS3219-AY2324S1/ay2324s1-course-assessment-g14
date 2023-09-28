@@ -12,11 +12,11 @@ export default function App() {
     <Box>
       <CssBaseline />
       <Navbar />    
-      <ProblemSolver /> 
-      {/* <CenteredContainer>
+      {/* <ProblemSolver />  */}
+      <CenteredContainer>
         <Home />
         <QuestionsTable />
-      </CenteredContainer> */}
+      </CenteredContainer>
     </Box>
   );
 }

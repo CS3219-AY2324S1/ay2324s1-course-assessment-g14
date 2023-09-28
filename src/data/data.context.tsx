@@ -72,11 +72,10 @@ export function DataContextProvider({ children }: DataContextProviderProps) {
 
         
         
-        })
+        }) 
         return examplesResult;
       }
         const examplesArray = await getExamples();
-        
         return {
           id: q.id,
           title: q.title,
@@ -88,6 +87,7 @@ export function DataContextProvider({ children }: DataContextProviderProps) {
           examples: examplesArray
         };
       });
+
       const finalResult = await Promise.all(result);
       setLoading(false);
       setQuestions(finalResult);
@@ -105,7 +105,7 @@ export function DataContextProvider({ children }: DataContextProviderProps) {
   };
 
   const dataContextProviderValue = useMemo(
-    () => ({ loading, response, questions, getQuestions }),
+    () => ({ loading, response, questions, getQuestions}),
     [loading, response, questions]
   );
 
