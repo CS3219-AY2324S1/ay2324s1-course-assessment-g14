@@ -8,7 +8,6 @@ import SignUp from "./pages/signup";
 import AuthGuard from "./auth/AuthGuard";
 import { DataContextProvider } from "./data/data.context";
 import ProblemSolver from "./pages/ProblemSolver";
-import Navbar from "./components/Navbar";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -20,7 +19,6 @@ root.render(
         <DataContextProvider>
           <Routes>
             <Route path="/" element={<App />} />
-            {/* <Route path="/question/" element={<App />} /> */}
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
             <Route
@@ -35,7 +33,6 @@ root.render(
               path="/question/:questionId"
               element={
                 <AuthGuard>
-    
                   <ProblemSolver />
                 </AuthGuard>
               }

@@ -28,7 +28,6 @@ interface DataContextData {
   response: Response;
   questions: Question[];
   getQuestions: () => void;
-  getExamples: (id:string) => void
 }
 
 interface DataContextProviderProps {
@@ -45,7 +44,6 @@ const DataContext = createContext<DataContextData>({
   response: emptyResponse,
   questions: [],
   getQuestions: () => undefined,
-  getExamples: (id:string) => undefined
 });
 
 export function DataContextProvider({ children }: DataContextProviderProps) {
@@ -53,52 +51,31 @@ export function DataContextProvider({ children }: DataContextProviderProps) {
   const [response, setResponse] = useState<Response>(emptyResponse);
   const [questions, setQuestions] = useState<Question[]>([]);
 
-
-  const getExamples = async (id:string) => {
-    const subCollRef = collection(db, "questions", id, "examples")
-
-    const examplesSnapshot = await getDocs(subCollRef);
-    
-    const examplesResult = examplesSnapshot.docs.map((data) => {
-      const exampleData = data.data();
- 
-      return {
-        
-        text: exampleData.text,
-        image: exampleData.img || '', // Use an empty string if image is missing
-      };
-
-    
-    
-      }) 
-      // console.log(examplesSnapshot)
-      return examplesResult;
-     }
-
-
   const getQuestions = async () => {
     try {
       setLoading(true);
-      // console.log("penis")
       const query = await getDocs(collection(db, "questions"));
-      const result = await Promise.all(query.docs.map(async (d) => {
+      const result = query.docs.map(async (d) => {
         const q = d.data();
-        // const getExamples = async () => {
-        // const examplesSnapshot = await getDocs(collection(db, "questions", q.id, "examples"));
-        // console.log(examplesSnapshot)
-        // const examplesResult = examplesSnapshot.docs.map((data) => {
-        //   const exampleData = data.data();
-        //   return {
-        //     text: exampleData.text,
-        //     image: exampleData.img || '', // Use an empty string if image is missing
-        //   };
+        
+        const getExamples = async () => {
+        const examplesSnapshot = await getDocs(collection(db, "questions", q.id, "examples"));
 
-        const examplesArray = await getExamples(d.id)
-    
-    
-        // const examplesArray = await getExamples();
+        const examplesResult = examplesSnapshot.docs.map((data) => {
+          const exampleData = data.data();
+          return {
+            text: exampleData.text,
+            image: exampleData.img || '', // Use an empty string if image is missing
+          };
+
+        
+        
+        }) 
+        return examplesResult;
+      }
+        const examplesArray = await getExamples();
         return {
-          id: d.id,
+          id: q.id,
           title: q.title,
           tags: q.tags,
           categories: q.categories,
@@ -107,11 +84,11 @@ export function DataContextProvider({ children }: DataContextProviderProps) {
           description: q.description,
           examples: examplesArray
         };
-      }));
-      
-    
+      });
+
+      const finalResult = await Promise.all(result);
       setLoading(false);
-      setQuestions(result);
+      setQuestions(finalResult);
       setResponse({
         type: "success",
         message: "successfully retreived questions",
@@ -122,15 +99,11 @@ export function DataContextProvider({ children }: DataContextProviderProps) {
         type: "error",
         message: e,
       });
-    
     }
-  
-    
   };
 
-  
   const dataContextProviderValue = useMemo(
-    () => ({ loading, response, questions, getQuestions, getExamples}),
+    () => ({ loading, response, questions, getQuestions}),
     [loading, response, questions]
   );
 

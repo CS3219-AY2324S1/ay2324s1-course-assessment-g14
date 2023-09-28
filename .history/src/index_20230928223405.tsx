@@ -35,7 +35,7 @@ root.render(
               path="/question/:questionId"
               element={
                 <AuthGuard>
-    
+                  <Navbar />
                   <ProblemSolver />
                 </AuthGuard>
               }

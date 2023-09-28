@@ -84,10 +84,11 @@ function ProblemSolver() {
   }
 
   return (
-    <><Box>
+    <Box
       <CssBaseline />
       <Navbar />
-    </Box><Container
+    </Box>
+    <Container
       sx={{
         display: 'flex',
         flexDirection: 'column',
@@ -104,7 +105,7 @@ function ProblemSolver() {
             <ProblemSolverRight />
           </Grid>
         </Grid>
-      </Container></>
+      </Container>
   );
 }
 

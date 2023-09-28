@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, CssBaseline, Grid, Paper, Typography } from '@mui/material';
+import { Container, Grid, Paper, Typography } from '@mui/material';
 import ProblemSolverLeft from '../components/ProblemSolverLeft';
 import ProblemSolverRight from '../components/ProblemSolverRight';
 import {useData} from '../data/data.context'
@@ -7,7 +7,6 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import { useParams } from 'react-router-dom';
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
-import Navbar from '../components/Navbar';
 
 
 
@@ -37,22 +36,17 @@ function ProblemSolver() {
  
   // Find the question with the specified ID
   const question = questions.find((q) => q.id === questionId);
-  // console.log(questions)
+  console.log(questions)
   // Check if the question doesn't exist
 
   if (loading) {
     return (
-      <Box sx={{display: 'flex',
-      justifyContent: 'center', // Center horizontally
-      alignItems: 'center', // Center vertically
-      minHeight: '100vh',
-      minWidth: '100vw',
-      paddingY: 4, }}>
+      <Box sx={{ display: 'flex' }}>
       <CircularProgress />
     </Box>
     )
   }
-  if (!loading && !question) {
+  if (!question) {
     return (
       <Container
         sx={{
@@ -84,10 +78,7 @@ function ProblemSolver() {
   }
 
   return (
-    <><Box>
-      <CssBaseline />
-      <Navbar />
-    </Box><Container
+    <Container
       sx={{
         display: 'flex',
         flexDirection: 'column',
@@ -96,15 +87,15 @@ function ProblemSolver() {
         paddingY: 4,
       }}
     >
-        <Grid container spacing={1} sx={{ flex: 1 }}>
-          <Grid item xs={12} md={6} sx={{ display: 'flex', flexDirection: 'column', flex: 1, padding: 1 }}>
-            <ProblemSolverLeft />
-          </Grid>
-          <Grid item xs={12} md={6} sx={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-            <ProblemSolverRight />
-          </Grid>
+      <Grid container spacing={1} sx={{ flex: 1 }}>
+        <Grid item xs={12} md={6} sx={{ display: 'flex', flexDirection: 'column', flex: 1, padding: 1}}>
+          <ProblemSolverLeft />
         </Grid>
-      </Container></>
+        <Grid item xs={12} md={6} sx={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+          <ProblemSolverRight />
+        </Grid>
+      </Grid>
+    </Container>
   );
 }
 

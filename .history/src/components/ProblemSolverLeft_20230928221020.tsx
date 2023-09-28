@@ -76,7 +76,6 @@ const ProblemSolverLeft = () => {
             <CardMedia
               component="img"
               alt={`Example ${index + 1}`}
-              sx={{maxHeight: '100%', width: 'auto' }}
               height="140"
               image={example.image}
             />

@@ -84,10 +84,10 @@ function ProblemSolver() {
   }
 
   return (
-    <><Box>
+    <><Container>
       <CssBaseline />
       <Navbar />
-    </Box><Container
+    </Container><Container
       sx={{
         display: 'flex',
         flexDirection: 'column',

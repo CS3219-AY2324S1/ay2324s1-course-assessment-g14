@@ -23,7 +23,7 @@ const InterviewQuestionsTable: React.FC = () => {
 
   useEffect(() => {
     async function getInterviewQuestions() {
-      getQuestions();
+      await getQuestions();
     }
     getInterviewQuestions();
     console.log("here");

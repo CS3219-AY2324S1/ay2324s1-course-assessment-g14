@@ -56,12 +56,13 @@ export function DataContextProvider({ children }: DataContextProviderProps) {
 
   const getExamples = async (id:string) => {
     const subCollRef = collection(db, "questions", id, "examples")
-
+    console.log("Vagina")
     const examplesSnapshot = await getDocs(subCollRef);
-    
+    console.log("penis")
     const examplesResult = examplesSnapshot.docs.map((data) => {
       const exampleData = data.data();
- 
+      console.log(id)
+      console.log("ID ABOVE")
       return {
         
         text: exampleData.text,
@@ -71,7 +72,7 @@ export function DataContextProvider({ children }: DataContextProviderProps) {
     
     
       }) 
-      // console.log(examplesSnapshot)
+      console.log(examplesSnapshot)
       return examplesResult;
      }
 
@@ -83,6 +84,9 @@ export function DataContextProvider({ children }: DataContextProviderProps) {
       const query = await getDocs(collection(db, "questions"));
       const result = await Promise.all(query.docs.map(async (d) => {
         const q = d.data();
+        console.log("data below")
+        console.log(q)
+        console.log("BREAK")
         // const getExamples = async () => {
         // const examplesSnapshot = await getDocs(collection(db, "questions", q.id, "examples"));
         // console.log(examplesSnapshot)
@@ -93,12 +97,13 @@ export function DataContextProvider({ children }: DataContextProviderProps) {
         //     image: exampleData.img || '', // Use an empty string if image is missing
         //   };
 
-        const examplesArray = await getExamples(d.id)
-    
+        const examplesArray = await getExamples(q.id)
+        console.log("Examples")
+        console.log(examplesArray)
     
         // const examplesArray = await getExamples();
         return {
-          id: d.id,
+          id: d.id
           title: q.title,
           tags: q.tags,
           categories: q.categories,
@@ -109,7 +114,7 @@ export function DataContextProvider({ children }: DataContextProviderProps) {
         };
       }));
       
-    
+      // const finalResult = await Promise.all(result);
       setLoading(false);
       setQuestions(result);
       setResponse({

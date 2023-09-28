@@ -71,7 +71,7 @@ export function DataContextProvider({ children }: DataContextProviderProps) {
     
     
       }) 
-      // console.log(examplesSnapshot)
+      console.log(examplesSnapshot)
       return examplesResult;
      }
 
@@ -94,7 +94,8 @@ export function DataContextProvider({ children }: DataContextProviderProps) {
         //   };
 
         const examplesArray = await getExamples(d.id)
-    
+        console.log("Examples")
+        console.log(examplesArray)
     
         // const examplesArray = await getExamples();
         return {
@@ -109,7 +110,7 @@ export function DataContextProvider({ children }: DataContextProviderProps) {
         };
       }));
       
-    
+      // const finalResult = await Promise.all(result);
       setLoading(false);
       setQuestions(result);
       setResponse({

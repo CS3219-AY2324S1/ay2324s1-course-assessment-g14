@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, CssBaseline, Grid, Paper, Typography } from '@mui/material';
+import { Container, Grid, Paper, Typography } from '@mui/material';
 import ProblemSolverLeft from '../components/ProblemSolverLeft';
 import ProblemSolverRight from '../components/ProblemSolverRight';
 import {useData} from '../data/data.context'
@@ -84,10 +84,9 @@ function ProblemSolver() {
   }
 
   return (
-    <><Box>
-      <CssBaseline />
+    <><Container>
       <Navbar />
-    </Box><Container
+    </Container><Container
       sx={{
         display: 'flex',
         flexDirection: 'column',
