@@ -7,6 +7,7 @@ import Login from "./pages/login";
 import SignUp from "./pages/signup";
 import AuthGuard from "./auth/AuthGuard";
 import { DataContextProvider } from "./data/data.context";
+import Landing from "./pages/landing";
 import Profile from "./pages/profile";
 
 const root = ReactDOM.createRoot(
@@ -18,9 +19,10 @@ root.render(
       <AuthContextProvider>
         <DataContextProvider>
           <Routes>
-            <Route path="/" element={<App />} />
+            <Route path="/" element={<Landing />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
+            {/* <Route path="/landing" element={<Landing />} /> */}
             <Route
               path="/home"
               element={
