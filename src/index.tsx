@@ -8,6 +8,7 @@ import SignUp from "./pages/signup";
 import AuthGuard from "./auth/AuthGuard";
 import { DataContextProvider } from "./data/data.context";
 import Landing from "./pages/landing";
+import Profile from "./pages/profile";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -27,6 +28,14 @@ root.render(
               element={
                 <AuthGuard>
                   <App />
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <AuthGuard>
+                  <Profile />
                 </AuthGuard>
               }
             />
