@@ -8,12 +8,13 @@ import {
   CardMedia,
 } from '@mui/material';
 import { useData } from '../data/data.context';
-// import { ClosedCaptionDisabledSharp } from '@mui/icons-material';
+import { ClosedCaptionDisabledSharp } from '@mui/icons-material';
 
 const ProblemSolverLeft = () => {
   const { questionId } = useParams();
   const { questions } = useData();
-
+  const [selectedLanguage, setSelectedLanguage] = useState<string>('JavaScript');
+  const [code, setCode] = useState<string>('');
 
   // Find the question that matches the questionId
   const question = questions.find((q) => q.id === questionId);
@@ -25,7 +26,21 @@ const ProblemSolverLeft = () => {
     // For example, setCode(question?.initialCode || '');
   }, [question]);
 
+  const handleLanguageChange = (
+    event: React.ChangeEvent<{ value: unknown }>
+  ) => {
+    setSelectedLanguage(event.target.value as string);
+  };
 
+  const handleCodeChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setCode(event.target.value);
+  };
+
+  const handleSubmit = () => {
+    // Handle code submission here
+  };
 
   if (!question) {
     // If the question is not found, display a message

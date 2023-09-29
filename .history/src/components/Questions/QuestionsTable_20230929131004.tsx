@@ -65,7 +65,7 @@ const InterviewQuestionsTable: React.FC = () => {
                       </TableRow>
                   </TableHead>
                   <TableBody>
-                      {currentQuestions.map((question:Question, index:number) => (
+                      {currentQuestions.map((question, index) => (
                           <TableRow key={index}>
                               <TableCell>{question.title}</TableCell>
                               <TableCell>{question.tags.join(', ')}</TableCell>
