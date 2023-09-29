@@ -13,7 +13,6 @@ import ProblemSolver from "./pages/ProblemSolver";
 import Landing from "./pages/landing";
 import Profile from "./pages/profile";
 
-
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -23,15 +22,10 @@ root.render(
       <AuthContextProvider>
         <DataContextProvider>
           <Routes>
-
-            <Route path="/" element={<App />} />
- 
-
             <Route path="/" element={<Landing />} />
-
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
-            <Route path="/landing" element={<Landing />} /> 
+            <Route path="/landing" element={<Landing />} />
             <Route
               path="/home"
               element={
@@ -39,17 +33,15 @@ root.render(
                   <App />
                 </AuthGuard>
               }
-              />
-              <Route
+            />
+            <Route
               path="/question/:questionId"
               element={
                 <AuthGuard>
-    
                   <ProblemSolver />
                 </AuthGuard>
               }
-              />
-            
+            />
             <Route
               path="/profile"
               element={
@@ -59,7 +51,6 @@ root.render(
               }
             />
           </Routes>
-
         </DataContextProvider>
       </AuthContextProvider>
     </Router>
