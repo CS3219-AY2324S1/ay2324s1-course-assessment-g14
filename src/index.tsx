@@ -49,7 +49,7 @@ root.render(
                 </AuthGuard>
               }
               />
-            />
+            
             <Route
               path="/profile"
               element={
