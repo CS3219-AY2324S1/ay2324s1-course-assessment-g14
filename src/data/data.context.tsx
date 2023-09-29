@@ -131,7 +131,7 @@ export function DataContextProvider({ children }: DataContextProviderProps) {
   
   const dataContextProviderValue = useMemo(
     () => ({ loading, response, questions, getQuestions, getExamples }),
-    [loading, response, questions, getQuestions]
+    [loading, response, questions]
   );
   
 

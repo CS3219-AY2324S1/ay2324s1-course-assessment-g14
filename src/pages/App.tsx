@@ -3,7 +3,6 @@ import Navbar from "../components/Navbar";
 import Home from "../components/Home";
 import "./App.css";
 import CenteredContainer from "../components/CenteredContainer";
-import ProblemSolver from "./ProblemSolver";
 import QuestionsTable from "../components/Questions/QuestionsTable";
 
 export default function App() {
@@ -11,7 +10,6 @@ export default function App() {
     <Box>
       <CssBaseline />
       <Navbar />    
-      {/* <ProblemSolver />  */}
       <CenteredContainer>
         <Home />
         <QuestionsTable />
