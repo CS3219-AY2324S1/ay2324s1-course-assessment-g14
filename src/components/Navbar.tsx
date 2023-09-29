@@ -15,6 +15,7 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import AdbIcon from "@mui/icons-material/Adb";
 import { useAuth } from "../auth/auth.context";
+import { useNavigate } from "react-router-dom";
 
 const pages = ["Products", "Pricing", "Blog"];
 const authPages = [
@@ -30,6 +31,7 @@ const authPages = [
 
 export default function Navbar() {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
@@ -50,7 +52,7 @@ export default function Navbar() {
   };
 
   const settings = [
-    { name: "Profile", onclick: handleCloseUserMenu },
+    { name: "Profile", onclick: () => navigate("/profile", { replace: true }) },
     { name: "Account", onclick: handleCloseUserMenu },
     { name: "Dashboard", onclick: handleCloseUserMenu },
     { name: "Logout", onclick: logout },
