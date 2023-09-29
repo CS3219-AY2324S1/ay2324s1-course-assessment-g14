@@ -9,7 +9,7 @@ export default function App() {
   return (
     <Box>
       <CssBaseline />
-      <Navbar />
+      <Navbar />    
       <CenteredContainer>
         <Home />
         <QuestionsTable />
