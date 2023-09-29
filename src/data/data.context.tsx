@@ -128,9 +128,9 @@ export function DataContextProvider({ children }: DataContextProviderProps) {
     
   };
 
-  
   const dataContextProviderValue = useMemo(
     () => ({ loading, response, questions, getQuestions, getExamples }),
+    //eslint-disable-next-line react-hooks/exhaustive-deps
     [loading, response, questions]
   );
   
