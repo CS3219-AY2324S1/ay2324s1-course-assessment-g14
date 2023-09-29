@@ -6,8 +6,8 @@ const languages: string[] = ['C++', 'Java', 'JavaScript', 'Python'];
 
 function ProblemSolverRight() {
   const [selectedLanguage, setSelectedLanguage] = useState<string>('JavaScript');
-  // const [code, setCode] = useState<string>('class Solution:');
-  const code = "class Solution:"
+  const [code, setCode] = useState<string>('class Solution:');
+
   const handleLanguageChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setSelectedLanguage(event.target.value as string);
   };
