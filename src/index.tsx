@@ -11,6 +11,7 @@ import { DataContextProvider } from "./data/data.context";
 import ProblemSolver from "./pages/ProblemSolver";
 
 import Landing from "./pages/landing";
+import Profile from "./pages/profile";
 
 
 const root = ReactDOM.createRoot(
@@ -30,7 +31,7 @@ root.render(
 
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
-            {/* <Route path="/landing" element={<Landing />} /> */}
+            <Route path="/landing" element={<Landing />} /> 
             <Route
               path="/home"
               element={
@@ -48,6 +49,15 @@ root.render(
                 </AuthGuard>
               }
               />
+            />
+            <Route
+              path="/profile"
+              element={
+                <AuthGuard>
+                  <Profile />
+                </AuthGuard>
+              }
+            />
           </Routes>
 
         </DataContextProvider>

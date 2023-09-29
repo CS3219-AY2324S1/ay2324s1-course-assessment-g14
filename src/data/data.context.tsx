@@ -10,6 +10,7 @@ interface Response {
 
 interface Question {
   id: string;
+
   title: string;
   tags: string[];
   categories: string[];
@@ -100,6 +101,13 @@ export function DataContextProvider({ children }: DataContextProviderProps) {
         // const examplesArray = await getExamples();
         return {
           id: d.id,
+  const getQuestions = async () => {
+    try {
+      setLoading(true);
+      const query = await getDocs(collection(db, "questions"));
+      const result = query.docs.map((d) => {
+        const q = d.data();
+        return {
           title: q.title,
           tags: q.tags,
           categories: q.categories,
@@ -111,6 +119,8 @@ export function DataContextProvider({ children }: DataContextProviderProps) {
       }));
       
     
+        };
+      });
       setLoading(false);
       setQuestions(result);
       setResponse({
@@ -135,6 +145,13 @@ export function DataContextProvider({ children }: DataContextProviderProps) {
     [loading, response, questions, getQuestions]
   );
   
+    }
+  };
+
+  const dataContextProviderValue = useMemo(
+    () => ({ loading, response, questions, getQuestions }),
+    [loading, response, questions]
+  );
 
   return (
     <DataContext.Provider value={dataContextProviderValue}>
@@ -145,4 +162,7 @@ export function DataContextProvider({ children }: DataContextProviderProps) {
 
 export const useData = () => {
   return useContext(DataContext);
+
+};
+
 };
