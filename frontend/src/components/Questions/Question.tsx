@@ -1,4 +1,5 @@
 export default class Question {
+    id: string ='';
     title: string = '';
     tags: string[] = [];
     categories: string[] = [];
@@ -8,6 +9,7 @@ export default class Question {
 
     constructor(initializer?: any) {
         if (!initializer) return;
+        if (initializer.id) this.id = initializer.id;
         if (initializer.title) this.title = initializer.title;
         if (initializer.tags) this.tags = initializer.tags;
         if (initializer.categories) this.categories = initializer.categories;

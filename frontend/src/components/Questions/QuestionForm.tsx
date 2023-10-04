@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import Question from "./Question";
-import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
@@ -9,15 +8,17 @@ import {Autocomplete} from "@mui/material";
 import {QUESTION_CATEGORIES} from "./QuestionCategories";
 
 interface QuestionFormProps {
+    question?: Question;
     onSubmit: (question: Question) => void;
     onCancel: () => void;
 }
 
-const AddQuestionForm: React.FC<QuestionFormProps> = ({onSubmit, onCancel}) => {
+const QuestionForm: React.FC<QuestionFormProps> = ({question:initialQuestion, onSubmit, onCancel}) => {
     const [question, setQuestion] = useState(
-        new Question({
-            difficulty: 'Easy',
-        }));
+        initialQuestion ? initialQuestion :
+            new Question({
+                difficulty: 'Easy',
+            }));
 
     const complexities = [
         {value: 'Easy', label: 'Easy'},
@@ -46,11 +47,6 @@ const AddQuestionForm: React.FC<QuestionFormProps> = ({onSubmit, onCancel}) => {
         <React.Fragment>
             <form>
                 <Grid container spacing={3} justifyContent="center">
-                    <Grid item xs={12}>
-                        <Typography variant="h4">
-                            Add Question
-                        </Typography>
-                    </Grid>
                     <Grid item sm={6}>
                         <TextField
                             required
@@ -140,4 +136,4 @@ const AddQuestionForm: React.FC<QuestionFormProps> = ({onSubmit, onCancel}) => {
     );
 };
 
-export default AddQuestionForm;
+export default QuestionForm;

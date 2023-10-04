@@ -1,6 +1,8 @@
 export const QUESTION_CATEGORIES = [
+    "Strings",
+    "Data Structures",
+    "Algorithms",
     "Array",
-    "String",
     "Hash Table",
     "Math",
     "Dynamic Programming",
