@@ -1,32 +1,34 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import Question from "./Question";
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import Button from '@mui/material/Button';
+import {Autocomplete} from "@mui/material";
+import {QUESTION_CATEGORIES} from "./QuestionCategories";
 
 interface QuestionFormProps {
     onSubmit: (question: Question) => void;
     onCancel: () => void;
 }
 
-const AddQuestionForm : React.FC<QuestionFormProps> = ({ onSubmit, onCancel }) => {
+const AddQuestionForm: React.FC<QuestionFormProps> = ({onSubmit, onCancel}) => {
     const [question, setQuestion] = useState(
         new Question({
-            difficulty : 'Easy'
+            difficulty: 'Easy',
         }));
 
     const complexities = [
-        { value: 'Easy', label: 'Easy' },
-        { value: 'Medium', label: 'Medium' },
-        { value: 'Hard', label: 'Hard' },
+        {value: 'Easy', label: 'Easy'},
+        {value: 'Medium', label: 'Medium'},
+        {value: 'Hard', label: 'Hard'},
     ];
 
     const handleTextInputChange = (e: { target: { id: any; value: any; }; }) => {
-        const { id, value } = e.target;
-        setQuestion((prevData) => ({
-            ...prevData,
+        const {id, value} = e.target;
+        setQuestion((q) => ({
+            ...q,
             [id]: value,
         }));
     };
@@ -68,7 +70,7 @@ const AddQuestionForm : React.FC<QuestionFormProps> = ({ onSubmit, onCancel }) =
                             fullWidth
                             value={question.difficulty}
                             onChange={(e) =>
-                                setQuestion({ ...question, difficulty: e.target.value })
+                                setQuestion({...question, difficulty: e.target.value})
                             }
                         >
                             {complexities.map((option) => (
@@ -77,6 +79,25 @@ const AddQuestionForm : React.FC<QuestionFormProps> = ({ onSubmit, onCancel }) =
                                 </MenuItem>
                             ))}
                         </TextField>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Autocomplete
+                            multiple
+                            id="categories-outlined"
+                            options={QUESTION_CATEGORIES}
+                            limitTags={5}
+                            filterSelectedOptions
+                            value={question.categories}
+                            onChange={(event: any, updatedCategories: string[]) => {
+                                setQuestion({...question, categories: updatedCategories})
+                            }}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    label="Categories"
+                                />
+                            )}
+                        />
                     </Grid>
                     <Grid item xs={12}>
                         <TextField
