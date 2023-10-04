@@ -4,6 +4,7 @@ import Home from "../components/Home";
 import "./App.css";
 import CenteredContainer from "../components/CenteredContainer";
 import QuestionsTable from "../components/Questions/QuestionsTable";
+import AddQuestionTab from "../components/Questions/AddQuestionTab";
 
 export default function App() {
   return (
@@ -13,6 +14,7 @@ export default function App() {
       <CenteredContainer>
         <Home />
         <QuestionsTable />
+        <AddQuestionTab />
       </CenteredContainer>
     </Box>
   );

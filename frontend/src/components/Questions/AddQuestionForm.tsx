@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Question from "./Question";
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
@@ -6,23 +7,15 @@ import MenuItem from '@mui/material/MenuItem';
 import Button from '@mui/material/Button';
 
 interface QuestionFormProps {
-    onSubmit: (questionData: QuestionData) => void;
+    onSubmit: (question: Question) => void;
+    onCancel: () => void;
 }
 
-export interface QuestionData {
-    title: string,
-    complexity: string,
-    description: string,
-    constraints: string,
-}
-
-const AddQuestionForm : React.FC<QuestionFormProps> = ({ onSubmit }) => {
-    const [formData, setFormData] = useState({
-        title: '',
-        complexity: '',
-        description: '',
-        constraints: '',
-    });
+const AddQuestionForm : React.FC<QuestionFormProps> = ({ onSubmit, onCancel }) => {
+    const [question, setQuestion] = useState(
+        new Question({
+            difficulty : 'Easy'
+        }));
 
     const complexities = [
         { value: 'Easy', label: 'Easy' },
@@ -32,7 +25,7 @@ const AddQuestionForm : React.FC<QuestionFormProps> = ({ onSubmit }) => {
 
     const handleTextInputChange = (e: { target: { id: any; value: any; }; }) => {
         const { id, value } = e.target;
-        setFormData((prevData) => ({
+        setQuestion((prevData) => ({
             ...prevData,
             [id]: value,
         }));
@@ -40,37 +33,42 @@ const AddQuestionForm : React.FC<QuestionFormProps> = ({ onSubmit }) => {
 
     const handleSubmit = (e: { preventDefault: () => void; }) => {
         e.preventDefault();
-        onSubmit(formData);
+        onSubmit(question);
+    };
+
+    const handleCancel = () => {
+        onCancel();
     };
 
     return (
         <React.Fragment>
-            <Typography variant="h4" gutterBottom>
-                Add Question
-            </Typography>
-
-            <form onSubmit={handleSubmit}>
-                <Grid container spacing={3}>
-                    <Grid item xs={12} sm={6}>
+            <form>
+                <Grid container spacing={3} justifyContent="center">
+                    <Grid item xs={12}>
+                        <Typography variant="h4">
+                            Add Question
+                        </Typography>
+                    </Grid>
+                    <Grid item sm={6}>
                         <TextField
                             required
                             id="title"
                             label="Question Title"
                             fullWidth
-                            value={formData.title}
+                            value={question.title}
                             onChange={handleTextInputChange}
                         />
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+                    <Grid item sm={6}>
                         <TextField
                             required
-                            id="complexity"
+                            id="difficulty"
                             select
-                            label="Complexity"
+                            label="Difficulty"
                             fullWidth
-                            value={formData.complexity}
+                            value={question.difficulty}
                             onChange={(e) =>
-                                setFormData({ ...formData, complexity: e.target.value })
+                                setQuestion({ ...question, difficulty: e.target.value })
                             }
                         >
                             {complexities.map((option) => (
@@ -89,7 +87,7 @@ const AddQuestionForm : React.FC<QuestionFormProps> = ({ onSubmit }) => {
                             multiline
                             minRows={10}
                             maxRows={30}
-                            value={formData.description}
+                            value={question.description}
                             onChange={handleTextInputChange}
                         />
                     </Grid>
@@ -99,14 +97,21 @@ const AddQuestionForm : React.FC<QuestionFormProps> = ({ onSubmit }) => {
                             label="Constraints"
                             multiline
                             fullWidth
-                            value={formData.constraints}
+                            value={question.constraints}
                             onChange={handleTextInputChange}
                         />
                     </Grid>
-                    <Grid item xs={12}>
-                        <Button type="submit" variant="contained">
-                            Submit
-                        </Button>
+                    <Grid container item xs={12} spacing={2}>
+                        <Grid item>
+                            <Button variant="contained" onClick={handleSubmit}>
+                                Submit
+                            </Button>
+                        </Grid>
+                        <Grid item>
+                            <Button variant="outlined" onClick={handleCancel}>
+                                Cancel
+                            </Button>
+                        </Grid>
                     </Grid>
                 </Grid>
             </form>
