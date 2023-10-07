@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { User } from "firebase/auth";
+import { UserModel } from "../api/user";
 
 export function useLocalStorage(
   keyName: string,
-  defaultValue: User | undefined
+  defaultValue: UserModel | undefined
 ) {
   const [storedValue, setStoredValue] = useState(() => {
     try {
@@ -19,7 +19,7 @@ export function useLocalStorage(
     }
   });
 
-  const setValue = (newValue: User | undefined) => {
+  const setValue = (newValue: UserModel | undefined) => {
     try {
       window.localStorage.setItem(keyName, JSON.stringify(newValue));
     } catch (err) {}

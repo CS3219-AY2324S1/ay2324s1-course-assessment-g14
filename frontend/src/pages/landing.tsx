@@ -1,26 +1,7 @@
-import React from "react";
-import axios from "axios";
 import { Link as RouterLink } from "react-router-dom";
 import { Typography, Button, Container, Paper, Grid } from "@mui/material";
 
 function Landing() {
-  React.useEffect(() => {
-    const getHello = async () =>
-      await axios
-        .get(`${process.env.REACT_APP_DEV_ENDPOINT}`)
-        .then((r) => console.log(r.data));
-    getHello();
-
-    const login = async () =>
-      await axios
-        .post(`${process.env.REACT_APP_DEV_ENDPOINT}login`, {
-          email: process.env.REACT_APP_TEST_EMAIL,
-          password: process.env.REACT_APP_TEST_PASSWORD,
-        })
-        .then((r) => console.log(r.data));
-    login();
-  }, []);
-
   return (
     <Container maxWidth="md">
       <Paper elevation={3} sx={{ padding: 4, marginTop: 4 }}>

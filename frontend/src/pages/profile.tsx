@@ -18,9 +18,9 @@ export default function Profile() {
   const [edit, setEdit] = useState(false);
   const [value, setValue] = useState<Values>({
     email: user?.email ? user?.email : "",
-    name: user?.displayName ? user?.displayName : "",
-    year: "",
-    major: "",
+    name: user?.name ? user?.name : "",
+    year: user?.year ? user?.year : "",
+    major: user?.major ? user.major : "",
   });
 
   const profileFields = [
@@ -34,21 +34,17 @@ export default function Profile() {
     setEdit(!edit);
   };
 
-  useEffect(() => {
-    console.log(user);
-  });
-
   return (
     <Box height="100vh">
       <CssBaseline />
       <Navbar />
       <Container sx={{ mt: 5 }}>
         <Grid container spacing={2}>
-          <Grid item xs={3}>
+          <Grid item xs={12} sm={4}>
             <Avatar sx={{ height: 192, width: 192, mb: 2 }}>R</Avatar>
-            <Chip label="Verified User" color="primary" />
+            {user && <Chip label={user.role} color="primary" />}
           </Grid>
-          <Grid item xs={9}>
+          <Grid item xs={12} sm={8}>
             <Box display="flex" justifyContent="flex-end" width="100%">
               <Button
                 variant="contained"
@@ -60,6 +56,7 @@ export default function Profile() {
             </Box>
             {profileFields.map((field) => (
               <ProfileField
+                key={field.title}
                 title={field.title}
                 data={field.data}
                 edit={edit}
