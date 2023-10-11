@@ -1,6 +1,5 @@
 import { createContext, ReactNode, useContext, useMemo, useState } from "react";
-import { db } from "../firebase/firebase";
-import { collection, getDocs } from "firebase/firestore";
+
 import { getAllQuestions } from "../api/questions/data";
 
 interface Response {
@@ -58,12 +57,14 @@ export function DataContextProvider({ children }: DataContextProviderProps) {
   const getQuestions = async () => {
     try {
       setLoading(true);
+      
       const result = await (await getAllQuestions()).data;
+      console.log(result)
       setLoading(false);
       setQuestions(result);
       setResponse({
         type: "success",
-        message: "successfully retreived questions",
+        message: "successfully retrieved questions",
       });
     } catch (e) {
       setLoading(false);

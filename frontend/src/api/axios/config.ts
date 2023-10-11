@@ -1,7 +1,11 @@
-import axios from "axios";
+import axios from 'axios'
 
-const httpClient = axios.create({
+export const httpClient = axios.create({
   baseURL: process.env.REACT_APP_BASE_URL,
 });
 
-export default httpClient;
+export const questionhttpClient = axios.create({
+  baseURL: process.env.REACT_APP_QUESTION_BASE_URL,
+})
+
+// export default httpClient;
