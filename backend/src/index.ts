@@ -6,6 +6,7 @@ import {
   handleSignUp,
 } from "./auth/auth.controller";
 import { handleCreateUser, handleGetUser } from "./user/user.controller";
+import { handleGetQuestions } from "./question/question.controller";
 const app = express();
 const port = 3001;
 
@@ -19,7 +20,7 @@ app.get("/", (req, res) => {
 app.post("/signup", handleSignUp);
 app.post("/login", handleLogin);
 app.delete("/logout", handleLogout);
-
+app.get("/questions", handleGetQuestions);
 app.post("/user", handleCreateUser);
 app.get("/user", handleGetUser);
 
