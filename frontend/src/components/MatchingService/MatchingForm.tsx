@@ -5,7 +5,8 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
+import socket from './socket';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -27,15 +28,46 @@ const style = {
 const MatchingForm = React.forwardRef(function MatchingForm() {
     const [difficulty, setDifficulty] = React.useState('');
     const [category, setCategory] = React.useState('');
+    const [isMatching, setIsMatching] = React.useState(false); // Track matching state
+    const navigate = useNavigate(); // Get navigate for redirection
+
     const handleDiffChange = (event: SelectChangeEvent) => {
         setDifficulty(event.target.value);
     };
+
     const handleCatChange = (event: SelectChangeEvent) => {
         setCategory(event.target.value);
     };
+
     const handleConnect = () => {
-        console.log('connecting...')
-    }
+        const preferences = {
+            difficulty,
+            category,
+        };
+
+        // Emit the startMatching event to the server with user preferences
+        socket.emit('startMatching', preferences);
+
+        // Set matching state to true when attempting to match
+        setIsMatching(true);
+    };
+
+    // Handle the "matchFound" event from the server
+    React.useEffect(() => {
+        socket.on('matchFound', (matchedUserPreferences) => {
+            // Handle the matched user's preferences here
+            console.log('Match Found:', matchedUserPreferences);
+            setIsMatching(false); // Set matching state to false
+            // Redirect to the question page with the code editor
+            navigate('/question'); // Update the route as needed
+        });
+
+        // Clean up the event listener when the component unmounts
+        return () => {
+            socket.off('matchFound');
+        };
+    }, [navigate]);
+
     return (
         <Box sx={style}>
             <h2><center>Please select a difficulty and question category.</center></h2>
@@ -56,7 +88,6 @@ const MatchingForm = React.forwardRef(function MatchingForm() {
                     <MenuItem value={'Medium'}>Medium</MenuItem>
                     <MenuItem value={'Hard'}>Hard</MenuItem>
                 </Select>
-                {/* <FormHelperText>Difficulty of Question</FormHelperText> */}
             </FormControl>
             <FormControl sx={{ mt: 1, mb: 1, width: '100%' }}>
                 <InputLabel id="demo-simple-select-helper-label">Category</InputLabel>
@@ -73,13 +104,16 @@ const MatchingForm = React.forwardRef(function MatchingForm() {
                     <MenuItem value={'Algo'}>Algo</MenuItem>
                     <MenuItem value={'ML'}>ML</MenuItem>
                 </Select>
-                {/* <FormHelperText>Difficulty of Question</FormHelperText> */}
             </FormControl>
-            <Button sx={{ mt: '5%' }} variant="contained" onClick={handleConnect}>
-                Connect
-            </Button>
+            {isMatching ? (
+                <div>Loading...</div> // Show loading spinner
+            ) : (
+                <Button sx={{ mt: '5%' }} variant="contained" onClick={handleConnect}>
+                    Connect
+                </Button>
+            )}
         </Box>
     );
 });
 
-export default MatchingForm
+export default MatchingForm;
