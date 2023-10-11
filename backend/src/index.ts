@@ -12,6 +12,7 @@ import { firebaseConfig } from "./firebase/firebase.config";
 import { initializeMatchingService } from './matching/matching.service'; // Import the matching service function
 import { Socket, Server } from 'socket.io';
 import { Server as ServerHttp } from 'http';
+import { handleCreateUser, handleGetUser, handleUpdateUser } from "./user/user.controller";
 const app = express();
 const port = 3001;
 app.use(cors());
@@ -38,6 +39,7 @@ app.delete("/logout", handleLogout);
 
 app.post("/user", handleCreateUser);
 app.get("/user", handleGetUser);
+app.put("/user", handleUpdateUser);
 
 //Socket logic
 // Maintain an array to store active users seeking a match

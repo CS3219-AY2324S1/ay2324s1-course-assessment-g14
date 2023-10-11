@@ -6,3 +6,7 @@ export interface UserModel {
   role: string;
   completed: number;
 }
+
+export interface Values {
+  [key: string]: string;
+}
