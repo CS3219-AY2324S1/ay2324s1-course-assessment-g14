@@ -5,7 +5,7 @@ import {
   handleLogout,
   handleSignUp,
 } from "./auth/auth.controller";
-import { handleCreateUser, handleGetUser } from "./user/user.controller";
+import { handleCreateUser, handleGetUser, handleUpdateUser } from "./user/user.controller";
 const app = express();
 const port = 3001;
 
@@ -22,6 +22,7 @@ app.delete("/logout", handleLogout);
 
 app.post("/user", handleCreateUser);
 app.get("/user", handleGetUser);
+app.put("/user", handleUpdateUser);
 
 app.listen(port, () => {
   console.log(`Peerprep listening on port ${port}`);

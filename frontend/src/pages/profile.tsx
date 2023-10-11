@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import {
   Avatar,
   Box,
@@ -12,9 +12,10 @@ import Navbar from "../components/Navbar";
 import ProfileField from "../components/ProfileField";
 import { useAuth } from "../auth/auth.context";
 import { Values } from "../components/DropDownOrTextField";
+import { updateUser } from "../api/user";
 
 export default function Profile() {
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
   const [edit, setEdit] = useState(false);
   const [value, setValue] = useState<Values>({
     email: user?.email ? user?.email : "",
@@ -30,7 +31,15 @@ export default function Profile() {
     { title: "Major", data: "major" },
   ];
 
-  const toggleEdit = () => {
+  const toggleEdit = async () => {
+    if (edit) {
+      try {
+        const response = await updateUser(value);
+        setUser(value)
+      } catch (e) {
+        console.log(e)
+      }
+    }
     setEdit(!edit);
   };
 

@@ -15,6 +15,7 @@ import { createUser, getUser, UserModel } from "../api/user";
 
 interface AuthContextData {
   user: UserModel | undefined;
+  setUser: any | undefined,
   error: string;
   signUp: (email: string, password: string) => void;
   login: (email: string, password: string) => void;
@@ -27,6 +28,7 @@ interface AuthContextProviderProps {
 
 const AuthContext = createContext<AuthContextData>({
   user: undefined,
+  setUser: undefined,
   error: "",
   signUp: (email: string, password: string) => undefined,
   login: (email: string, password: string) => undefined,
@@ -101,8 +103,8 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   }, [setUser, navigate]);
 
   const authContextProviderValue = useMemo(
-    () => ({ user, error, signUp, login, logout }),
-    [user, error, signUp, login, logout]
+    () => ({ user, setUser, error, signUp, login, logout }),
+    [user, setUser, error, signUp, login, logout]
   );
 
   return (
