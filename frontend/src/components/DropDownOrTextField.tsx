@@ -30,12 +30,13 @@ export function DropDownOrTextField({
 }: DropDownOrTextFieldProps) {
   const dropdowns = ["Year of Study", "Major"];
   const dropDownValues: DropDownValues = {
-    "Year of Study": ["1", "2", "3", "4", ">5"],
+    "Year of Study": ["1", "2", "3", "4", ">5", "-"],
     Major: [
       "Computer Science",
       "Business Analytics",
       "Information Systems",
       "Data Science",
+      "-"
     ],
   };
 
@@ -57,7 +58,13 @@ export function DropDownOrTextField({
           </Select>
         </FormControl>
       ) : (
-        <TextField label={title} variant="outlined" value={value[data]} />
+        <TextField label={title}
+        variant="outlined" 
+        value={value[data]}
+        disabled={title == "Email"} // Users cannot edit their email
+        onChange={(e) => {
+          setValue({ ...value, [data]: e.target.value })}
+        } />
       )}
     </>
   );
