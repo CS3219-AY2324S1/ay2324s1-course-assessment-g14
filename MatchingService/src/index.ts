@@ -1,20 +1,15 @@
 import express from "express";
 import cors from "cors";
-import {
-  handleLogin,
-  handleLogout,
-  handleSignUp,
-} from "./auth/auth.controller";
-import { handleCreateUser, handleGetUser } from "./user/user.controller";
+
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { firebaseConfig } from "./firebase/firebase.config";
 import { initializeMatchingService } from './matching/matching.service'; // Import the matching service function
 import { Socket, Server } from 'socket.io';
 import { Server as ServerHttp } from 'http';
-import { handleCreateUser, handleGetUser, handleUpdateUser } from "./user/user.controller";
+
 const app = express();
-const port = 3001;
+const port = 3005;
 app.use(cors());
 app.use(express.json());
 
@@ -33,12 +28,6 @@ app.get("/", (req, res) => {
 initializeApp(firebaseConfig);
 const db = getFirestore();
 
-app.post("/signup", handleSignUp);
-app.post("/login", handleLogin);
-app.delete("/logout", handleLogout);
-app.post("/user", handleCreateUser);
-app.get("/user", handleGetUser);
-app.put("/user", handleUpdateUser);
 
 //Socket logic
 // Maintain an array to store active users seeking a match
@@ -52,5 +41,5 @@ initializeMatchingService(io);
 // });
 
 httpServer.listen(port, () => {
-  console.log(`Peerprep listening on port ${port}`);
+  console.log(`Matching Service listening on port ${port}`);
 });

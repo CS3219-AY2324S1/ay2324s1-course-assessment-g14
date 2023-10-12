@@ -3,7 +3,7 @@ import cors from "cors";
 
 import { handleGetQuestions, handleAddQuestion, handleDeleteQuestion } from "./question/question.controller";
 const app = express();
-const port = 3002;
+const port = 3002;  
 
 app.use(cors());
 app.use(express.json());
@@ -18,5 +18,5 @@ app.post("/questions", handleAddQuestion)
 app.delete("/questions/:questionId", handleDeleteQuestion)
 
 app.listen(port, () => {
-  console.log(`Peerprep listening on port ${port}`);
+  console.log(`Question Service listening on port ${port}`);
 });

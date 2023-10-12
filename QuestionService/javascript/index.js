@@ -17,5 +17,5 @@ app.get("/questions", question_controller_1.handleGetQuestions);
 app.post("/questions", question_controller_1.handleAddQuestion);
 app.delete("/questions/:questionId", question_controller_1.handleDeleteQuestion);
 app.listen(port, () => {
-    console.log(`Peerprep listening on port ${port}`);
+    console.log(`Question Service listening on port ${port}`);
 });

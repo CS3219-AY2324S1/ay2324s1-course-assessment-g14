@@ -6,6 +6,12 @@
 /backend/node_modules
 /QuestionService/node_modules
 /QuestionService/javascript
+/AuthService/javascript
+/AuthService/node_modules
+/MatchingService/javascript
+/MatchingService/node_modules
+/UserService/node_modules
+/UserService/javascript
 /backend/javascript
 /.pnp
 .pnp.js
