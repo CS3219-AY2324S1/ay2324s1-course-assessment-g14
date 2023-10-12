@@ -17,6 +17,9 @@ export default function Login() {
       <CssBaseline />
       <Navbar />
       <CenteredContainer>
+        <Typography variant="h4" align="center" paddingBottom={5}>
+          Log In
+        </Typography>
         <TextField
           sx={{ width: "25ch" }}
           label="email"
