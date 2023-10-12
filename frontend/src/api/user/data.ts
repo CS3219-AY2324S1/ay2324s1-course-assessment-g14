@@ -1,5 +1,6 @@
-import httpClient from "../axios/config";
+import {httpClient} from "../axios/config";
 import { UserModel, Values } from "./model";
+
 
 export const createUser = (email: string) =>
   httpClient.post<UserModel>("/user", { email: email });

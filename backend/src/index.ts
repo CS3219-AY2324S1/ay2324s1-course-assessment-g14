@@ -36,7 +36,6 @@ const db = getFirestore();
 app.post("/signup", handleSignUp);
 app.post("/login", handleLogin);
 app.delete("/logout", handleLogout);
-
 app.post("/user", handleCreateUser);
 app.get("/user", handleGetUser);
 app.put("/user", handleUpdateUser);
