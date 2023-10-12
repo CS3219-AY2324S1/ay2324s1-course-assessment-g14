@@ -1,11 +1,11 @@
-import httpClient from "../axios/config";
+import {AuthHttpClient} from "../axios/config";
 import { AuthDTO } from "./dto";
 import { UserCredential } from "firebase/auth";
 
 export const registerUser = (params: AuthDTO) =>
-  httpClient.post<UserCredential>("/signup", params);
+  AuthHttpClient.post<UserCredential>("/signup", params);
 
 export const signIn = (params: AuthDTO) =>
-  httpClient.post<UserCredential>("/login", params);
+  AuthHttpClient.post<UserCredential>("/login", params);
 
-export const signOut = () => httpClient.delete("/logout");
+export const signOut = () => AuthHttpClient.delete("/logout");

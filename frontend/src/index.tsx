@@ -6,6 +6,7 @@ import App from "./pages/App";
 import Login from "./pages/login";
 import SignUp from "./pages/signup";
 import AuthGuard from "./auth/AuthGuard";
+import RedirectIfLoggedIn from "./auth/RedirectIfLoggedIn";
 import { DataContextProvider } from "./data/data.context";
 
 import ProblemSolver from "./pages/ProblemSolver";
@@ -23,9 +24,23 @@ root.render(
         <DataContextProvider>
           <Routes>
             <Route path="/" element={<Landing />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<SignUp />} />
             <Route path="/landing" element={<Landing />} />
+            <Route
+              path="/login"
+              element={
+                <RedirectIfLoggedIn>
+                  <Login />
+                </RedirectIfLoggedIn>
+              }
+            />
+            <Route
+              path="/signup"
+              element={
+                <RedirectIfLoggedIn>
+                  <SignUp />
+                </RedirectIfLoggedIn>
+              }
+            />
             <Route
               path="/home"
               element={

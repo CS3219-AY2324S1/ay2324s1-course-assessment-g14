@@ -1,7 +1,19 @@
-import axios from "axios";
+import axios from 'axios'
 
-const httpClient = axios.create({
-  baseURL: process.env.REACT_APP_BASE_URL,
-});
+export const questionhttpClient = axios.create({
+  baseURL: process.env.REACT_APP_QUESTION_BASE_URL,
+})
 
-export default httpClient;
+export const AuthHttpClient = axios.create({
+  baseURL: process.env.REACT_APP_AUTH_BASE_URL,
+})
+
+export const UserHttpClient = axios.create({
+  baseURL: process.env.REACT_APP_USER_BASE_URL,
+})
+
+export const MatchingHttpClient = axios.create({
+  baseURL: process.env.REACT_APP_MATCHING_BASE_URL,
+})
+
+// export default httpClient;
