@@ -17,7 +17,7 @@ import AdbIcon from "@mui/icons-material/Adb";
 import { useAuth } from "../auth/auth.context";
 import { useNavigate } from "react-router-dom";
 
-const pages = ["Products", "Pricing", "Blog"];
+const pages = ["Questions"];
 const authPages = [
   {
     name: "Login",
@@ -67,7 +67,7 @@ export default function Navbar() {
             variant="h6"
             noWrap
             component="a"
-            href="/"
+            href="/home"
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
@@ -78,7 +78,7 @@ export default function Navbar() {
               textDecoration: "none",
             }}
           >
-            LOGO
+            PeerPrep
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -110,12 +110,12 @@ export default function Navbar() {
                 display: { xs: "block", md: "none" },
               }}
             >
-              {pages.map((page) => (
+              {user && pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
-              {authPages.map((page) => (
+              {!user && authPages.map((page) => (
                 <MenuItem key={page.name} onClick={() => navigate(page.link)}>
                   <Typography textAlign="center">{page.name}</Typography>
                 </MenuItem>
@@ -127,7 +127,7 @@ export default function Navbar() {
             variant="h5"
             noWrap
             component="a"
-            href="/"
+            href="/home"
             sx={{
               mr: 2,
               display: { xs: "flex", md: "none" },
@@ -139,10 +139,10 @@ export default function Navbar() {
               textDecoration: "none",
             }}
           >
-            LOGO
+            PeerPrep
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
+            {user && pages.map((page) => (
               <Button
                 key={page}
                 onClick={handleCloseNavMenu}
