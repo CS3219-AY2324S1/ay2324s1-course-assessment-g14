@@ -76,20 +76,18 @@ exports.handleDeleteQuestion = handleDeleteQuestion;
 function handleAddQuestion(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const { qtitle, qtags, qcategories, qconstraints, qdifficulty, qdescription, qexamples, } = req.body;
-            const docRef = yield (0, firestore_1.addDoc)((0, firestore_1.collection)(question_service_1.db, "questions"), {
-                title: qtitle,
-                tags: qtags,
-                categories: qcategories,
-                constraints: qconstraints,
-                difficulty: qdifficulty,
-                description: qdescription,
+            const { title, tags, categories, constraints, difficulty, description, examples, } = req.body;
+            console.log(`adding question ${title}`);
+            const question = yield (0, question_service_1.addQuestion)({
+                title: title,
+                tags: tags,
+                categories: categories,
+                constraints: constraints,
+                difficulty: difficulty,
+                description: description,
+                examples: examples,
             });
-            const exampleRef = (0, firestore_1.collection)(docRef, "examples");
-            qexamples.map((e) => {
-                const add = (0, firestore_1.addDoc)(exampleRef, e);
-            });
-            // const addExample = setDoc(exampleRef, qexamples)
+            res.status(200).send(question);
         }
         catch (err) {
             console.log(err);

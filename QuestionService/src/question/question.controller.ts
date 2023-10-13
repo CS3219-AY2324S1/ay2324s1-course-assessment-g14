@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { db } from "./question.service";
+import {addQuestion, db} from "./question.service";
 import {
   getDocs,
   collection,
@@ -8,6 +8,16 @@ import {
   addDoc,
   setDoc,
 } from "firebase/firestore";
+
+interface Question {
+  title: string;
+  tags: string[];
+  categories: string[];
+  constraints: string[];
+  difficulty: string;
+  description: string;
+  examples: Example[];
+}
 
 interface Example {
   text: string;
@@ -79,27 +89,25 @@ export async function handleDeleteQuestion(req: Request, res: Response) {
 export async function handleAddQuestion(req: Request, res: Response) {
   try {
     const {
-      qtitle,
-      qtags,
-      qcategories,
-      qconstraints,
-      qdifficulty,
-      qdescription,
-      qexamples,
+      title,
+      tags,
+      categories,
+      constraints,
+      difficulty,
+      description,
+      examples,
     } = req.body;
-    const docRef = await addDoc(collection(db, "questions"), {
-      title: qtitle,
-      tags: qtags,
-      categories: qcategories,
-      constraints: qconstraints,
-      difficulty: qdifficulty,
-      description: qdescription,
+    console.log(`adding question ${title}`);
+    const question = await addQuestion({
+      title: title,
+      tags: tags,
+      categories: categories,
+      constraints: constraints,
+      difficulty: difficulty,
+      description: description,
+      examples: examples,
     });
-    const exampleRef = collection(docRef, "examples");
-    qexamples.map((e: Example) => {
-      const add = addDoc(exampleRef, e);
-    });
-    // const addExample = setDoc(exampleRef, qexamples)
+    res.status(200).send(question);
   } catch (err) {
     console.log(err);
     res.status(500).send(err);
