@@ -6,6 +6,7 @@ export default class Question {
     constraints: string[] = [];
     difficulty: string = '';
     description: string = '';
+    examples: Example[] = [];
 
     constructor(initializer?: any) {
         if (!initializer) return;
@@ -16,6 +17,11 @@ export default class Question {
         if (initializer.constraints) this.constraints = initializer.constraints;
         if (initializer.difficulty) this.difficulty = initializer.difficulty;
         if (initializer.description) this.description = initializer.description;
-
+        if (initializer.examples) this.examples = initializer.examples;
     }
+}
+
+interface Example {
+    text: string;
+    image: string;
 }

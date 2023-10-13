@@ -21,8 +21,8 @@ function addQuestion(question) {
             let questionDoc = question;
             const docRef = (0, firestore_1.doc)(exports.db, "questions", question.title);
             yield (0, firestore_1.setDoc)(docRef, questionDoc);
-            for (let i = 1; i <= question.examples.length; i++) {
-                const add = (0, firestore_1.setDoc)((0, firestore_1.doc)(docRef, "examples", i.toString()), question.examples[i]);
+            for (let i = 0; i < question.examples.length; i++) {
+                const add = (0, firestore_1.setDoc)((0, firestore_1.doc)(docRef, "examples", (i + 1).toString()), question.examples[i]);
             }
             return Promise.resolve(question);
         }

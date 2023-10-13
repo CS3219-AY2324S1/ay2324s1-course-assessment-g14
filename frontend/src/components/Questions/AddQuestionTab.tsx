@@ -3,6 +3,8 @@ import QuestionForm from "./QuestionForm";
 import {Box, Button} from "@mui/material";
 import Question from "./Question";
 import Typography from "@mui/material/Typography";
+import {addQuestion} from "../../api/questions/data";
+import {AxiosError} from "axios";
 
 
 const AddQuestionTab: React.FC = () => {
@@ -11,10 +13,21 @@ const AddQuestionTab: React.FC = () => {
     const handleAddQuestionClick = () => {
         setAddQuestions(true);
     }
-    const onSubmit = (question: Question) => {
-        // TODO: Add question to database
+    const onSubmit = async (question: Question) => {
         console.log(question);
-        setAddQuestions(false);
+        let questionToAdd = new Question(question);
+
+        try {
+            const questionAdded = await addQuestion(questionToAdd);
+            console.log(questionAdded);
+            setAddQuestions(false);
+        } catch (e) {
+            if (e instanceof AxiosError && e.response) {
+                console.log(e.response.data.code);
+            } else if (e instanceof Error) {
+                console.log(e.message);
+            }
+        }
     };
 
     const onCancel = () => {

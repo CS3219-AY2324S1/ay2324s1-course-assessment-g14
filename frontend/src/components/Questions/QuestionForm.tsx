@@ -27,7 +27,10 @@ const QuestionForm: React.FC<QuestionFormProps> = ({question:initialQuestion, on
     ];
 
     const handleTextInputChange = (e: { target: { id: any; value: any; }; }) => {
-        const {id, value} = e.target;
+        let {id, value} = e.target;
+        if (id === 'constraints') {
+            value = [value]
+        }
         setQuestion((q) => ({
             ...q,
             [id]: value,
