@@ -24,6 +24,9 @@ export default function SignUp() {
       <CssBaseline />
       <Navbar />
       <CenteredContainer>
+        <Typography variant="h4" align="center" paddingBottom={5}>
+          Sign Up
+        </Typography>
         <TextField
           sx={{ width: "25ch" }}
           label="email"
