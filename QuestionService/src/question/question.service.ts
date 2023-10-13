@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import {doc, getFirestore, setDoc} from "firebase/firestore";
+import {deleteDoc, doc, getFirestore, setDoc} from "firebase/firestore";
 import { firebaseConfig } from "../firebase/firebase.config"
 
 initializeApp(firebaseConfig);
@@ -18,6 +18,16 @@ interface Question {
 interface Example {
   text: string;
   image: string;
+}
+
+export async function deleteQuestion(questionId: string) {
+  try {
+    const docRef = doc(db, "questions", questionId);
+    await deleteDoc(docRef);
+    return Promise.resolve();
+  } catch (error) {
+    return Promise.reject(error);
+  }
 }
 
 export async function addQuestion(question: Question): Promise<Question> {

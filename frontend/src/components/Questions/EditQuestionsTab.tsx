@@ -3,6 +3,9 @@ import EditQuestionsTable from "./EditQuestionsTable";
 import {Box, Button} from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Question from "./Question";
+import {Delete} from "@mui/icons-material";
+import {addQuestion, deleteQuestion} from "../../api/questions/data";
+import {AxiosError} from "axios";
 
 
 const EditQuestionsTab: React.FC = () => {
@@ -21,10 +24,20 @@ const EditQuestionsTab: React.FC = () => {
         //TODO: Update question in database
     }
 
-    const onDelete = (questionToDelete: Question) => {
+    const onDelete = async (questionToDelete: Question) => {
         console.log("Question to Delete: ", questionToDelete);
 
-        //TODO: Delete question from database
+        try {
+            await deleteQuestion(questionToDelete.title);
+            console.log("Question deleted: ",questionToDelete.title);
+            setEditQuestions(false);
+        } catch (e) {
+            if (e instanceof AxiosError && e.response) {
+                console.log(e.response.data.code);
+            } else if (e instanceof Error) {
+                console.log(e.message);
+            }
+        }
     }
 
 

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import {addQuestion, db} from "./question.service";
+import {addQuestion, db, deleteQuestion} from "./question.service";
 import {
   getDocs,
   collection,
@@ -78,8 +78,9 @@ const getExamples = async (id: string) => {
 export async function handleDeleteQuestion(req: Request, res: Response) {
   const questionId = req.params.questionId;
   try {
-    const docRef = doc(db, "questions", questionId);
-    const result = await deleteDoc(docRef);
+    console.log(`deleting question with id ${questionId}`);
+    await deleteQuestion(questionId);
+    res.status(200).send(`question with id "${questionId}" deleted`);
   } catch (err) {
     console.log(`error when deleting question with id ${questionId}` + err);
     res.status(500).send(err);

@@ -63,8 +63,9 @@ function handleDeleteQuestion(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const questionId = req.params.questionId;
         try {
-            const docRef = (0, firestore_1.doc)(question_service_1.db, "questions", questionId);
-            const result = yield (0, firestore_1.deleteDoc)(docRef);
+            console.log(`deleting question with id ${questionId}`);
+            yield (0, question_service_1.deleteQuestion)(questionId);
+            res.status(200).send(`question with id "${questionId}" deleted`);
         }
         catch (err) {
             console.log(`error when deleting question with id ${questionId}` + err);

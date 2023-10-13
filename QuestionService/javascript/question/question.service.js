@@ -9,12 +9,25 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addQuestion = exports.db = void 0;
+exports.addQuestion = exports.deleteQuestion = exports.db = void 0;
 const app_1 = require("firebase/app");
 const firestore_1 = require("firebase/firestore");
 const firebase_config_1 = require("../firebase/firebase.config");
 (0, app_1.initializeApp)(firebase_config_1.firebaseConfig);
 exports.db = (0, firestore_1.getFirestore)();
+function deleteQuestion(questionId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const docRef = (0, firestore_1.doc)(exports.db, "questions", questionId);
+            yield (0, firestore_1.deleteDoc)(docRef);
+            return Promise.resolve();
+        }
+        catch (error) {
+            return Promise.reject(error);
+        }
+    });
+}
+exports.deleteQuestion = deleteQuestion;
 function addQuestion(question) {
     return __awaiter(this, void 0, void 0, function* () {
         try {

@@ -16,5 +16,5 @@ export const getAllQuestions = () => questionhttpClient.get("/questions");
 export const addQuestion = (params: QuestionDTO) =>
   questionhttpClient.post("/questions", params);
 
-export const deleteQuestion = () =>
-  questionhttpClient.delete("/questions/:questionId");
+export const deleteQuestion = (questionId: string) =>
+  questionhttpClient.delete(`/questions/${questionId}`);
