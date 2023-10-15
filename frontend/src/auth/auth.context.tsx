@@ -7,7 +7,7 @@ import {
   useState,
 } from "react";
 import { User } from "firebase/auth";
-import { registerUser, signIn, signOut } from "../api/auth";
+import { deleteUser, registerUser, signIn, signOut } from "../api/auth";
 import { useLocalStorage } from "./useLocalStorage";
 import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
@@ -16,10 +16,12 @@ import { createUser, getUser, UserModel } from "../api/user";
 interface AuthContextData {
   user: UserModel | undefined;
   setUser: any | undefined,
+  activeUser: User | undefined;
   error: string;
   signUp: (email: string, password: string) => void;
   login: (email: string, password: string) => void;
   logout: () => void;
+  removeAccount: () => void;
 }
 
 interface AuthContextProviderProps {
@@ -29,15 +31,18 @@ interface AuthContextProviderProps {
 const AuthContext = createContext<AuthContextData>({
   user: undefined,
   setUser: undefined,
+  activeUser: undefined,
   error: "",
   signUp: (email: string, password: string) => undefined,
   login: (email: string, password: string) => undefined,
   logout: () => undefined,
+  removeAccount: () => undefined
 });
 
 export function AuthContextProvider({ children }: AuthContextProviderProps) {
   const navigate = useNavigate();
   const [user, setUser] = useLocalStorage("user", undefined);
+  const [activeUser, setActiveUser] = useState<User>();
   const [error, setError] = useState<string>("");
 
   const signUp = useCallback(
@@ -52,6 +57,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
           throw new Error("user returned without email");
         }
         const fetchedUser = await createUser(u.email);
+        setActiveUser(u)
         setUser(fetchedUser.data);
       } catch (e) {
         if (e instanceof AxiosError && e.response) {
@@ -72,9 +78,8 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
         if (!u.email) {
           throw new Error("user returned without email");
         }
-        console.log(u.email);
+        setActiveUser(u)
         const fetchedUser = await getUser(u.email);
-        console.log(fetchedUser.data);
         setUser(fetchedUser.data);
         navigate("/home", { replace: true });
       } catch (e) {
@@ -92,6 +97,24 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     try {
       await signOut();
       setUser(undefined);
+      setActiveUser(undefined)
+      navigate("/", { replace: true });
+    } catch (e) {
+      if (e instanceof AxiosError && e.response) {
+        setError(e.response.data.code);
+      } else if (e instanceof Error) {
+        setError(e.message);
+      }
+    }
+  }, [setUser, navigate]);
+
+  const removeAccount = useCallback(async () => {
+    try {
+      if (activeUser) {
+        await deleteUser();
+      }
+      setUser(undefined);
+      setActiveUser(undefined)
       navigate("/", { replace: true });
     } catch (e) {
       if (e instanceof AxiosError && e.response) {
@@ -103,8 +126,8 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   }, [setUser, navigate]);
 
   const authContextProviderValue = useMemo(
-    () => ({ user, setUser, error, signUp, login, logout }),
-    [user, setUser, error, signUp, login, logout]
+    () => ({ user, setUser, activeUser, error, signUp, login, logout, removeAccount }),
+    [user, setUser, activeUser, error, signUp, login, logout, removeAccount]
   );
 
   return (

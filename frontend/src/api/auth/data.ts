@@ -9,3 +9,5 @@ export const signIn = (params: AuthDTO) =>
   AuthHttpClient.post<UserCredential>("/login", params);
 
 export const signOut = () => AuthHttpClient.delete("/logout");
+
+export const deleteUser = () => AuthHttpClient.delete("/delete");

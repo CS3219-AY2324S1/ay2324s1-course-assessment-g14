@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createUser, getUser, updateUser } from "./user.service";
+import { createUser, delUser, getUser, updateUser } from "./user.service";
 
 export async function handleCreateUser(req: Request, res: Response) {
   try {
@@ -37,6 +37,22 @@ export async function handleUpdateUser(req: Request, res: Response) {
       console.log(`updating user ${email}`);
       const user = await updateUser(email, req.body.params)
       res.status(200).send(user);
+    } else {
+      res.status(500).send("no params");
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
+  }
+}
+
+export async function handleDeleteUser(req: Request, res: Response) {
+  try {
+    const user = req.query;
+    if (user && typeof(user.email) === "string") {
+      console.log(`deleting user`);
+      await delUser(user.email)
+      res.status(200).send("no params");
     } else {
       res.status(500).send("no params");
     }

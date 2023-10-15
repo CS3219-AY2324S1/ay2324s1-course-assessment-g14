@@ -4,6 +4,7 @@ import {
   handleLogin,
   handleLogout,
   handleSignUp,
+  handleDelete
 } from "./auth/auth.controller";
 // import { Socket, Server } from 'socket.io';
 // import { initializeApp } from 'firebase/app';
@@ -24,6 +25,7 @@ app.get("/", (req, res) => {
 app.post("/signup", handleSignUp);
 app.post("/login", handleLogin);
 app.delete("/logout", handleLogout);
+app.delete("/delete", handleDelete);
 
 
 
