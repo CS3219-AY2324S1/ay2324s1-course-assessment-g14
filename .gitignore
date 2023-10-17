@@ -15,6 +15,10 @@
 /ApiGatewayService/javascript
 /ApiGatewayService/node_modules
 /backend/javascript
+/CollabService/javascript
+/CollabService/node_modules
+/ChatService/node_modules
+/ChatService/javascript
 /.pnp
 .pnp.js
 
@@ -26,7 +30,8 @@
 /frontend/build
 /backend/build
 /QuestionService/build
-
+/CollabService/build
+/ChatService/build
 # misc
 .DS_Store
 .env
