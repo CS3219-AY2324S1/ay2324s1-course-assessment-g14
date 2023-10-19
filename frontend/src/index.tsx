@@ -13,6 +13,8 @@ import ProblemSolver from "./pages/ProblemSolver";
 
 import Landing from "./pages/landing";
 import Profile from "./pages/profile";
+import CreateAdmin from "./pages/createAdmin";
+import MaintainerGuard from "./auth/MaintainerGuard";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -63,6 +65,14 @@ root.render(
                 <AuthGuard>
                   <Profile />
                 </AuthGuard>
+              }
+            />
+            <Route
+              path="/createadmin"
+              element={
+                <MaintainerGuard>
+                  <CreateAdmin />
+                </MaintainerGuard>
               }
             />
           </Routes>

@@ -1,11 +1,24 @@
 import { Request, Response } from "express";
-import { createUser, getUser, updateUser } from "./user.service";
+
+import { createAdminUser, createUser, getUser, updateUser } from "./user.service";
 
 export async function handleCreateUser(req: Request, res: Response) {
   try {
     const { email } = req.body;
     console.log(`creating user ${email}`);
     const user = await createUser(email);
+    res.status(200).send(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
+  }
+}
+
+export async function handleCreateAdminUser(req: Request, res: Response) {
+  try {
+    const { email } = req.body;
+    console.log(`creating admin user ${email}`);
+    const user = await createAdminUser(email);
     res.status(200).send(user);
   } catch (error) {
     console.error(error);

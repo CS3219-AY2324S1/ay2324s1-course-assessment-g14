@@ -51,12 +51,16 @@ export default function Navbar() {
     setAnchorElUser(null);
   };
 
-  const settings = [
+  var settings = [
     { name: "Profile", onclick: () => navigate("/profile", { replace: true }) },
     { name: "Account", onclick: handleCloseUserMenu },
     { name: "Dashboard", onclick: handleCloseUserMenu },
     { name: "Logout", onclick: logout },
   ];
+  if (user?.role == 'maintainer') {
+    // settings = settings.concat({name: "Create", onclick: test})
+    settings = settings.concat({name: "Create Admin", onclick: () => navigate("/createadmin", { replace: true })})
+  }
 
   return (
     <AppBar position="static">

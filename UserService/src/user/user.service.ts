@@ -37,6 +37,29 @@ export async function createUser(email: string): Promise<User> {
   }
 }
 
+export async function createAdminUser(email: string): Promise<User> {
+  try {
+    await setDoc(doc(db, "users", email), {
+      email: email,
+      name: "-",
+      year: "-",
+      major: "-",
+      role: "admin",
+      completed: 0,
+    });
+    return Promise.resolve({
+      email: email,
+      name: "-",
+      year: "-",
+      major: "-",
+      role: "admin",
+      completed: 0,
+    });
+  } catch (error) {
+    return Promise.reject(error);
+  }
+}
+
 export async function getUser(email: string): Promise<User> {
   try {
     const data = await getDoc(doc(db, "users", email));
