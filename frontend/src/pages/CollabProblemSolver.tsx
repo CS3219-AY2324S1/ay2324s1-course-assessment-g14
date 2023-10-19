@@ -4,15 +4,20 @@ import CollabProblemSolverLeft from "../components/CollabProblemSolverLeft";
 import CollabProblemSolverRight from "../components/CollabProblemSolverRight";
 import { useData } from "../data/data.context";
 import CircularProgress from "@mui/material/CircularProgress";
+// import { getUser } from "../api/user";
+import { useAuth } from "../auth/auth.context";
 import Box from "@mui/material/Box";
 import { useParams } from "react-router-dom";
 import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
 import Navbar from "../components/Navbar";
+import { sha256 } from "js-sha256";
 
 function CollabProblemSolver() {
   const { questions, getQuestions, loading } = useData();
-  const  params  = useParams();
-  console.log(params)
+  const params = useParams();
+  const { user } = useAuth();
+
+  console.log(params);
   // React.useEffect(() => {
   //   getQuestions()
   //   // Fetch initial code or other data as needed
@@ -48,6 +53,40 @@ function CollabProblemSolver() {
       >
         <CircularProgress />
       </Box>
+    );
+  }
+  if (
+    !loading &&
+    user &&
+    sha256(user.email) !== params.user1 &&
+    sha256(user.email) !== params.user2
+  ) {
+    return (
+      <Container
+        sx={{
+          display: "flex",
+          justifyContent: "center", // Center horizontally
+          alignItems: "center", // Center vertically
+          minHeight: "100vh",
+          minWidth: "100vw",
+          paddingY: 4,
+        }}
+      >
+        <SentimentVeryDissatisfiedIcon sx={{ fontSize: 64, color: "blue" }} />
+        <Paper
+          elevation={3}
+          sx={{
+            padding: 2,
+            borderRadius: 10, // Rounded border
+            backgroundColor: "#42a5f5", // Dark blue background
+            color: "white", // White text
+          }}
+        >
+          <Typography variant="h4" gutterBottom>
+            Not your collaborative page!
+          </Typography>
+        </Paper>
+      </Container>
     );
   }
   if (!loading && !question) {
@@ -107,7 +146,7 @@ function CollabProblemSolver() {
               padding: 1,
             }}
           >
-            <CollabProblemSolverLeft questionNumber={params.questionId || ""}/>
+            <CollabProblemSolverLeft questionNumber={params.questionId || ""} />
           </Grid>
           <Grid
             item
@@ -115,7 +154,10 @@ function CollabProblemSolver() {
             md={6}
             sx={{ display: "flex", flexDirection: "column", flex: 1 }}
           >
-            <CollabProblemSolverRight user1={params.user1 || ""} user2={params.user2 || ""} />
+            <CollabProblemSolverRight
+              user1={params.user1 || ""}
+              user2={params.user2 || ""}
+            />
           </Grid>
         </Grid>
       </Container>

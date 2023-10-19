@@ -3,10 +3,17 @@ import { Paper, Typography, TextField, MenuItem, Button } from "@mui/material";
 import Editor from "@monaco-editor/react";
 import * as Y from "yjs";
 import { WebsocketProvider } from "y-websocket";
-
+import { useAuth } from "../auth/auth.context";
+import { Socket, io } from "socket.io-client";
+import { v4 as uuidv4 } from "uuid";
 import { MonacoBinding } from "y-monaco";
 import { editor } from "monaco-editor";
+import { DefaultEventsMap } from "@socket.io/component-emitter";
 
+interface ChatMessage {
+  id: string;
+  content: string;
+}
 const languages: string[] = ["C++", "Java", "JavaScript", "Python"];
 
 function CollabProblemSolverRight({
@@ -16,68 +23,58 @@ function CollabProblemSolverRight({
   user1: string;
   user2: string;
 }) {
-  const userId1 = user1;
-  const userId2 = user2;
-
-  const serverWsUrl = `${process.env.REACT_APP_COLLAB_BASE_URL}`;
+  const { user } = useAuth();
+  const roomId = user1 + "&" + user2; // Create a room ID based on user1 and user2
+  const serverWsUrl = process.env.REACT_APP_COLLAB_BASE_URL;
   const editorRef = useRef<editor.IStandaloneCodeEditor>();
-//   const chatWebSocket = new WebSocket(`${process.env.REACT_APP_CHAT_BASE_URL}`);
+
   const [selectedLanguage, setSelectedLanguage] =
     useState<string>("JavaScript");
-  const [code, setCode] = useState<string>('class Solution:');
+  const [code, setCode] = useState<string>("class Solution:");
 
   // State variable for chat messages
-  const [chatMessages, setChatMessages] = useState<string[]>([]);
-  const [newMessage, setNewMessage] = useState<string>('');
-  const [chatWebSocket, setChatWebSocket] = useState<WebSocket | null>(null);
-  const [webSocketState, setWebSocketState] = useState<string>('disconnected'); // Add a state variable to track WebSocket state
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
+  const [newMessage, setNewMessage] = useState<string>("");
 
+  const socketRef = useRef<Socket<DefaultEventsMap, DefaultEventsMap>>();
 
-  useEffect(() => {
-    // Initialize yjs
-    const doc = new Y.Doc();
-
-    // Connect to WebSocket server
-    const provider: WebsocketProvider = new WebsocketProvider(
-      serverWsUrl,
-      user1 + "&" + user2,
-      doc
-    );
-    const type = doc.getText("monaco");
-
-    // Bind yjs doc to Monaco editor
-    if (editorRef.current) {
+  function handleEditorDidMount(editor: editor.IStandaloneCodeEditor) {
+    try {
+      editorRef.current = editor;
+      const doc = new Y.Doc();
+      const provider: WebsocketProvider = new WebsocketProvider(
+        serverWsUrl!,
+        user1 + "&" + user2,
+        doc
+      );
+      const type = doc.getText("monaco");
       const binding = new MonacoBinding(
         type,
         editorRef.current.getModel()!,
         new Set([editorRef.current])
       );
+    } catch (err) {
+      console.log(err);
     }
-    const chatSocket = new WebSocket(`${process.env.REACT_APP_CHAT_BASE_URL}`);
+  }
 
-    chatSocket.onopen = (event) => {
-      console.log('Chat WebSocket opened');
-      setWebSocketState('connected'); // Update WebSocket state when connected
-    };
-  
-    chatSocket.onmessage = (event) => {
-      const receivedMessage = event.data.toString();
-      // Process and display the received message
-      setChatMessages([...chatMessages, receivedMessage]);
-    };
-  
-    chatSocket.onclose = (event) => {
-      console.log('Chat WebSocket closed', event);
-      setWebSocketState('disconnected'); // Update WebSocket state when disconnected
-    };
-  
-    chatSocket.onerror = (event) => {
-      console.error('Chat WebSocket error', event);
-      setWebSocketState('disconnected'); // Update WebSocket state when an error occurs
-    };
-  
-    setChatWebSocket(chatSocket); // Store the WebSocket instance in state
-  }, []);
+  useEffect(() => {
+    try {
+      socketRef.current = io(`${process.env.REACT_APP_CHAT_BASE_URL}`);
+
+      socketRef.current.emit("joinRoom", roomId);
+
+      socketRef.current.on("receiveMessage", (message) => {
+        setChatMessages((prevMessages) => [...prevMessages, message]);
+      });
+
+      return () => {
+        socketRef.current?.disconnect();
+      };
+    } catch (err) {
+      console.log(err);
+    }
+  }, [roomId]);
 
   const handleLanguageChange = (
     event: React.ChangeEvent<{ value: unknown }>
@@ -86,31 +83,37 @@ function CollabProblemSolverRight({
   };
 
   const handleCodeChange = (value: string | undefined) => {
-    setCode(value || '');
+    setCode(value || "");
   };
 
-  const handleNewMessageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleNewMessageChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setNewMessage(event.target.value);
   };
 
-  const handleNewMessageKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleNewMessageKeyPress = (
+    event: React.KeyboardEvent<HTMLInputElement>
+  ) => {
     if (event.key === "Enter") {
       handleSendChatMessage();
     }
   };
 
   const handleSendChatMessage = () => {
-    if (newMessage && chatWebSocket && webSocketState === 'connected') {
-        // Send the message to the WebSocket server
-        // TODO: CHECK WHO IS SENDING MSG
-        chatWebSocket.send(`${userId1}: ${newMessage}`);
-      
-        // Add the new message to chatMessages
-        setChatMessages([...chatMessages, `${userId1}: ${newMessage}`]);
-      
-        // Clear the input field
-        setNewMessage('');
+    try {
+      if (newMessage && user) {
+        const messageToSend = {
+          id: uuidv4(),
+          content: `${user.name}: ${newMessage}`,
+        };
+        socketRef.current?.emit("sendMessage", roomId, messageToSend);
+        setChatMessages([...chatMessages, messageToSend]);
+        setNewMessage("");
       }
+    } catch (err) {
+      console.log(err);
+    }
   };
   return (
     <Paper
@@ -137,6 +140,7 @@ function CollabProblemSolverRight({
         Code Editor:
       </Typography>
       <Editor
+        onMount={handleEditorDidMount}
         height="800px"
         language={selectedLanguage.toLowerCase()}
         theme="vs-dark"
@@ -147,18 +151,18 @@ function CollabProblemSolverRight({
         Chat:
       </Typography>
       <div
-      style={{
-        flex: 1,
-        overflowY: "auto",
-        marginBottom: "16px",
-        maxHeight: "150px",
-        padding: "8px", // Add padding inside the chat box
-        backgroundColor: "#DCDCDC", // Change the chat box background color
-        borderRadius: 8, // Add border radius to chat box
-      }}
-    >
-        {chatMessages.map((message, index) => (
-          <div key={index}>{message}</div>
+        style={{
+          flex: 1,
+          overflowY: "auto",
+          marginBottom: "16px",
+          maxHeight: "150px",
+          padding: "8px", // Add padding inside the chat box
+          backgroundColor: "#DCDCDC", // Change the chat box background color
+          borderRadius: 8, // Add border radius to chat box
+        }}
+      >
+        {chatMessages.map((message) => (
+          <div key={message.id}>{message.content}</div>
         ))}
       </div>
       <TextField
