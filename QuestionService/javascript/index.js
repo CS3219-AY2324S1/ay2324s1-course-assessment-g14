@@ -15,6 +15,7 @@ app.get("/", (req, res) => {
 });
 app.get("/questions", question_controller_1.handleGetQuestions);
 app.post("/questions", question_controller_1.handleAddQuestion);
+app.put("/questions/:questionId", question_controller_1.handleUpdateQuestion);
 app.delete("/questions/:questionId", question_controller_1.handleDeleteQuestion);
 app.listen(port, () => {
     console.log(`Question Service listening on port ${port}`);

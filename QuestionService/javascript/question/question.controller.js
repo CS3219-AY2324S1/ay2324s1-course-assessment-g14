@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.handleAddQuestion = exports.handleDeleteQuestion = exports.handleGetQuestions = void 0;
+exports.handleAddQuestion = exports.handleUpdateQuestion = exports.handleDeleteQuestion = exports.handleGetQuestions = void 0;
 const question_service_1 = require("./question.service");
 const firestore_1 = require("firebase/firestore");
 function handleGetQuestions(req, res) {
@@ -74,6 +74,30 @@ function handleDeleteQuestion(req, res) {
     });
 }
 exports.handleDeleteQuestion = handleDeleteQuestion;
+function handleUpdateQuestion(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const questionId = req.params.questionId;
+        try {
+            const { title, tags, categories, constraints, difficulty, description, examples, } = req.body;
+            console.log(`updating question ${questionId}: ${title}`);
+            const question = yield (0, question_service_1.updateQuestion)(questionId, {
+                title: title,
+                tags: tags,
+                categories: categories,
+                constraints: constraints,
+                difficulty: difficulty,
+                description: description,
+                examples: examples,
+            });
+            res.status(200).send(question);
+        }
+        catch (err) {
+            console.log(err);
+            res.status(500).send(err);
+        }
+    });
+}
+exports.handleUpdateQuestion = handleUpdateQuestion;
 function handleAddQuestion(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {

@@ -20,7 +20,7 @@ const EditQuestionTab: React.FC<EditQuestionPreviewProps> = ({question, onEdit, 
     }
 
     const handleFinishEdit = (editedQuestion: Question) => {
-        onEdit(question);
+        onEdit(editedQuestion);
         setEditQuestion(false);
     };
 

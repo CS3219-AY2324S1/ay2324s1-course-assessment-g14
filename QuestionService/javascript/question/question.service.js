@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addQuestion = exports.deleteQuestion = exports.db = void 0;
+exports.addQuestion = exports.updateQuestion = exports.deleteQuestion = exports.db = void 0;
 const app_1 = require("firebase/app");
 const firestore_1 = require("firebase/firestore");
 const firebase_config_1 = require("../firebase/firebase.config");
@@ -28,6 +28,23 @@ function deleteQuestion(questionId) {
     });
 }
 exports.deleteQuestion = deleteQuestion;
+function updateQuestion(questionId, question) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            let questionDoc = question;
+            const docRef = (0, firestore_1.doc)(exports.db, "questions", questionId);
+            yield (0, firestore_1.setDoc)(docRef, questionDoc);
+            for (let i = 0; i < question.examples.length; i++) {
+                const add = (0, firestore_1.setDoc)((0, firestore_1.doc)(docRef, "examples", (i + 1).toString()), question.examples[i]);
+            }
+            return Promise.resolve(question);
+        }
+        catch (error) {
+            return Promise.reject(error);
+        }
+    });
+}
+exports.updateQuestion = updateQuestion;
 function addQuestion(question) {
     return __awaiter(this, void 0, void 0, function* () {
         try {

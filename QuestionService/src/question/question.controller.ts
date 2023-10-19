@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import {addQuestion, db, deleteQuestion} from "./question.service";
+import {addQuestion, db, deleteQuestion, updateQuestion} from "./question.service";
 import {
   getDocs,
   collection,
@@ -83,6 +83,35 @@ export async function handleDeleteQuestion(req: Request, res: Response) {
     res.status(200).send(`question with id "${questionId}" deleted`);
   } catch (err) {
     console.log(`error when deleting question with id ${questionId}` + err);
+    res.status(500).send(err);
+  }
+}
+
+export async function handleUpdateQuestion(req: Request, res: Response) {
+  const questionId = req.params.questionId;
+  try {
+    const {
+      title,
+      tags,
+      categories,
+      constraints,
+      difficulty,
+      description,
+      examples,
+    } = req.body;
+    console.log(`updating question ${questionId}: ${title}`);
+    const question = await updateQuestion(questionId,{
+      title: title,
+      tags: tags,
+      categories: categories,
+      constraints: constraints,
+      difficulty: difficulty,
+      description: description,
+      examples: examples,
+    });
+    res.status(200).send(question);
+  } catch (err) {
+    console.log(err);
     res.status(500).send(err);
   }
 }
