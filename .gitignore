@@ -12,6 +12,8 @@
 /MatchingService/node_modules
 /UserService/node_modules
 /UserService/javascript
+/ApiGatewayService/javascript
+/ApiGatewayService/node_modules
 /backend/javascript
 /.pnp
 .pnp.js
