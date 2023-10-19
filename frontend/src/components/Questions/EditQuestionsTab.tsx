@@ -3,9 +3,9 @@ import EditQuestionsTable from "./EditQuestionsTable";
 import {Box, Button} from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Question from "./Question";
-import {Delete} from "@mui/icons-material";
-import {addQuestion, deleteQuestion, updateQuestion} from "../../api/questions/data";
+import {deleteQuestion, updateQuestion} from "../../api/questions/data";
 import {AxiosError} from "axios";
+import Typography from "@mui/material/Typography";
 
 
 const EditQuestionsTab: React.FC = () => {
@@ -56,6 +56,9 @@ const EditQuestionsTab: React.FC = () => {
             <Box component="span" padding={2} width='80%'>
                 {editQuestions ?
                     <React.Fragment>
+                        <Typography variant="h5" gutterBottom>
+                            Edit Questions
+                        </Typography>
                         <Grid container spacing={3}>
                             <Grid item sm={12}>
                                 <EditQuestionsTable onEdit={onEdit} onDelete={onDelete}/>

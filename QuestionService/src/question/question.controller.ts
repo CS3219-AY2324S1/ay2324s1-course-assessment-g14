@@ -3,10 +3,6 @@ import {addQuestion, db, deleteQuestion, updateQuestion} from "./question.servic
 import {
   getDocs,
   collection,
-  deleteDoc,
-  doc,
-  addDoc,
-  setDoc,
 } from "firebase/firestore";
 
 interface Question {

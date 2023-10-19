@@ -40,7 +40,7 @@ const AddQuestionTab: React.FC = () => {
             <Box component="span" padding={2} width='80%'>
                 {addQuestions ?
                     <React.Fragment>
-                        <Typography variant="h4" gutterBottom>
+                        <Typography variant="h5" gutterBottom>
                             Add Question
                         </Typography>
                         <QuestionForm onSubmit={onSubmit} onCancel={onCancel} />

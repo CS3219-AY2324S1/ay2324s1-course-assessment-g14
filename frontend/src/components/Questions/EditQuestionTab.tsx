@@ -3,7 +3,7 @@ import Question from "./Question";
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
-import {Box, Card, Paper} from "@mui/material";
+import {Box} from "@mui/material";
 import QuestionForm from "./QuestionForm";
 
 interface EditQuestionPreviewProps {
