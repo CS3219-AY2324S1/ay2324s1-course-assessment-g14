@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Paper, Typography, TextField, MenuItem, Button } from "@mui/material";
 import Editor from "@monaco-editor/react";
-import * as Y from "yjs";
-import { WebsocketProvider } from "y-websocket";
+
 import { useAuth } from "../auth/auth.context";
 import { Socket, io } from "socket.io-client";
 import { v4 as uuidv4 } from "uuid";
-import { MonacoBinding } from "y-monaco";
-import { editor } from "monaco-editor";
+
 import { DefaultEventsMap } from "@socket.io/component-emitter";
+import PartySocket from "partysocket";
+import socket from "./MatchingService/socket";
 
 interface ChatMessage {
   id: string;
@@ -25,12 +25,12 @@ function CollabProblemSolverRight({
 }) {
   const { user } = useAuth();
   const roomId = user1 + "&" + user2; // Create a room ID based on user1 and user2
-  const serverWsUrl = process.env.REACT_APP_COLLAB_BASE_URL;
-  const editorRef = useRef<editor.IStandaloneCodeEditor>();
+  // const serverWsUrl = process.env.REACT_APP_COLLAB_BASE_URL;
+  // const editorRef = useRef<editor.IStandaloneCodeEditor>();
 
   const [selectedLanguage, setSelectedLanguage] =
     useState<string>("JavaScript");
-  const [code, setCode] = useState<string>("class Solution:");
+  const [editorValue, setEditorValue] = useState<string>("");
 
   // State variable for chat messages
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
@@ -38,28 +38,35 @@ function CollabProblemSolverRight({
 
   const socketRef = useRef<Socket<DefaultEventsMap, DefaultEventsMap>>();
 
-  function handleEditorDidMount(editor: editor.IStandaloneCodeEditor) {
-    try {
-      editorRef.current = editor;
-      const doc = new Y.Doc();
-      const provider: WebsocketProvider = new WebsocketProvider(
-        serverWsUrl!,
-        user1 + "&" + user2,
-        doc
-      );
-      const type = doc.getText("monaco");
-      const binding = new MonacoBinding(
-        type,
-        editorRef.current.getModel()!,
-        new Set([editorRef.current])
-      );
-    } catch (err) {
-      console.log(err);
-    }
-  }
+  // function handleEditorDidMount(editor: editor.IStandaloneCodeEditor) {
+  //   try {
+  //     editorRef.current = editor;
+  //     const doc = new Y.Doc();
+  //     const provider: WebsocketProvider = new WebsocketProvider(
+  //       serverWsUrl!,
+  //       user1 + "&" + user2,
+  //       doc
+  //     );
+  //     const type = doc.getText("monaco");
+  //     const binding = new MonacoBinding(
+  //       type,
+  //       editorRef.current.getModel()!,
+  //       new Set([editorRef.current])
+  //     );
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // }
 
+  const socket = new PartySocket({
+    host: `${process.env.REACT_APP_COLLAB_BASE_URL}`,
+    room: roomId,
+  });
   useEffect(() => {
     try {
+      
+      
+      socket.addEventListener("message", onIncomingMessage);
       socketRef.current = io(`${process.env.REACT_APP_CHAT_BASE_URL}`);
 
       socketRef.current.emit("joinRoom", roomId);
@@ -70,11 +77,12 @@ function CollabProblemSolverRight({
 
       return () => {
         socketRef.current?.disconnect();
+        // socket.removeEventListener("message", onIncomingMessage);
       };
     } catch (err) {
       console.log(err);
     }
-  }, [roomId]);
+  }, []);
 
   const handleLanguageChange = (
     event: React.ChangeEvent<{ value: unknown }>
@@ -82,8 +90,16 @@ function CollabProblemSolverRight({
     setSelectedLanguage(event.target.value as string);
   };
 
-  const handleCodeChange = (value: string | undefined) => {
-    setCode(value || "");
+  const handleChange = (value: string | undefined) => {
+    if (value !== undefined) {
+    socket.send(value);
+    }
+  };
+
+  const onIncomingMessage = (message: MessageEvent) => {
+    // console.log("message in");
+    // console.log(message.data)
+    setEditorValue(message.data);
   };
 
   const handleNewMessageChange = (
@@ -115,6 +131,7 @@ function CollabProblemSolverRight({
       console.log(err);
     }
   };
+
   return (
     <Paper
       elevation={3}
@@ -140,12 +157,11 @@ function CollabProblemSolverRight({
         Code Editor:
       </Typography>
       <Editor
-        onMount={handleEditorDidMount}
         height="800px"
         language={selectedLanguage.toLowerCase()}
         theme="vs-dark"
-        value={code}
-        onChange={handleCodeChange} // Update the code when changed
+        value={editorValue}
+        onChange={handleChange} // Update the code when changed
       />
       <Typography variant="h6" gutterBottom style={{ marginTop: "16px" }}>
         Chat:
