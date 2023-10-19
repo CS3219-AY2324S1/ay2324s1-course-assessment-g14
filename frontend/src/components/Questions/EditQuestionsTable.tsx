@@ -57,8 +57,8 @@ const EditQuestionsTable: React.FC<EditQuestionsTableProps> = ({onEdit, onDelete
         setCurrentPage(1);
     };
 
-    const handleExpandClick = (title: string) => {
-        expandedQuestion === title ? setExpandedQuestion(false) : setExpandedQuestion(title);
+    const handleExpandClick = (id: string) => {
+        expandedQuestion === id ? setExpandedQuestion(false) : setExpandedQuestion(id);
     }
 
     const indexOfLastQuestion = currentPage * itemsPerPage;
@@ -79,20 +79,20 @@ const EditQuestionsTable: React.FC<EditQuestionsTableProps> = ({onEdit, onDelete
                     </TableHead>
                     <TableBody>
                         {currentQuestions.map((question:Question) => (
-                            <React.Fragment key={question.title}>
+                            <React.Fragment key={question.id}>
                                 <TableRow
                                     sx={{ '& > *': { borderBottom: 'unset' }}}
                                     hover
-                                    onClick={() => handleExpandClick(question.title)}
-                                    selected={expandedQuestion === question.title}
+                                    onClick={() => handleExpandClick(question.id)}
+                                    selected={expandedQuestion === question.id}
                                 >
                                     <TableCell>
                                         <IconButton
                                             aria-label="expand row"
                                             size="small"
-                                            onClick={() => handleExpandClick(question.title)}
+                                            onClick={() => handleExpandClick(question.id)}
                                         >
-                                            {expandedQuestion === question.title ?
+                                            {expandedQuestion === question.id ?
                                                 <Typography>▼</Typography> : <Typography>▶</Typography>}
                                         </IconButton>
                                     </TableCell>
@@ -100,9 +100,9 @@ const EditQuestionsTable: React.FC<EditQuestionsTableProps> = ({onEdit, onDelete
                                     <TableCell>{question.categories.join(', ')}</TableCell>
                                     <TableCell>{question.difficulty}</TableCell>
                                 </TableRow>
-                                <TableRow key={question.title + "_details"}>
+                                <TableRow key={question.id + "_details"}>
                                     <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={4}>
-                                        <Collapse in={question.title === expandedQuestion} timeout="auto" unmountOnExit>
+                                        <Collapse in={question.id === expandedQuestion} timeout="auto" unmountOnExit>
                                             <EditQuestionTab question={question} onEdit={onEdit} onDelete={onDelete} />
                                         </Collapse>
                                     </TableCell>

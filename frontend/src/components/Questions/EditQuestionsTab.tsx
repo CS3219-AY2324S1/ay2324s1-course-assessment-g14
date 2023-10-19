@@ -23,7 +23,7 @@ const EditQuestionsTab: React.FC = () => {
 
         try {
             await updateQuestion(editedQuestion.id, editedQuestion);
-            console.log(`Question updated: ${editedQuestion.id}: ${editedQuestion.title}`);
+            console.log(`Question ${editedQuestion.id} updated: ${editedQuestion.title}`);
             setEditQuestions(false);
         } catch (e) {
             if (e instanceof AxiosError && e.response) {
@@ -38,8 +38,8 @@ const EditQuestionsTab: React.FC = () => {
         console.log("Question to Delete: ", questionToDelete);
 
         try {
-            await deleteQuestion(questionToDelete.title);
-            console.log("Question deleted: ",questionToDelete.title);
+            await deleteQuestion(questionToDelete.id);
+            console.log(`Question ${questionToDelete.id} deleted: ${questionToDelete.title}`);
             setEditQuestions(false);
         } catch (e) {
             if (e instanceof AxiosError && e.response) {
