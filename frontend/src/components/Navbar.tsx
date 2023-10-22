@@ -16,6 +16,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import AdbIcon from "@mui/icons-material/Adb";
 import { useAuth } from "../auth/auth.context";
 import { useNavigate } from "react-router-dom";
+import { useData } from "../data/data.context";
 
 const pages = [
   {
@@ -62,12 +63,15 @@ export default function Navbar() {
     setAnchorElUser(null);
   };
 
-  const settings = [
+  var settings = [
     { name: "Profile", onclick: () => navigate("/profile", { replace: true }) },
     { name: "Account", onclick: handleCloseUserMenu },
     { name: "Dashboard", onclick: handleCloseUserMenu },
     { name: "Logout", onclick: logout },
   ];
+  if (user?.role == 'maintainer') {
+    settings = settings.concat({name: "Create Admin", onclick: () => navigate("/createadmin", { replace: true })})
+  }
 
   return (
     <AppBar position="static">

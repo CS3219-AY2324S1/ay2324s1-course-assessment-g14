@@ -1,11 +1,24 @@
 import { Request, Response } from "express";
-import { createUser, delUser, getUser, updateUser } from "./user.service";
+
+import { createAdminUser, delUser, createUser, getAdminUsers, getUser, updateUser } from "./user.service";
 
 export async function handleCreateUser(req: Request, res: Response) {
   try {
     const { email } = req.body;
     console.log(`creating user ${email}`);
     const user = await createUser(email);
+    res.status(200).send(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
+  }
+}
+
+export async function handleCreateAdminUser(req: Request, res: Response) {
+  try {
+    const { email } = req.body;
+    console.log(`creating admin user ${email}`);
+    const user = await createAdminUser(email);
     res.status(200).send(user);
   } catch (error) {
     console.error(error);
@@ -25,6 +38,17 @@ export async function handleGetUser(req: Request, res: Response) {
     } else {
       res.status(500).send("no params");
     }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
+  }
+}
+
+export async function handleGetAdminUsers(req: Request, res: Response) {
+  try {
+    console.log(`getting admin users`);
+    const result = await getAdminUsers();
+    res.status(200).send(result);
   } catch (error) {
     console.error(error);
     res.status(500).send(error);

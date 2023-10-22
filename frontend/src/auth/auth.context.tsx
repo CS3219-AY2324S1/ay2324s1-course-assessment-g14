@@ -11,7 +11,7 @@ import { deleteUser, registerUser, signIn, signOut } from "../api/auth";
 import { useLocalStorage } from "./useLocalStorage";
 import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
-import { createUser, getUser, UserModel } from "../api/user";
+import { createAdminUser, createUser, getUser, UserModel } from "../api/user";
 
 interface AuthContextData {
   user: UserModel | undefined;
@@ -19,6 +19,7 @@ interface AuthContextData {
   activeUser: User | undefined;
   error: string;
   signUp: (email: string, password: string) => void;
+  signUpAdmin: (email: string, password: string) => void;
   login: (email: string, password: string) => void;
   logout: () => void;
   removeAccount: () => void;
@@ -34,6 +35,7 @@ const AuthContext = createContext<AuthContextData>({
   activeUser: undefined,
   error: "",
   signUp: (email: string, password: string) => undefined,
+  signUpAdmin: (email: string, password: string) => undefined,
   login: (email: string, password: string) => undefined,
   logout: () => undefined,
   removeAccount: () => undefined
@@ -59,6 +61,33 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
         const fetchedUser = await createUser(u.email);
         setActiveUser(u)
         setUser(fetchedUser.data);
+      } catch (e) {
+        if (e instanceof AxiosError && e.response) {
+          setError(e.response.data.code);
+        } else if (e instanceof Error) {
+          setError(e.message);
+        }
+      }
+    },
+    [setUser]
+  );
+
+  const signUpAdmin = useCallback(
+    async (email: string, password: string) => {
+      try {
+        const response = await registerUser({
+          email: email,
+          password: password,
+        });
+        const u: User = response.data.user;
+        if (!u.email) {
+          throw new Error("user returned without email");
+        }
+        console.log('creating admin')
+        const fetchedUser = await createAdminUser(u.email);
+        console.log('admin created')
+        // setActiveUser(u)
+        // setUser(fetchedUser.data);
       } catch (e) {
         if (e instanceof AxiosError && e.response) {
           setError(e.response.data.code);
@@ -126,8 +155,8 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   }, [setUser, navigate]);
 
   const authContextProviderValue = useMemo(
-    () => ({ user, setUser, activeUser, error, signUp, login, logout, removeAccount }),
-    [user, setUser, activeUser, error, signUp, login, logout, removeAccount]
+    () => ({ user, setUser, activeUser, error, signUp, signUpAdmin, login, logout, removeAccount }),
+    [user, setUser, activeUser, error, signUp, signUpAdmin, login, logout, removeAccount]
   );
 
   return (
