@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-import { createAdminUser, createUser, getUser, updateUser } from "./user.service";
+import { createAdminUser, createUser, getAdminUsers, getUser, updateUser } from "./user.service";
 
 export async function handleCreateUser(req: Request, res: Response) {
   try {
@@ -37,6 +37,17 @@ export async function handleGetUser(req: Request, res: Response) {
     } else {
       res.status(500).send("no params");
     }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
+  }
+}
+
+export async function handleGetAdminUsers(req: Request, res: Response) {
+  try {
+    console.log(`getting admin users`);
+    const result = await getAdminUsers();
+    res.status(200).send(result);
   } catch (error) {
     console.error(error);
     res.status(500).send(error);

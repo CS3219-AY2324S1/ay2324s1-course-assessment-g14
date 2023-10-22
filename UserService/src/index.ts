@@ -7,7 +7,7 @@ import cors from "cors";
 // import { Socket, Server } from 'socket.io';
 // import { Server as ServerHttp } from 'http';
 
-import { handleCreateUser, handleGetUser, handleUpdateUser, handleCreateAdminUser } from "./user/user.controller";
+import { handleCreateUser, handleGetUser, handleUpdateUser, handleCreateAdminUser, handleGetAdminUsers } from "./user/user.controller";
 const app = express();
 const port = 3004;
 app.use(cors());
@@ -24,6 +24,7 @@ app.get("/", (req, res) => {
 // const db = getFirestore();
 
 app.post("/user", handleCreateUser);
+app.get("/adminusers", handleGetAdminUsers);
 app.post("/useradmin", handleCreateAdminUser);
 app.get("/user", handleGetUser);
 app.put("/user", handleUpdateUser);

@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { doc, getDoc, getFirestore, setDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, getFirestore, setDoc, updateDoc, where, query, collection, getDocs } from "firebase/firestore";
 import { firebaseConfig } from "../firebase/firebase.config";
 
 initializeApp(firebaseConfig);
@@ -80,13 +80,42 @@ export async function getUser(email: string): Promise<User> {
   }
 }
 
+export async function getAdminUsers(): Promise<User[]> {
+  try {
+    const q = query(collection(db, "users"), where("role", "==", "admin"));
+    const querySnapshot = await getDocs(q);
+    let adminsArray: (User)[];
+    adminsArray = []
+    querySnapshot.forEach((doc) =>  {
+      const user = doc.data()
+      adminsArray = adminsArray.concat([{
+        email: user.email,
+        name: user.name ? user.name : undefined,
+        year: user.year ? user.year : undefined,
+        major: user.major ? user.major : undefined,
+        role: user.role,
+        completed: user.completed,
+      }])
+    })
+
+    if (querySnapshot) {
+      return Promise.resolve(adminsArray);
+
+    }
+    return Promise.reject("no such user");
+  } catch (error) {
+    return Promise.reject(error);
+  }
+}
+
 export async function updateUser(email: string, params: any): Promise<User> {
   try {
     const document = doc(db, "users", email);
     await updateDoc(document, {
       name: params.name,
       year: params.year,
-      major: params.major
+      major: params.major,
+      role: params.role
     })
     const data = await getDoc(doc(db, "users", email));
     const user = data.data();

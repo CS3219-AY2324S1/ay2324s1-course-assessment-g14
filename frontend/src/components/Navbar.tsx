@@ -16,6 +16,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import AdbIcon from "@mui/icons-material/Adb";
 import { useAuth } from "../auth/auth.context";
 import { useNavigate } from "react-router-dom";
+import { useData } from "../data/data.context";
 
 const pages = ["Questions"];
 const authPages = [
@@ -58,7 +59,6 @@ export default function Navbar() {
     { name: "Logout", onclick: logout },
   ];
   if (user?.role == 'maintainer') {
-    // settings = settings.concat({name: "Create", onclick: test})
     settings = settings.concat({name: "Create Admin", onclick: () => navigate("/createadmin", { replace: true })})
   }
 

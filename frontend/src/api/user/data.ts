@@ -5,6 +5,8 @@ import { UserModel, Values } from "./model";
 export const createUser = (email: string) =>
   UserHttpClient.post<UserModel>("/user", { email: email });
 
+export const getAllAdminUsers = () => UserHttpClient.get<UserModel[]>("/adminusers");
+
 export const createAdminUser = (email: string) =>
   UserHttpClient.post<UserModel>("/useradmin", { email: email });
 
