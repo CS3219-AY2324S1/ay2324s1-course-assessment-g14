@@ -1,17 +1,18 @@
 import { initializeApp } from "firebase/app";
-import { doc, getDoc, getFirestore, setDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, getFirestore, setDoc, updateDoc, deleteDoc } from "firebase/firestore";
 import { firebaseConfig } from "../firebase/firebase.config";
-
-initializeApp(firebaseConfig);
-const db = getFirestore();
+import { getAuth } from "firebase/auth";
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
 interface User {
-  email: string;
+  email?: string;
   name?: string;
   year?: string;
   major?: string;
-  role: string;
-  completed: number;
+  role?: string;
+  completed?: number;
 }
 
 export async function createUser(email: string): Promise<User> {
@@ -78,6 +79,15 @@ export async function updateUser(email: string, params: any): Promise<User> {
       });
     }
     return Promise.reject("no such user");
+  } catch (error) {
+    return Promise.reject(error);
+  }
+}
+
+export async function delUser(user: string): Promise<null> {
+  try {
+    await deleteDoc(doc(db, "users", user));
+    return null;
   } catch (error) {
     return Promise.reject(error);
   }

@@ -1,5 +1,5 @@
 
-import { useEffect, useState, useCallback } from "react";
+import { useState } from "react";
 
 import {
   Avatar,
@@ -15,6 +15,7 @@ import ProfileField from "../components/ProfileField";
 import { useAuth } from "../auth/auth.context";
 import { Values } from "../components/DropDownOrTextField";
 import { updateUser } from "../api/user";
+import DeleteButtonModal from "../components/UserService/DeleteButton";
 
 export default function Profile() {
   const { user, setUser } = useAuth();
@@ -77,6 +78,7 @@ export default function Profile() {
             ))}
           </Grid>
         </Grid>
+          <DeleteButtonModal/>
       </Container>
     </Box>
   );

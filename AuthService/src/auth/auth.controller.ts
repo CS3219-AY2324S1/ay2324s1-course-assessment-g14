@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { signUp, login, logout } from "./auth.service";
+import { signUp, login, logout, removeUser } from "./auth.service";
 
 export async function handleSignUp(req: Request, res: Response) {
   try {
@@ -29,6 +29,17 @@ export async function handleLogout(req: Request, res: Response) {
   try {
     console.log(`logging out`);
     await logout();
+    res.status(200).send();
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
+  }
+}
+
+export async function handleDelete(req: Request, res: Response) {
+  try {
+    console.log(`deleting user`);
+    await removeUser();
     res.status(200).send();
   } catch (error) {
     console.error(error);

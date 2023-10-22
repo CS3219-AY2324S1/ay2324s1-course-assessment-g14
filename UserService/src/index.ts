@@ -6,7 +6,7 @@ import cors from "cors";
 // import { firebaseConfig } from "./firebase/firebase.config";
 // import { Socket, Server } from 'socket.io';
 // import { Server as ServerHttp } from 'http';
-import { handleCreateUser, handleGetUser, handleUpdateUser } from "./user/user.controller";
+import { handleCreateUser, handleDeleteUser, handleGetUser, handleUpdateUser } from "./user/user.controller";
 const app = express();
 const port = 3004;
 app.use(cors());
@@ -25,7 +25,7 @@ app.get("/", (req, res) => {
 app.post("/user", handleCreateUser);
 app.get("/user", handleGetUser);
 app.put("/user", handleUpdateUser);
-
+app.delete("/user", handleDeleteUser);
 
 
 
