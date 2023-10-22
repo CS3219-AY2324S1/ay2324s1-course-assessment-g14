@@ -1,4 +1,4 @@
-import {AuthHttpClient} from "../axios/config";
+import { AuthHttpClient } from "../axios/config";
 import { AuthDTO } from "./dto";
 import { UserCredential } from "firebase/auth";
 

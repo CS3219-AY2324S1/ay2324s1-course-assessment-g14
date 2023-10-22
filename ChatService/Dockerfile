@@ -2,7 +2,7 @@
 FROM node:14
 
 # Set the working directory in the container
-WORKDIR /usr/src/user-service
+WORKDIR /usr/src/chat-service
 
 # Copy package.json and package-lock.json to the working directory
 COPY package.json ./
@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Expose the port on which your Auth service will run
-# EXPOSE 3004
+EXPOSE 3007
 
 # Define the command to start your Auth service
 CMD [ "npm", "run", "dev"]

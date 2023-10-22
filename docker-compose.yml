@@ -40,6 +40,24 @@ services:
     image: user-service-image
     # ports:
     #   - "3001:3001"
+  
+  # collab-service:
+  #   container_name: collab-service
+    
+  #   build:
+  #     context: ./CollabService
+  #   image: collab-service-image
+  #   ports:
+  #     - "3006:3006"
+    
+
+  chat-service:
+    container_name: chat-service
+    build:
+      context: ./ChatService
+    image: chat-service-image
+    ports:
+      - "3007:3007"
 
   frontend:
     container_name: frontend

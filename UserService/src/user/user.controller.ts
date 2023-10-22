@@ -20,6 +20,7 @@ export async function handleGetUser(req: Request, res: Response) {
     console.log(`getting user ${email}`);
     if (typeof email === "string") {
       const user = await getUser(email);
+
       res.status(200).send(user);
     } else {
       res.status(500).send("no params");
@@ -35,7 +36,7 @@ export async function handleUpdateUser(req: Request, res: Response) {
     const email = req.body.params.email;
     if (typeof email === "string") {
       console.log(`updating user ${email}`);
-      const user = await updateUser(email, req.body.params)
+      const user = await updateUser(email, req.body.params);
       res.status(200).send(user);
     } else {
       res.status(500).send("no params");
