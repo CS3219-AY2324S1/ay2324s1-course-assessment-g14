@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 
-import { handleGetQuestions, handleAddQuestion, handleDeleteQuestion } from "./question/question.controller";
+import { handleGetQuestions, handleAddQuestion, handleUpdateQuestion, handleDeleteQuestion } from "./question/question.controller";
 const app = express();
 const port = 3002;  
 
@@ -15,6 +15,7 @@ app.get("/", (req, res) => {
 
 app.get("/questions", handleGetQuestions);
 app.post("/questions", handleAddQuestion)
+app.put("/questions/:questionId", handleUpdateQuestion)
 app.delete("/questions/:questionId", handleDeleteQuestion)
 
 app.listen(port, () => {
