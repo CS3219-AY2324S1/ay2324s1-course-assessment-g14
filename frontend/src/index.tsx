@@ -14,13 +14,10 @@ import ProblemSolver from "./pages/ProblemSolver";
 
 import Landing from "./pages/landing";
 import Profile from "./pages/profile";
-<<<<<<< HEAD
 import CreateAdmin from "./pages/createAdmin";
 import MaintainerGuard from "./auth/MaintainerGuard";
-=======
 import QuestionsManage from "./pages/QuestionsManage";
 import QuestionsView from "./pages/QuestionsView";
->>>>>>> master
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -83,13 +80,14 @@ root.render(
               }
             />
             <Route
-<<<<<<< HEAD
               path="/createadmin"
               element={
                 <MaintainerGuard>
                   <CreateAdmin />
                 </MaintainerGuard>
-=======
+              }
+            />
+            <Route
               path="/view-questions"
               element={
                 <AuthGuard>
@@ -103,7 +101,6 @@ root.render(
                 <AdminAuthGuard>
                   <QuestionsManage />
                 </AdminAuthGuard>
->>>>>>> master
               }
             />
           </Routes>
