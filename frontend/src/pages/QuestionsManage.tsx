@@ -1,22 +1,21 @@
-import { Box, CssBaseline } from "@mui/material";
+import {Box, CssBaseline, Typography} from "@mui/material";
 import Navbar from "../components/Navbar";
-import Home from "../components/Home";
-import "./App.css";
 import CenteredContainer from "../components/CenteredContainer";
-import QuestionsTable from "../components/Questions/QuestionsTable";
 import AddQuestionTab from "../components/Questions/AddQuestionTab";
 import EditQuestionsTab from "../components/Questions/EditQuestionsTab";
+import React from "react";
 
-export default function App() {
+export default function QuestionsManage() {
   return (
     <Box>
       <CssBaseline />
-      <Navbar />    
+      <Navbar />
       <CenteredContainer>
-        <Home />
-        <QuestionsTable />
-        <AddQuestionTab />
-        <EditQuestionsTab />
+          <Typography variant="h4" align="center" gutterBottom paddingTop={3}>
+            Manage Question Repository
+          </Typography>
+          <AddQuestionTab />
+          <EditQuestionsTab />
       </CenteredContainer>
     </Box>
   );
