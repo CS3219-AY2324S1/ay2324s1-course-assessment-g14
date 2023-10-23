@@ -1,5 +1,6 @@
 import { Server, Socket } from 'socket.io';
 
+
 // Your existing matching service logic
 export function initializeMatchingService(io: Server) {
   // Maintain an array to store active users seeking a match
@@ -27,7 +28,23 @@ export function initializeMatchingService(io: Server) {
   });
 
   function tryMatchForUser(socket: Socket, preferences: any) {
-    const { difficulty, category } = preferences;
+
+    // const getQuestions = async () => {
+    //   const questions = await getAllQuestions();
+    //   const filteredQuestions = questions.data.filter((q: any) =>
+    //       q.difficulty === difficulty && q.categories.includes("Strings"));
+    //   console.log(questions)
+    //   const randomIndex = Math.floor(Math.random() * filteredQuestions.length);
+    //   const selectedQuestion = filteredQuestions[randomIndex];
+    //   console.log(selectedQuestion)
+    //   if (!selectedQuestion) {
+    //       return 1
+    //   }
+    //   const selectedId = selectedQuestion.id;
+    //   return selectedId
+
+
+    const { difficulty, category} = preferences;
 
     // Iterate through active users to find a match
     const matchedUser = activeUsers.find((user) => {
@@ -42,10 +59,10 @@ export function initializeMatchingService(io: Server) {
       // Remove both users from the active list
       removeUserFromActiveList(socket);
       removeUserFromActiveList(matchedUser.socket);
-
+      const randomSeed = Date.now();
       // Emit "matchFound" to both users
-      socket.emit('matchFound', matchedUser.preferences);
-      matchedUser.socket.emit('matchFound', preferences);
+      socket.emit('matchFound', {matchedUserPreferences: matchedUser.preferences, seed: randomSeed});
+      matchedUser.socket.emit('matchFound', {matchedUserPreferences: preferences, seed: randomSeed});
     } else {
       // Handle the case when no match is found for the user
       // You can emit a "noMatchFound" event or handle it differently

@@ -7,6 +7,10 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
 import socket from './socket';
+import { getAllQuestions } from '../../api/questions/data';
+import { useAuth } from '../../auth/auth.context'
+import { sha256 } from "js-sha256";
+
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -26,21 +30,27 @@ const style = {
 };
 
 const MatchingForm = React.forwardRef(function MatchingForm() {
-    const [difficulty, setDifficulty] = React.useState('');
-    const [category, setCategory] = React.useState('');
+    const [difficulty, setDifficulty] = React.useState('Easy');
+    const [category, setCategory] = React.useState('Strings');
     const [isMatching, setIsMatching] = React.useState(false); // Track matching state
     const navigate = useNavigate(); // Get navigate for redirection
-
+    const { user } = useAuth();
+    const userEmail = user?.email
     const handleDiffChange = (event: SelectChangeEvent) => {
+   
         setDifficulty(event.target.value);
+   
     };
 
     const handleCatChange = (event: SelectChangeEvent) => {
+     
         setCategory(event.target.value);
+  
     };
 
     const handleConnect = () => {
         const preferences = {
+            userEmail,
             difficulty,
             category,
         };
@@ -52,21 +62,54 @@ const MatchingForm = React.forwardRef(function MatchingForm() {
         setIsMatching(true);
     };
 
+
+    const generateConsistentRandomIndex = (seed: any, arrayLength: number) => {
+        // This is a simple example. In real-world scenarios, consider a more complex and predictable pseudo-random function
+        return seed % arrayLength;
+    }
     // Handle the "matchFound" event from the server
+    const getQuestions = async (seed: any) => {
+        const questions = await getAllQuestions();
+        console.log(difficulty)
+        console.log(category)
+        const filteredQuestions = questions.data.filter((q: any) => {
+            // console.log(difficulty);
+            // console.log(q.difficulty);
+            return  q.categories.includes(category) && q.difficulty === difficulty
+            
+        }); 
+        
+        const randomIndex = generateConsistentRandomIndex(seed, filteredQuestions.length)
+        console.log(randomIndex)
+        const selectedQuestion = filteredQuestions[randomIndex];
+        console.log(selectedQuestion)
+        if (!selectedQuestion) {
+            return 1
+        }
+        const selectedId = selectedQuestion.id;
+        return selectedId
+    }
     React.useEffect(() => {
-        socket.on('matchFound', (matchedUserPreferences) => {
+        socket.on('matchFound', async (matchedUserPreferences) => {
             // Handle the matched user's preferences here
             console.log('Match Found:', matchedUserPreferences);
+            const seed = matchedUserPreferences.seed;
+            const matchedUser = matchedUserPreferences.matchedUserPreferences;
+            console.log(seed)
             setIsMatching(false); // Set matching state to false
             // Redirect to the question page with the code editor
-            navigate('/question'); // Update the route as needed
+            const qId = await getQuestions(seed);
+            const hashedEmailOne = sha256(userEmail || "");
+            const hashedEmailTwo = sha256(matchedUser.userEmail)
+            navigate(`/collab/question/${qId}/${hashedEmailOne}/${hashedEmailTwo}`); // Update the route as needed
+            
         });
 
         // Clean up the event listener when the component unmounts
         return () => {
             socket.off('matchFound');
         };
-    }, [navigate]);
+    }, []);
 
     return (
         <Box sx={style}>
@@ -79,6 +122,7 @@ const MatchingForm = React.forwardRef(function MatchingForm() {
                     id="demo-simple-select-helper"
                     value={difficulty}
                     label="Difficulty"
+                    
                     onChange={handleDiffChange}
                 >
                     <MenuItem value="">
@@ -101,8 +145,8 @@ const MatchingForm = React.forwardRef(function MatchingForm() {
                     <MenuItem value="">
                         <em>None</em>
                     </MenuItem>
-                    <MenuItem value={'Algo'}>Algo</MenuItem>
-                    <MenuItem value={'ML'}>ML</MenuItem>
+                    <MenuItem value={'Strings'}>Strings</MenuItem>
+                    <MenuItem value={'Algorithms'}>Algorithms</MenuItem>
                 </Select>
             </FormControl>
             {isMatching ? (

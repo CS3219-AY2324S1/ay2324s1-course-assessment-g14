@@ -49,8 +49,7 @@ function addQuestion(question) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             let questionDoc = question;
-            const docRef = (0, firestore_1.doc)(exports.db, "questions", question.title);
-            yield (0, firestore_1.setDoc)(docRef, questionDoc);
+            const docRef = yield (0, firestore_1.addDoc)((0, firestore_1.collection)(exports.db, "questions"), questionDoc);
             for (let i = 0; i < question.examples.length; i++) {
                 const add = (0, firestore_1.setDoc)((0, firestore_1.doc)(docRef, "examples", (i + 1).toString()), question.examples[i]);
             }
