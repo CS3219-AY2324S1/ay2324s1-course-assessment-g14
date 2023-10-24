@@ -125,8 +125,11 @@ const MatchingForm = React.forwardRef(function MatchingForm() {
       const matchedUser = matchedUserPreferences.matchedUserPreferences;
       setIsMatching(false);
       const qId = await getQuestions(seed);
-      const hashedEmailOne = sha256(userEmail || "");
-      const hashedEmailTwo = sha256(matchedUser.userEmail);
+      const emails = [userEmail, matchedUser.userEmail].sort();
+
+      // Hash the sorted emails
+      const hashedEmailOne = sha256(emails[0]);
+      const hashedEmailTwo = sha256(emails[1]);
       navigate(`/collab/question/${qId}/${hashedEmailOne}/${hashedEmailTwo}`);
     });
 
