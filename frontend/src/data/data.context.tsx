@@ -57,9 +57,9 @@ export function DataContextProvider({ children }: DataContextProviderProps) {
   const getQuestions = async () => {
     try {
       setLoading(true);
-      
+
       const result = await (await getAllQuestions()).data;
-      console.log(result)
+      console.log(result);
       setLoading(false);
       setQuestions(result);
       setResponse({
