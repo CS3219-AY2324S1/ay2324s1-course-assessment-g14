@@ -36,7 +36,7 @@ export function DropDownOrTextField({
       "Business Analytics",
       "Information Systems",
       "Data Science",
-      "-"
+      "-",
     ],
   };
 
@@ -58,13 +58,15 @@ export function DropDownOrTextField({
           </Select>
         </FormControl>
       ) : (
-        <TextField label={title}
-        variant="outlined" 
-        value={value[data]}
-        disabled={title == "Email"} // Users cannot edit their email
-        onChange={(e) => {
-          setValue({ ...value, [data]: e.target.value })}
-        } />
+        <TextField
+          label={title}
+          variant="outlined"
+          value={value[data]}
+          disabled={title === "Email"} // Users cannot edit their email
+          onChange={(e) => {
+            setValue({ ...value, [data]: e.target.value });
+          }}
+        />
       )}
     </>
   );

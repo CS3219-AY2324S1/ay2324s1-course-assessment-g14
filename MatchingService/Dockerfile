@@ -5,7 +5,7 @@ FROM node:14
 WORKDIR /usr/src/matching-service
 
 # Copy package.json and package-lock.json to the working directory
-COPY package*.json ./
+COPY package.json ./
 
 # Install app dependencies
 RUN npm install

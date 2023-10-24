@@ -6,13 +6,18 @@ import App from "./pages/App";
 import Login from "./pages/login";
 import SignUp from "./pages/signup";
 import AuthGuard from "./auth/AuthGuard";
+import AdminAuthGuard from "./auth/AdminAuthGuard";
 import RedirectIfLoggedIn from "./auth/RedirectIfLoggedIn";
 import { DataContextProvider } from "./data/data.context";
-
+import CollabProblemSolver from "./pages/CollabProblemSolver";
 import ProblemSolver from "./pages/ProblemSolver";
 
 import Landing from "./pages/landing";
 import Profile from "./pages/profile";
+import CreateAdmin from "./pages/createAdmin";
+import MaintainerGuard from "./auth/MaintainerGuard";
+import QuestionsManage from "./pages/QuestionsManage";
+import QuestionsView from "./pages/QuestionsView";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -58,11 +63,44 @@ root.render(
               }
             />
             <Route
+              path="/collab/question/:questionId/:user1/:user2"
+              element={
+                <AuthGuard>
+                  <CollabProblemSolver />
+                </AuthGuard>
+              }
+            />
+            
+            <Route
               path="/profile"
               element={
                 <AuthGuard>
                   <Profile />
                 </AuthGuard>
+              }
+            />
+            <Route
+              path="/createadmin"
+              element={
+                <MaintainerGuard>
+                  <CreateAdmin />
+                </MaintainerGuard>
+              }
+            />
+            <Route
+              path="/view-questions"
+              element={
+                <AuthGuard>
+                  <QuestionsView />
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/manage-questions"
+              element={
+                <AdminAuthGuard>
+                  <QuestionsManage />
+                </AdminAuthGuard>
               }
             />
           </Routes>

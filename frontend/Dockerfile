@@ -5,7 +5,7 @@ FROM node:14
 WORKDIR /usr/src/frontend
 
 # Copy package.json and package-lock.json to the container
-COPY package*.json ./
+COPY package.json ./
 
 # Install app dependencies
 RUN npm install

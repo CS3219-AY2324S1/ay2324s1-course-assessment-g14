@@ -16,8 +16,20 @@ import MenuIcon from "@mui/icons-material/Menu";
 import AdbIcon from "@mui/icons-material/Adb";
 import { useAuth } from "../auth/auth.context";
 import { useNavigate } from "react-router-dom";
+import { useData } from "../data/data.context";
 
-const pages = ["Questions"];
+const pages = [
+  {
+    name: "Questions",
+    link: "/view-questions",
+  }
+];
+const adminPages = [
+  {
+    name: "Manage Questions",
+    link: "/manage-questions"
+  }
+];
 const authPages = [
   {
     name: "Login",
@@ -51,12 +63,15 @@ export default function Navbar() {
     setAnchorElUser(null);
   };
 
-  const settings = [
+  var settings = [
     { name: "Profile", onclick: () => navigate("/profile", { replace: true }) },
     { name: "Account", onclick: handleCloseUserMenu },
     { name: "Dashboard", onclick: handleCloseUserMenu },
     { name: "Logout", onclick: logout },
   ];
+  if (user?.role == 'maintainer') {
+    settings = settings.concat({name: "Create Admin", onclick: () => navigate("/createadmin", { replace: true })})
+  }
 
   return (
     <AppBar position="static">
@@ -111,8 +126,13 @@ export default function Navbar() {
               }}
             >
               {user && pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                <MenuItem key={page.name} onClick={() => navigate(page.link)}>
+                  <Typography textAlign="center">{page.name}</Typography>
+                </MenuItem>
+              ))}
+              {user?.role === "admin" && adminPages.map((page) => (
+                <MenuItem key={page.name} onClick={() => navigate(page.link)}>
+                  <Typography textAlign="center">{page.name}</Typography>
                 </MenuItem>
               ))}
               {!user && authPages.map((page) => (
@@ -144,11 +164,20 @@ export default function Navbar() {
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {user && pages.map((page) => (
               <Button
-                key={page}
-                onClick={handleCloseNavMenu}
+                key={page.name}
+                href={page.link}
                 sx={{ my: 2, color: "white", display: "block" }}
               >
-                {page}
+                {page.name}
+              </Button>
+            ))}
+            {user?.role === "admin" && adminPages.map((page) => (
+              <Button
+                key={page.name}
+                href={page.link}
+                sx={{ my: 2, color: "white", display: "block" }}
+              >
+                {page.name}
               </Button>
             ))}
           </Box>
@@ -159,7 +188,6 @@ export default function Navbar() {
                 {authPages.map((page) => (
                   <Button
                     key={page.name}
-                    // onClick={handleCloseNavMenu}
                     href={page.link}
                     sx={{ my: 2, color: "white", display: "block" }}
                   >
