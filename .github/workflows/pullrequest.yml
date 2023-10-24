@@ -19,7 +19,7 @@ jobs:
           node-version: "18" # You can specify the Node.js version you need
 
       - name: Checkout frontend
-      - run: cd frontend
+        run: cd frontend
 
       - name: Install dependencies
         run: npm install
