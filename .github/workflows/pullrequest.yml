@@ -23,7 +23,7 @@ jobs:
           cd frontend
           npm install
 
-      - name: Build
+      - name: Build and lint
         run: |
           cd frontend
           npm run build

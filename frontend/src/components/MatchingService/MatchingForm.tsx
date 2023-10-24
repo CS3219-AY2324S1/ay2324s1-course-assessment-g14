@@ -27,26 +27,22 @@ const style = {
   p: 4,
 };
 
-
-
 const titleStyle = {
-    fontSize: "2rem"    // Increase the title size
-  };
-  
-  const subtitleStyle = {
-    fontSize: "1.5rem",
-    padding:'10px',
-    
-    // Increase the subtitle size
-  };
+  fontSize: "2rem", // Increase the title size
+};
 
-  
+const subtitleStyle = {
+  fontSize: "1.5rem",
+  padding: "10px",
+
+  // Increase the subtitle size
+};
+
 const dropdownStyle = {
-    fontSize: "1.5rem", // Increase the font size
-    padding: "10px",    // Add padding for a bigger and more clickable area
-    margin: "10px 0"    // Space out the dropdowns a bit more
-  };
-  
+  fontSize: "1.5rem", // Increase the font size
+  padding: "10px", // Add padding for a bigger and more clickable area
+  margin: "10px 0", // Space out the dropdowns a bit more
+};
 
 const MatchingForm = React.forwardRef(function MatchingForm() {
   const [difficulty, setDifficulty] = React.useState("Easy");
@@ -133,7 +129,7 @@ const MatchingForm = React.forwardRef(function MatchingForm() {
     return () => {
       socket.off("matchFound");
     };
-  }, [difficulty, category, userEmail, navigate]);
+  }, [difficulty, category, userEmail, navigate, getQuestions]);
 
   return (
     <Box sx={style}>
@@ -147,7 +143,9 @@ const MatchingForm = React.forwardRef(function MatchingForm() {
         </center>
       </h4>
       <div>
-        <label htmlFor="difficulty" style={subtitleStyle}>Difficulty:</label>
+        <label htmlFor="difficulty" style={subtitleStyle}>
+          Difficulty:
+        </label>
         <select
           id="difficulty"
           value={difficulty}
@@ -161,7 +159,9 @@ const MatchingForm = React.forwardRef(function MatchingForm() {
         </select>
       </div>
       <div>
-        <label htmlFor="category" style={subtitleStyle}>Category:</label>
+        <label htmlFor="category" style={subtitleStyle}>
+          Category:
+        </label>
         <select
           id="category"
           value={category}
