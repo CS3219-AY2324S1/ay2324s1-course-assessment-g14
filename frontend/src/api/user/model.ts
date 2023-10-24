@@ -8,5 +8,5 @@ export interface UserModel {
 }
 
 export interface Values {
-  [key: string]: string;
+  [key: string]: string | number;
 }

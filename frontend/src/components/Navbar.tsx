@@ -17,7 +17,18 @@ import AdbIcon from "@mui/icons-material/Adb";
 import { useAuth } from "../auth/auth.context";
 import { useNavigate } from "react-router-dom";
 
-const pages = ["Questions"];
+const pages = [
+  {
+    name: "Questions",
+    link: "/view-questions",
+  },
+];
+const adminPages = [
+  {
+    name: "Manage Questions",
+    link: "/manage-questions",
+  },
+];
 const authPages = [
   {
     name: "Login",
@@ -51,12 +62,18 @@ export default function Navbar() {
     setAnchorElUser(null);
   };
 
-  const settings = [
+  let settings = [
     { name: "Profile", onclick: () => navigate("/profile", { replace: true }) },
     { name: "Account", onclick: handleCloseUserMenu },
     { name: "Dashboard", onclick: handleCloseUserMenu },
     { name: "Logout", onclick: logout },
   ];
+  if (user?.role === "maintainer") {
+    settings = settings.concat({
+      name: "Create Admin",
+      onclick: () => navigate("/createadmin", { replace: true }),
+    });
+  }
 
   return (
     <AppBar position="static">
@@ -110,16 +127,24 @@ export default function Navbar() {
                 display: { xs: "block", md: "none" },
               }}
             >
-              {user && pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
-              {!user && authPages.map((page) => (
-                <MenuItem key={page.name} onClick={() => navigate(page.link)}>
-                  <Typography textAlign="center">{page.name}</Typography>
-                </MenuItem>
-              ))}
+              {user &&
+                pages.map((page) => (
+                  <MenuItem key={page.name} onClick={() => navigate(page.link)}>
+                    <Typography textAlign="center">{page.name}</Typography>
+                  </MenuItem>
+                ))}
+              {user?.role === "admin" &&
+                adminPages.map((page) => (
+                  <MenuItem key={page.name} onClick={() => navigate(page.link)}>
+                    <Typography textAlign="center">{page.name}</Typography>
+                  </MenuItem>
+                ))}
+              {!user &&
+                authPages.map((page) => (
+                  <MenuItem key={page.name} onClick={() => navigate(page.link)}>
+                    <Typography textAlign="center">{page.name}</Typography>
+                  </MenuItem>
+                ))}
             </Menu>
           </Box>
           <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
@@ -142,15 +167,26 @@ export default function Navbar() {
             PeerPrep
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {user && pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                {page}
-              </Button>
-            ))}
+            {user &&
+              pages.map((page) => (
+                <Button
+                  key={page.name}
+                  href={page.link}
+                  sx={{ my: 2, color: "white", display: "block" }}
+                >
+                  {page.name}
+                </Button>
+              ))}
+            {user?.role === "admin" &&
+              adminPages.map((page) => (
+                <Button
+                  key={page.name}
+                  href={page.link}
+                  sx={{ my: 2, color: "white", display: "block" }}
+                >
+                  {page.name}
+                </Button>
+              ))}
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
@@ -159,7 +195,6 @@ export default function Navbar() {
                 {authPages.map((page) => (
                   <Button
                     key={page.name}
-                    // onClick={handleCloseNavMenu}
                     href={page.link}
                     sx={{ my: 2, color: "white", display: "block" }}
                   >

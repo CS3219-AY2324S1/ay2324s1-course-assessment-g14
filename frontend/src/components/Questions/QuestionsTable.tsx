@@ -8,9 +8,9 @@ interface Question {
   title: string;
   tags: string[];
   categories: string[];
-  constraints: string[];
+  //constraints: string[];
   difficulty: string;
-  description: string;
+  //description: string;
 }
 
 const ITEMS_PER_PAGE_OPTIONS = [5, 10]; // Number of items to display per page
@@ -59,9 +59,9 @@ const InterviewQuestionsTable: React.FC = () => {
                           <TableCell>Title</TableCell>
                           <TableCell>Tags</TableCell>
                           <TableCell>Categories</TableCell>
-                          <TableCell>Constraints</TableCell>
+                          {/* <TableCell>Constraints</TableCell> */}
                           <TableCell>Difficulty</TableCell>
-                          <TableCell>Description</TableCell>
+                          {/* <TableCell>Description</TableCell> */}
                       </TableRow>
                   </TableHead>
                   <TableBody>
@@ -70,9 +70,9 @@ const InterviewQuestionsTable: React.FC = () => {
                               <TableCell>{question.title}</TableCell>
                               <TableCell>{question.tags.join(', ')}</TableCell>
                               <TableCell>{question.categories.join(', ')}</TableCell>
-                              <TableCell>{question.constraints.join(', ')}</TableCell>
+                              {/* <TableCell>{question.constraints.join(', ')}</TableCell> */}
                               <TableCell>{question.difficulty}</TableCell>
-                              <TableCell>{question.description}</TableCell>
+                              {/* <TableCell>{question.description}</TableCell> */}
                           </TableRow>
                       ))}
                   </TableBody>

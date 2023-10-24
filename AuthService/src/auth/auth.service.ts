@@ -5,6 +5,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
   UserCredential,
+  deleteUser,
 } from "firebase/auth";
 import { firebaseConfig } from "../firebase/firebase.config";
 
@@ -46,6 +47,17 @@ export async function login(
 export async function logout(): Promise<void> {
   try {
     await signOut(auth);
+    return Promise.resolve();
+  } catch (error) {
+    return Promise.reject(error);
+  }
+}
+
+export async function removeUser(): Promise<void> {
+  try {
+    if (auth.currentUser) {
+      await deleteUser(auth.currentUser);
+    }
     return Promise.resolve();
   } catch (error) {
     return Promise.reject(error);
