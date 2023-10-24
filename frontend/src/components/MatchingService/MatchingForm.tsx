@@ -129,7 +129,8 @@ const MatchingForm = React.forwardRef(function MatchingForm() {
     return () => {
       socket.off("matchFound");
     };
-  }, [difficulty, category, userEmail, navigate, getQuestions]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [difficulty, category, userEmail, navigate]);
 
   return (
     <Box sx={style}>
