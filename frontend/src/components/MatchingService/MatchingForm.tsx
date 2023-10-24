@@ -1,16 +1,12 @@
 import * as React from 'react';
 import { Box } from "@mui/material";
 import Button from '@mui/material/Button';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
+import { useNavigate } from 'react-router-dom';
 import socket from './socket';
 import { getAllQuestions } from '../../api/questions/data';
-import { useAuth } from '../../auth/auth.context'
+import { useAuth } from '../../auth/auth.context';
 import { sha256 } from "js-sha256";
-
+import Question from '../Questions/Question';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -32,21 +28,11 @@ const style = {
 const MatchingForm = React.forwardRef(function MatchingForm() {
     const [difficulty, setDifficulty] = React.useState('Easy');
     const [category, setCategory] = React.useState('Strings');
-    const [isMatching, setIsMatching] = React.useState(false); // Track matching state
-    const navigate = useNavigate(); // Get navigate for redirection
+    const [categoryList, setCategoryList] = React.useState<string[]>([]);
+    const [isMatching, setIsMatching] = React.useState(false);
+    const navigate = useNavigate();
     const { user } = useAuth();
-    const userEmail = user?.email
-    const handleDiffChange = (event: SelectChangeEvent) => {
-   
-        setDifficulty(event.target.value);
-   
-    };
-
-    const handleCatChange = (event: SelectChangeEvent) => {
-     
-        setCategory(event.target.value);
-  
-    };
+    const userEmail = user?.email;
 
     const handleConnect = () => {
         const preferences = {
@@ -54,103 +40,82 @@ const MatchingForm = React.forwardRef(function MatchingForm() {
             difficulty,
             category,
         };
-
-        // Emit the startMatching event to the server with user preferences
         socket.emit('startMatching', preferences);
-
-        // Set matching state to true when attempting to match
         setIsMatching(true);
     };
 
-
     const generateConsistentRandomIndex = (seed: any, arrayLength: number) => {
-        // This is a simple example. In real-world scenarios, consider a more complex and predictable pseudo-random function
         return seed % arrayLength;
     }
-    // Handle the "matchFound" event from the server
+
     const getQuestions = async (seed: any) => {
         const questions = await getAllQuestions();
-        console.log(difficulty)
-        console.log(category)
         const filteredQuestions = questions.data.filter((q: any) => {
-            // console.log(difficulty);
-            // console.log(q.difficulty);
-            return  q.categories.includes(category) && q.difficulty === difficulty
-            
-        }); 
-        
+            return q.categories.includes(category) && q.difficulty === difficulty
+        });
+
         const randomIndex = generateConsistentRandomIndex(seed, filteredQuestions.length)
-        console.log(randomIndex)
         const selectedQuestion = filteredQuestions[randomIndex];
-        console.log(selectedQuestion)
         if (!selectedQuestion) {
             return 1
         }
         const selectedId = selectedQuestion.id;
         return selectedId
     }
+
+    React.useEffect(() => {
+        async function getCategories() {
+            const questionsData = await getAllQuestions() as { data: Question[] };
+            const allCategories = questionsData.data.reduce((acc: string[], question: Question) => {
+                return [...acc, ...question.categories];
+            }, []);
+            const uniqueCategories = Array.from(new Set(allCategories));
+            setCategoryList(uniqueCategories);
+        }
+        getCategories();
+    }, []);
+
     React.useEffect(() => {
         socket.on('matchFound', async (matchedUserPreferences) => {
-            // Handle the matched user's preferences here
             console.log('Match Found:', matchedUserPreferences);
             const seed = matchedUserPreferences.seed;
             const matchedUser = matchedUserPreferences.matchedUserPreferences;
-            console.log(seed)
-            setIsMatching(false); // Set matching state to false
-            // Redirect to the question page with the code editor
+            setIsMatching(false);
             const qId = await getQuestions(seed);
             const hashedEmailOne = sha256(userEmail || "");
             const hashedEmailTwo = sha256(matchedUser.userEmail)
-            navigate(`/collab/question/${qId}/${hashedEmailOne}/${hashedEmailTwo}`); // Update the route as needed
-            
+            navigate(`/collab/question/${qId}/${hashedEmailOne}/${hashedEmailTwo}`);
         });
 
-        // Clean up the event listener when the component unmounts
         return () => {
             socket.off('matchFound');
         };
-    }, []);
+    }, [difficulty, category, userEmail, navigate]);
 
     return (
         <Box sx={style}>
             <h2><center>Please select a difficulty and question category.</center></h2>
             <h4><center>We will attempt to connect you with a user who chose the same options as you within 30 seconds.</center></h4>
-            <FormControl sx={{ mt: 1, width: '100%' }}>
-                <InputLabel id="demo-simple-select-helper-label">Difficulty</InputLabel>
-                <Select
-                    labelId="demo-simple-select-helper-label"
-                    id="demo-simple-select-helper"
-                    value={difficulty}
-                    label="Difficulty"
-                    
-                    onChange={handleDiffChange}
-                >
-                    <MenuItem value="">
-                        <em>None</em>
-                    </MenuItem>
-                    <MenuItem value={'Easy'}>Easy</MenuItem>
-                    <MenuItem value={'Medium'}>Medium</MenuItem>
-                    <MenuItem value={'Hard'}>Hard</MenuItem>
-                </Select>
-            </FormControl>
-            <FormControl sx={{ mt: 1, mb: 1, width: '100%' }}>
-                <InputLabel id="demo-simple-select-helper-label">Category</InputLabel>
-                <Select
-                    labelId="demo-simple-select-helper-label"
-                    id="demo-simple-select-helper"
-                    value={category}
-                    label="Category"
-                    onChange={handleCatChange}
-                >
-                    <MenuItem value="">
-                        <em>None</em>
-                    </MenuItem>
-                    <MenuItem value={'Strings'}>Strings</MenuItem>
-                    <MenuItem value={'Algorithms'}>Algorithms</MenuItem>
-                </Select>
-            </FormControl>
+            <div>
+                <label htmlFor="difficulty">Difficulty:</label>
+                <select id="difficulty" value={difficulty} onChange={e => setDifficulty(e.target.value)}>
+                    <option value="">None</option>
+                    <option value="Easy">Easy</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Hard">Hard</option>
+                </select>
+            </div>
+            <div>
+                <label htmlFor="category">Category:</label>
+                <select id="category" value={category} onChange={e => setCategory(e.target.value)}>
+                    <option value="">None</option>
+                    {categoryList.map(cat => (
+                        <option key={cat} value={cat}>{cat}</option>
+                    ))}
+                </select>
+            </div>
             {isMatching ? (
-                <div>Loading...</div> // Show loading spinner
+                <div>Loading...</div>
             ) : (
                 <Button sx={{ mt: '5%' }} variant="contained" onClick={handleConnect}>
                     Connect
