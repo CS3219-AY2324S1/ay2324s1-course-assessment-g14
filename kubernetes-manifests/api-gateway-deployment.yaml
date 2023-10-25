@@ -14,7 +14,16 @@ spec:
     spec:
       containers:
       - name: api-gateway-service
-        image: api-gateway-image
+        image: szelongq/peerprep-api-gateway:latest
         imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            cpu: 500m
+            ephemeral-storage: 1Gi
+            memory: 2Gi
+          requests:
+            cpu: 500m
+            ephemeral-storage: 1Gi
+            memory: 2Gi
         ports:
         - containerPort: 3001

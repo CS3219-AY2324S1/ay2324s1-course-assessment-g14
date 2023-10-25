@@ -14,7 +14,14 @@ spec:
     spec:
       containers:
       - name: auth-service
-        image: auth-service-image
+        image: szelongq/peerprep-auth-service:latest
         imagePullPolicy: IfNotPresent
-        # ports:
-        # - containerPort: 3001
+        resources:
+          limits:
+            cpu: 500m
+            ephemeral-storage: 1Gi
+            memory: 2Gi
+          requests:
+            cpu: 500m
+            ephemeral-storage: 1Gi
+            memory: 2Gi

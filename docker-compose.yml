@@ -4,15 +4,18 @@ services:
     container_name: api-gateway
     build:
       context: ./ApiGatewayService
-    image: api-gateway-image
+    image: szelongq/peerprep-api-gateway:latest
     ports:
       - "3001:3001"
+    platform: linux/amd64
+
 
   auth-service:
     container_name: auth-service
     build:
       context: ./AuthService
-    image: auth-service-image
+    image: szelongq/peerprep-auth-service:latest
+    platform: linux/amd64
     # ports:
     #   - "3001:3001"
 
@@ -20,16 +23,19 @@ services:
     container_name: matching-service
     build:
       context: ./MatchingService
-    image: matching-service-image
+    image: szelongq/peerprep-matching-service:latest
     ports:
       - "3005:3005"
     stdin_open: true
+    platform: linux/amd64
+
 
   question-service:
     container_name: question-service
     build:
       context: ./QuestionService
-    image: question-service-image
+    image: szelongq/peerprep-question-service:latest
+    platform: linux/amd64
     # ports:
     #   - "3001:3001"
 
@@ -37,32 +43,37 @@ services:
     container_name: user-service
     build:
       context: ./UserService
-    image: user-service-image
+    image: szelongq/peerprep-user-service:latest
+    platform: linux/amd64
     # ports:
     #   - "3001:3001"
+    
   
   # collab-service:
   #   container_name: collab-service
     
   #   build:
   #     context: ./CollabService
-  #   image: collab-service-image
+  #   image: szelongq/peerprep-collab-service:latest
   #   ports:
   #     - "3006:3006"
+  #     platform: linux/amd64
     
 
   chat-service:
     container_name: chat-service
     build:
       context: ./ChatService
-    image: chat-service-image
+    image: szelongq/peerprep-chat-service:latest
     ports:
       - "3007:3007"
+    platform: linux/amd64
 
   frontend:
     container_name: frontend
     build:
       context: ./frontend
-    image: frontend-image
+    image: szelongq/peerprep-frontend:latest
     ports:
       - "3000:3000"
+    platform: linux/amd64
