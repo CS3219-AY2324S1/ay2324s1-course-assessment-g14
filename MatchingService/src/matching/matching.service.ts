@@ -54,7 +54,7 @@ export function initializeMatchingService(io: Server) {
         user.preferences.category === category
       );
     });
-
+    let timeoutId: NodeJS.Timeout;
     if (matchedUser) {
       // Remove both users from the active list
       removeUserFromActiveList(socket);
@@ -64,6 +64,11 @@ export function initializeMatchingService(io: Server) {
       socket.emit('matchFound', {matchedUserPreferences: matchedUser.preferences, seed: randomSeed});
       matchedUser.socket.emit('matchFound', {matchedUserPreferences: preferences, seed: randomSeed});
     } else {
+      
+      timeoutId = setTimeout(() => {
+        socket.emit('noMatchFound');
+        removeUserFromActiveList(socket);
+      }, 30000);
       // Handle the case when no match is found for the user
       // You can emit a "noMatchFound" event or handle it differently
     }
