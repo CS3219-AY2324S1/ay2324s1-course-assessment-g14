@@ -8,8 +8,8 @@ interface AuthGuardProps {
 
 export default function AdminAuthGuard({ children }: AuthGuardProps) {
   const { user } = useAuth();
-  if (user?.role !== "admin") {
-    return <Navigate to="/home" />;
+  if (user?.role !== "admin" && user?.role !== "maintainer") {
+    return <Navigate to="/login" />;
   }
   return <>{children}</>;
 }

@@ -8,7 +8,7 @@ interface AuthGuardProps {
 
 export default function MaintainerGuard({ children }: AuthGuardProps) {
   const { user } = useAuth();
-  if (!(user?.role == 'maintainer')) {
+  if (user?.role !== 'maintainer') {
     return <Navigate to="/login" />;
   }
   return <>{children}</>;
