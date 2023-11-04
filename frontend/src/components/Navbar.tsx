@@ -69,7 +69,7 @@ export default function Navbar() {
     { name: "Dashboard", onclick: handleCloseUserMenu },
     { name: "Logout", onclick: logout },
   ];
-  if (user?.role === 'maintainer') {
+  if (user?.role === 'master') {
     settings = settings.concat({name: "Create Admin", onclick: () => navigate("/createadmin", { replace: true })})
   }
 
@@ -130,7 +130,7 @@ export default function Navbar() {
                   <Typography textAlign="center">{page.name}</Typography>
                 </MenuItem>
               ))}
-              {(user?.role === "admin" || user?.role === "maintainer")
+              {(user?.role === "admin" || user?.role === "master")
                 && adminPages.map((page) => (
                 <MenuItem key={page.name} onClick={() => navigate(page.link)}>
                   <Typography textAlign="center">{page.name}</Typography>
@@ -172,7 +172,7 @@ export default function Navbar() {
                 {page.name}
               </Button>
             ))}
-            {(user?.role === "admin" || user?.role === "maintainer")
+            {(user?.role === "admin" || user?.role === "master")
               && adminPages.map((page) => (
               <Button
                 key={page.name}
