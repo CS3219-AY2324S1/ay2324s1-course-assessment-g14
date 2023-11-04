@@ -17,14 +17,21 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: "50%",
   display: "flex-wrap",
-  maxHeight: "60%",
+  // Remove or adjust the maxHeight value
+  //maxHeight: "60%",
   justifyContent: "center",
   textAlign: "center",
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
-  overflow: "auto",
   p: 4,
+};
+
+const snackbarStyle = {
+  position: "absolute" as "absolute",
+  top: 3,
+  left: "50%",
+  transform: "translate(-50%, 0)",
 };
 
 const titleStyle = {
@@ -53,6 +60,7 @@ const MatchingForm = React.forwardRef(function MatchingForm() {
   const { user } = useAuth();
   const userEmail = user?.email;
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
+  const [snackbarMessage, setSnackbarMessage] = React.useState("");
 
   const handleConnect = async () => {
     const preferences = {
@@ -69,6 +77,9 @@ const MatchingForm = React.forwardRef(function MatchingForm() {
     });
 
     if (filteredQuestions.length === 0) {
+      setSnackbarMessage(
+        "No questions match the selected difficulty and category."
+      );
       setOpenSnackbar(true);
       return;
     }
@@ -121,8 +132,11 @@ const MatchingForm = React.forwardRef(function MatchingForm() {
       const matchedUser = matchedUserPreferences.matchedUserPreferences;
       setIsMatching(false);
       const qId = await getQuestions(seed);
-      const hashedEmailOne = sha256(userEmail || "");
-      const hashedEmailTwo = sha256(matchedUser.userEmail);
+      const emails = [userEmail, matchedUser.userEmail].sort();
+
+      // Hash the sorted emails
+      const hashedEmailOne = sha256(emails[0]);
+      const hashedEmailTwo = sha256(emails[1]);
       navigate(`/collab/question/${qId}/${hashedEmailOne}/${hashedEmailTwo}`);
     });
 
@@ -131,6 +145,19 @@ const MatchingForm = React.forwardRef(function MatchingForm() {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [difficulty, category, userEmail, navigate]);
+
+  React.useEffect(() => {
+    socket.on("noMatchFound", () => {
+      console.log("Match Not Found");
+      setIsMatching(false);
+      setSnackbarMessage("No eligible match found within the given timeframe.");
+      setOpenSnackbar(true);
+    });
+
+    return () => {
+      socket.off("noMatchFound");
+    };
+  });
 
   return (
     <Box sx={style}>
@@ -186,6 +213,7 @@ const MatchingForm = React.forwardRef(function MatchingForm() {
       )}
 
       <Snackbar
+        style={snackbarStyle}
         open={openSnackbar}
         autoHideDuration={6000}
         onClose={() => setOpenSnackbar(false)}
@@ -196,7 +224,7 @@ const MatchingForm = React.forwardRef(function MatchingForm() {
           severity="warning"
           sx={{ width: "100%" }}
         >
-          No questions match the selected difficulty and category.
+          {snackbarMessage}
         </Alert>
       </Snackbar>
     </Box>
