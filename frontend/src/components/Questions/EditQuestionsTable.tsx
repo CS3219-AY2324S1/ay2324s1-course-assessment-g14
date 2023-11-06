@@ -26,7 +26,7 @@ interface EditQuestionsTableProps {
 
 const EditQuestionsTable: React.FC<EditQuestionsTableProps> = ({onEdit, onDelete}) => {
     const [questionsData, setQuestions] = useState<Question[]>([]);
-    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [currentPage, setCurrentPage] = useState<number>(0);
     const [itemsPerPage, setItemsPerPage] = useState<number>(ITEMS_PER_PAGE_OPTIONS[0]);
     const [expandedQuestion, setExpandedQuestion] = useState<string | false>(false);
 
@@ -61,7 +61,7 @@ const EditQuestionsTable: React.FC<EditQuestionsTableProps> = ({onEdit, onDelete
         expandedQuestion === id ? setExpandedQuestion(false) : setExpandedQuestion(id);
     }
 
-    const indexOfLastQuestion = currentPage * itemsPerPage;
+    const indexOfLastQuestion = (currentPage + 1) * itemsPerPage;
     const indexOfFirstQuestion = indexOfLastQuestion - itemsPerPage;
     const currentQuestions = questionsData.slice(indexOfFirstQuestion, indexOfLastQuestion);
 
@@ -130,7 +130,7 @@ const EditQuestionsTable: React.FC<EditQuestionsTableProps> = ({onEdit, onDelete
                 component="div"
                 count={questionsData.length}
                 rowsPerPage={itemsPerPage}
-                page={currentPage - 1}
+                page={currentPage}
                 onPageChange={handlePageChange} />
         </div></>
 

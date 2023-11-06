@@ -33,7 +33,7 @@ const ITEMS_PER_PAGE_OPTIONS = [5, 10]; // Number of items to display per page
 const InterviewQuestionsTable: React.FC = () => {
   const [questionsData, setQuestions] = useState<Question[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [currentPage, setCurrentPage] = useState<number>(0);
   const [itemsPerPage, setItemsPerPage] = useState<number>(
     ITEMS_PER_PAGE_OPTIONS[0]
   );
@@ -73,7 +73,7 @@ const filteredQuestions = questionsData.filter(question =>
     setCurrentPage(1);
   };
 
-  const indexOfLastQuestion = currentPage * itemsPerPage;
+  const indexOfLastQuestion = (currentPage + 1) * itemsPerPage;
   const indexOfFirstQuestion = indexOfLastQuestion - itemsPerPage;
   const currentQuestions = filteredQuestions.slice(
     indexOfFirstQuestion,
@@ -157,7 +157,7 @@ const filteredQuestions = questionsData.filter(question =>
           component="div"
           count={questionsData.length}
           rowsPerPage={itemsPerPage}
-          page={currentPage - 1}
+          page={currentPage}
           onPageChange={handlePageChange}
         />
       </div>
