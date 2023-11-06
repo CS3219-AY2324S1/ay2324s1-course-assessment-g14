@@ -1,19 +1,37 @@
 import { useState } from "react";
-import { Box, Button, CssBaseline, TextField, Typography } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Button,
+  Collapse,
+  CssBaseline,
+  TextField,
+  Typography,
+} from "@mui/material";
 import CenteredContainer from "../components/CenteredContainer";
 import Navbar from "../components/Navbar";
 import PasswordField from "../components/PasswordField";
 import { useAuth } from "../auth/auth.context";
+import { useLocation } from "react-router-dom";
 
 export default function Login() {
   const { error, login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { state } = useLocation();
+  const [show, setShow] = useState(true);
 
   const handleClickLogin = () => login(email, password);
 
   return (
     <Box height="100vh">
+      {state?.showAlert && (
+        <Collapse in={show}>
+          <Alert onClose={() => setShow(false)} severity="warning">
+            You are not logged in. Please log in to continue.
+          </Alert>
+        </Collapse>
+      )}
       <CssBaseline />
       <Navbar />
       <CenteredContainer>
