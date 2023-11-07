@@ -7,7 +7,7 @@ import cors from "cors";
 // import { Socket, Server } from 'socket.io';
 // import { Server as ServerHttp } from 'http';
 
-import { handleCreateUser, handleDeleteUser, handleGetUser, handleUpdateUser, handleCreateAdminUser, handleGetAdminUsers } from "./user/user.controller";
+import { handleCreateUser, handleDeleteUser, handleGetUser, handleUpdateUser, handleCreateAdminUser, handleGetAdminUsers, handleGetNormalUsers } from "./user/user.controller";
 const app = express();
 const port = 3004;
 app.use(cors());
@@ -25,6 +25,7 @@ app.get("/", (req, res) => {
 
 app.post("/user", handleCreateUser);
 app.get("/adminusers", handleGetAdminUsers);
+app.get("/normalusers", handleGetNormalUsers);
 app.post("/useradmin", handleCreateAdminUser);
 app.get("/user", handleGetUser);
 app.put("/user", handleUpdateUser);

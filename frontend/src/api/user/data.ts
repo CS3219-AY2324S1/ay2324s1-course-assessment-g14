@@ -6,6 +6,8 @@ export const createUser = (email: string) =>
 
 export const getAllAdminUsers = () => UserHttpClient.get<UserModel[]>("/adminusers");
 
+export const getAllNormalUsers = () => UserHttpClient.get<UserModel[]>("/normalusers");
+
 export const createAdminUser = (email: string) =>
   UserHttpClient.post<UserModel>("/useradmin", { email: email });
 
