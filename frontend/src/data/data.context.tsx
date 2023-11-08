@@ -2,6 +2,7 @@ import { createContext, ReactNode, useContext, useMemo, useState } from "react";
 
 import { getAllQuestions } from "../api/questions/data";
 import { getAllAdminUsers } from "../api/user";
+import { useAuth } from "../auth/auth.context";
 
 interface Response {
   type: "success" | "error" | undefined;
@@ -20,13 +21,14 @@ interface Question {
   examples: Example[];
 }
 
-interface AdminUser {
+export interface AdminUser {
   email: string;
   name?: string;
   year?: string;
   major?: string;
   role: string;
   completed: number;
+  token: string;
 }
 
 export interface Example {
@@ -38,7 +40,7 @@ interface DataContextData {
   loading: boolean;
   response: Response;
   questions: Question[];
-  getQuestions: () => void;  
+  getQuestions: () => void;
   adminUsers: AdminUser[];
   getAdminUsers: () => void;
   // getExamples: (id: string) => void;
@@ -64,6 +66,7 @@ const DataContext = createContext<DataContextData>({
 });
 
 export function DataContextProvider({ children }: DataContextProviderProps) {
+  const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState<Response>(emptyResponse);
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -72,15 +75,19 @@ export function DataContextProvider({ children }: DataContextProviderProps) {
   const getQuestions = async () => {
     try {
       setLoading(true);
-
-      const result = await (await getAllQuestions()).data;
-      console.log(result);
-      setLoading(false);
-      setQuestions(result);
+      if (user) {
+        const result = (await getAllQuestions(user.token)).data;
+        setQuestions(result);
+        setResponse({
+          type: "success",
+          message: "successfully retrieved questions",
+        });
+      }
       setResponse({
-        type: "success",
-        message: "successfully retrieved questions",
+        type: "error",
+        message: "user not found",
       });
+      setLoading(false);
     } catch (e) {
       setLoading(false);
       setResponse({
@@ -93,7 +100,7 @@ export function DataContextProvider({ children }: DataContextProviderProps) {
   const getAdminUsers = async () => {
     try {
       setLoading(true);
-      const result = await (await getAllAdminUsers()).data;
+      const result = (await getAllAdminUsers()).data;
       setLoading(false);
       setAdminUsers(result);
       setResponse({
@@ -110,7 +117,14 @@ export function DataContextProvider({ children }: DataContextProviderProps) {
   };
 
   const dataContextProviderValue = useMemo(
-    () => ({ loading, response, questions, getQuestions, adminUsers, getAdminUsers }),
+    () => ({
+      loading,
+      response,
+      questions,
+      getQuestions,
+      adminUsers,
+      getAdminUsers,
+    }),
     //eslint-disable-next-line react-hooks/exhaustive-deps
     [loading, response, questions, adminUsers]
   );

@@ -5,10 +5,10 @@ import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import { useNavigate } from "react-router-dom";
 import socket from "./socket";
-import { getAllQuestions } from "../../api/questions/data";
 import { useAuth } from "../../auth/auth.context";
 import { sha256 } from "js-sha256";
 import Question from "../Questions/Question";
+import { useData } from "../../data/data.context";
 
 const style = {
   position: "absolute" as "absolute",
@@ -52,6 +52,7 @@ const dropdownStyle = {
 };
 
 const MatchingForm = React.forwardRef(function MatchingForm() {
+  const { questions, getQuestions } = useData();
   const [difficulty, setDifficulty] = React.useState("Easy");
   const [category, setCategory] = React.useState("Strings");
   const [categoryList, setCategoryList] = React.useState<string[]>([]);
@@ -62,6 +63,11 @@ const MatchingForm = React.forwardRef(function MatchingForm() {
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
   const [snackbarMessage, setSnackbarMessage] = React.useState("");
 
+  React.useEffect(() => {
+    getQuestions();
+    // eslint-disable-next-line
+  }, []);
+
   const handleConnect = async () => {
     const preferences = {
       userEmail,
@@ -71,8 +77,7 @@ const MatchingForm = React.forwardRef(function MatchingForm() {
     // if no such question with difficulty and category, show a pop up saying no question
     // matching the requirements
 
-    const questions = await getAllQuestions();
-    const filteredQuestions = questions.data.filter((q: any) => {
+    const filteredQuestions = questions.filter((q: any) => {
       return q.categories.includes(category) && q.difficulty === difficulty;
     });
 
@@ -92,9 +97,8 @@ const MatchingForm = React.forwardRef(function MatchingForm() {
     return seed % arrayLength;
   };
 
-  const getQuestions = async (seed: any) => {
-    const questions = await getAllQuestions();
-    const filteredQuestions = questions.data.filter((q: any) => {
+  const getRandomQuestion = async (seed: any) => {
+    const filteredQuestions = questions.filter((q: any) => {
       return q.categories.includes(category) && q.difficulty === difficulty;
     });
 
@@ -112,8 +116,8 @@ const MatchingForm = React.forwardRef(function MatchingForm() {
 
   React.useEffect(() => {
     async function getCategories() {
-      const questionsData = (await getAllQuestions()) as { data: Question[] };
-      const allCategories = questionsData.data.reduce(
+      // const questionsData = (await getAllQuestions()) as { data: Question[] };
+      const allCategories = questions.reduce(
         (acc: string[], question: Question) => {
           return [...acc, ...question.categories];
         },
@@ -131,7 +135,7 @@ const MatchingForm = React.forwardRef(function MatchingForm() {
       const seed = matchedUserPreferences.seed;
       const matchedUser = matchedUserPreferences.matchedUserPreferences;
       setIsMatching(false);
-      const qId = await getQuestions(seed);
+      const qId = await getRandomQuestion(seed);
       const emails = [userEmail, matchedUser.userEmail].sort();
 
       // Hash the sorted emails

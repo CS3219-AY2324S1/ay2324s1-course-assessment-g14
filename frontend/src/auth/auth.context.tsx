@@ -18,6 +18,7 @@ interface AuthContextData {
   setUser: any | undefined;
   activeUser: User | undefined;
   error: string;
+  success: boolean;
   signUp: (email: string, password: string) => void;
   signUpAdmin: (email: string, password: string) => void;
   login: (email: string, password: string) => void;
@@ -34,6 +35,7 @@ const AuthContext = createContext<AuthContextData>({
   setUser: undefined,
   activeUser: undefined,
   error: "",
+  success: false,
   signUp: (email: string, password: string) => undefined,
   signUpAdmin: (email: string, password: string) => undefined,
   login: (email: string, password: string) => undefined,
@@ -46,31 +48,29 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   const [user, setUser] = useLocalStorage("user", undefined);
   const [activeUser, setActiveUser] = useState<User>();
   const [error, setError] = useState<string>("");
+  const [success, setSuccess] = useState<boolean>(false);
 
-  const signUp = useCallback(
-    async (email: string, password: string) => {
-      try {
-        const response = await registerUser({
-          email: email,
-          password: password,
-        });
-        const u: User = response.data.user;
-        if (!u.email) {
-          throw new Error("user returned without email");
-        }
-        const fetchedUser = await createUser(u.email);
-        setActiveUser(u);
-        setUser(fetchedUser.data);
-      } catch (e) {
-        if (e instanceof AxiosError && e.response) {
-          setError(e.response.data.code);
-        } else if (e instanceof Error) {
-          setError(e.message);
-        }
+  const signUp = useCallback(async (email: string, password: string) => {
+    try {
+      const response = await registerUser({
+        email: email,
+        password: password,
+      });
+      const u: User = response.data.user.user;
+      const token: string = response.data.token;
+      if (!u.email) {
+        throw new Error("user returned without email");
       }
-    },
-    [setUser]
-  );
+      await createUser(u.email, token);
+      setSuccess(true);
+    } catch (e) {
+      if (e instanceof AxiosError && e.response) {
+        setError(e.response.data);
+      } else if (e instanceof Error) {
+        setError(e.message);
+      }
+    }
+  }, []);
 
   const signUpAdmin = useCallback(async (email: string, password: string) => {
     try {
@@ -78,16 +78,15 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
         email: email,
         password: password,
       });
-      const u: User = response.data.user;
+      const u: User = response.data.user.user;
+      const token: string = response.data.token;
       if (!u.email) {
         throw new Error("user returned without email");
       }
-      console.log("creating admin");
-      await createAdminUser(u.email);
-      console.log("admin created");
+      await createAdminUser(u.email, token);
     } catch (e) {
       if (e instanceof AxiosError && e.response) {
-        setError(e.response.data.code);
+        setError(e.response.data);
       } else if (e instanceof Error) {
         setError(e.message);
       }
@@ -108,7 +107,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
         navigate("/home", { replace: true });
       } catch (e) {
         if (e instanceof AxiosError && e.response) {
-          setError(e.response.data.code);
+          setError(e.response.data);
         } else if (e instanceof Error) {
           setError(e.message);
         }
@@ -125,7 +124,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       navigate("/", { replace: true });
     } catch (e) {
       if (e instanceof AxiosError && e.response) {
-        setError(e.response.data.code);
+        setError(e.response.data);
       } else if (e instanceof Error) {
         setError(e.message);
       }
@@ -142,7 +141,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       navigate("/", { replace: true });
     } catch (e) {
       if (e instanceof AxiosError && e.response) {
-        setError(e.response.data.code);
+        setError(e.response.data);
       } else if (e instanceof Error) {
         setError(e.message);
       }
@@ -155,6 +154,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       setUser,
       activeUser,
       error,
+      success,
       signUp,
       signUpAdmin,
       login,
@@ -166,6 +166,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       setUser,
       activeUser,
       error,
+      success,
       signUp,
       signUpAdmin,
       login,

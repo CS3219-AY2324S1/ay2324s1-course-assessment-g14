@@ -25,12 +25,13 @@ interface AdminUser {
   major?: string;
   role: string;
   completed: number;
+  token: string;
 }
 
 const ITEMS_PER_PAGE_OPTIONS = [5, 10]; // Number of items to display per page
 
 const AdminUsersTable: React.FC = () => {
-  const [adminUsersData, setAdminUsers] = useState<AdminUser[]>([]);
+  const [adminUsersData, setAdminUsersData] = useState<AdminUser[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [itemsPerPage, setItemsPerPage] = useState<number>(
     ITEMS_PER_PAGE_OPTIONS[0]
@@ -46,7 +47,7 @@ const AdminUsersTable: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    setAdminUsers(adminUsers);
+    setAdminUsersData(adminUsers);
     console.log("check");
   }, [adminUsers]);
 
@@ -67,8 +68,9 @@ const AdminUsersTable: React.FC = () => {
       major: admin?.major ? admin.major : "",
       role: "user",
       completed: admin?.completed ? admin.completed : 0,
+      token: admin.token,
     });
-    setAdminUsers(adminUsersData.filter((e, i) => i !== index));
+    setAdminUsersData(adminUsersData.filter((e, i) => i !== index));
   };
 
   const indexOfLastAdmin = currentPage * itemsPerPage;
@@ -104,7 +106,7 @@ const AdminUsersTable: React.FC = () => {
             </TableHead>
             <TableBody>
               {currentAdmins.map((admin: AdminUser, index: number) => (
-                <TableRow key={index}>
+                <TableRow key={admin.email}>
                   <TableCell>{admin.email}</TableCell>
                   <TableCell>{admin.name}</TableCell>
                   <TableCell>{admin.year}</TableCell>
