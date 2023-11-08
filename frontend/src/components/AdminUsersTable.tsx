@@ -16,7 +16,7 @@ const ITEMS_PER_PAGE_OPTIONS = [5, 10]; // Number of items to display per page
 
 const AdminUsersTable: React.FC = () => {
   const [adminUsersData, setAdminUsers] = useState<AdminUser[]>([]);
-  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [currentPage, setCurrentPage] = useState<number>(0);
   const [itemsPerPage, setItemsPerPage] = useState<number>(ITEMS_PER_PAGE_OPTIONS[0]);
   const { adminUsers, getAdminUsers } = useData();
 
@@ -40,7 +40,7 @@ const AdminUsersTable: React.FC = () => {
     event: SelectChangeEvent<unknown>,
   ) => {
     setItemsPerPage(event.target.value as number);
-    setCurrentPage(1);
+    setCurrentPage(0);
   };
   
   const removeAdmin = async (admin: AdminUser, index: number) => {
@@ -55,7 +55,7 @@ const AdminUsersTable: React.FC = () => {
     setAdminUsers(adminUsersData.filter((e, i) => i !== index));
   }
 
-  const indexOfLastAdmin = currentPage * itemsPerPage;
+  const indexOfLastAdmin = (currentPage + 1) * itemsPerPage;
   const indexOfFirstAdmin = indexOfLastAdmin - itemsPerPage;
   const currentAdmins = adminUsersData.slice(indexOfFirstAdmin, indexOfLastAdmin);
 
@@ -118,7 +118,7 @@ const AdminUsersTable: React.FC = () => {
                   component="div"
                   count={adminUsersData.length}
                   rowsPerPage={itemsPerPage}
-                  page={currentPage - 1}
+                  page={currentPage}
                   onPageChange={handlePageChange} />
           </div></>
     

@@ -70,7 +70,7 @@ const filteredQuestions = questionsData.filter(question =>
 
   const handleChangeItemsPerPage = (event: SelectChangeEvent<unknown>) => {
     setItemsPerPage(event.target.value as number);
-    setCurrentPage(1);
+    setCurrentPage(0);
   };
 
   const indexOfLastQuestion = (currentPage + 1) * itemsPerPage;
