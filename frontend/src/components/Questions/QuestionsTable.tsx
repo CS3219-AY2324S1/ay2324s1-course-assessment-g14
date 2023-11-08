@@ -85,9 +85,16 @@ const filteredQuestions = questionsData.filter(question =>
       {/* Category Filter */}
       <Select
         multiple
+        displayEmpty
         value={selectedCategories}
         onChange={handleCategoriesChange}
-        renderValue={(selected) => (selected as string[]).join(", ")}
+        renderValue={(selected) => {
+          if (selected.length === 0) {
+            return <em>Filter by category</em>;
+          } else {
+            return (selected as string[]).join(", ")}
+          }
+        }
         style={{ marginTop: "10px", marginBottom: "10px", width: "80%" }}
       >
         {uniqueCategories.map((category) => (
