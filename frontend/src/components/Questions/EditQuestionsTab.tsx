@@ -54,31 +54,29 @@ const EditQuestionsTab: React.FC = () => {
   };
 
   return (
-    <React.Fragment>
-      <Box component="span" padding={2} width="80%">
-        {editQuestions ? (
-          <React.Fragment>
-            <Typography variant="h5" gutterBottom>
-              Edit Questions
-            </Typography>
-            <Grid container spacing={3}>
-              <Grid item sm={12}>
-                <EditQuestionsTable onEdit={onEdit} onDelete={onDelete} />
-              </Grid>
-              <Grid item sm={12}>
-                <Button variant="contained" onClick={handleStopEdit}>
-                  Finish Editing
-                </Button>
-              </Grid>
-            </Grid>
-          </React.Fragment>
-        ) : (
-          <Button variant="contained" onClick={handleStartEdit}>
+    <Box component="span" padding={2} width="80%">
+      {editQuestions ? (
+        <React.Fragment>
+          <Typography variant="h5" gutterBottom>
             Edit Questions
-          </Button>
-        )}
-      </Box>
-    </React.Fragment>
+          </Typography>
+          <Grid container spacing={3}>
+            <Grid item sm={12}>
+              <EditQuestionsTable onEdit={onEdit} onDelete={onDelete} />
+            </Grid>
+            <Grid item sm={12}>
+              <Button variant="contained" onClick={handleStopEdit}>
+                Finish Editing
+              </Button>
+            </Grid>
+          </Grid>
+        </React.Fragment>
+      ) : (
+        <Button variant="contained" onClick={handleStartEdit}>
+          Edit Questions
+        </Button>
+      )}
+    </Box>
   );
 };
 
