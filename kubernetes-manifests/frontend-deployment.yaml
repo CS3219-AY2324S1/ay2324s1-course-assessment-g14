@@ -18,12 +18,12 @@ spec:
         imagePullPolicy: IfNotPresent
         envFrom:
         - configMapRef:
-          name: env-config
+            name: env-config
         resources:
           limits:
-            cpu: 500m
+            cpu: 1Gi
             ephemeral-storage: 1Gi
-            memory: 2Gi
+            memory: 4Gi
           requests:
             cpu: 500m
             ephemeral-storage: 1Gi
