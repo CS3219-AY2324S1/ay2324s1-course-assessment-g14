@@ -40,7 +40,7 @@ const ProblemSolverLeft = () => {
 }
 
   return (
-    <Paper elevation={3} sx={{ flex: 1, display: 'flex', flexDirection: 'column', padding: 2 }}>
+    <Paper elevation={3} sx={{ flex: 1, display: 'flex', flexDirection: 'column', padding: 2}}>
       <Typography variant="h4" gutterBottom sx={{ fontSize: '24px' }}>
         {question.title}
       </Typography>
