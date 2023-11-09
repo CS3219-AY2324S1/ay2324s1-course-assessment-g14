@@ -65,6 +65,21 @@ const MatchingForm = React.forwardRef(function MatchingForm() {
   const userEmail = user?.email;
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
   const [snackbarMessage, setSnackbarMessage] = React.useState("");
+  const [remainingTime, setRemainingTime] = React.useState(0); // State for the countdown timer
+  const [timerId, setTimerId] = React.useState<NodeJS.Timeout | null>(null); // State to keep track of the timer
+
+
+  const startCountdown = () => {
+    setRemainingTime(30); // Start the timer at 30 seconds
+    setIsMatching(true);
+    // Clear any existing timer
+    if (timerId) clearInterval(timerId);
+    // Start a new timer
+    const id = setInterval(() => {
+      setRemainingTime((time) => time - 1);
+    }, 1000);
+    setTimerId(id);
+  };
 
   const handleConnect = async () => {
     const preferences = {
@@ -88,7 +103,23 @@ const MatchingForm = React.forwardRef(function MatchingForm() {
 
     socket.emit("startMatching", preferences);
     setIsMatching(true);
+    startCountdown();
   };
+
+  React.useEffect(() => {
+    if (remainingTime === 0 && timerId) {
+      clearInterval(timerId);
+      setIsMatching(false); // Update isMatching state to false as matching ends
+      setSnackbarMessage("Matching timed out after 30 seconds.");
+      setOpenSnackbar(true);
+    }
+  }, [remainingTime, timerId]);
+
+  React.useEffect(() => {
+    return () => {
+      if (timerId) clearInterval(timerId);
+    };
+  }, [timerId]);
 
   const generateConsistentRandomIndex = (seed: any, arrayLength: number) => {
     return seed % arrayLength;
@@ -126,6 +157,8 @@ const MatchingForm = React.forwardRef(function MatchingForm() {
     }
     getCategories();
   }, []);
+
+  
 
   React.useEffect(() => {
     socket.on("matchFound", async (matchedUserPreferences) => {
@@ -203,7 +236,10 @@ const MatchingForm = React.forwardRef(function MatchingForm() {
         </select>
       </div>
       {isMatching ? (
-        <div>Loading...</div>
+        <div>Loading... 
+        <p>Time remaining: {remainingTime} seconds</p>
+        </div>
+        
       ) : (
         <Button sx={{ mt: "5%" }} variant="contained" onClick={handleConnect}>
           Connect
