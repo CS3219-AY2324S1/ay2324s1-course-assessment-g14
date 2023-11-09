@@ -127,7 +127,8 @@ const MatchingForm = React.forwardRef(function MatchingForm() {
       setCategoryList(uniqueCategories);
     }
     getCategories();
-  }, []);
+    // eslint-disable-next-line
+  }, [questions]);
 
   React.useEffect(() => {
     socket.on("matchFound", async (matchedUserPreferences) => {
