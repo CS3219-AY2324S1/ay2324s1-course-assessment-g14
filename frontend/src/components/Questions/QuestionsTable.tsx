@@ -1,5 +1,3 @@
-// InterviewQuestionsTable.tsx
-
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -14,6 +12,12 @@ import {
   MenuItem,
   TablePagination,
   SelectChangeEvent,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Typography,
 } from "@mui/material";
 import { useData } from "../../data/data.context";
 
@@ -37,6 +41,10 @@ const InterviewQuestionsTable: React.FC = () => {
   const [itemsPerPage, setItemsPerPage] = useState<number>(
     ITEMS_PER_PAGE_OPTIONS[0]
   );
+  const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(
+    null
+  );
+  const [isQuestionModalOpen, setIsQuestionModalOpen] = useState(false);
   const { questions, getQuestions } = useData();
 
   useEffect(() => {
@@ -44,25 +52,25 @@ const InterviewQuestionsTable: React.FC = () => {
       getQuestions();
     }
     getInterviewQuestions();
-    // console.log("here");
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     setQuestions(questions);
-    //console.log(questionsData);
   }, [questions]);
 
   const handleCategoriesChange = (event: SelectChangeEvent<unknown>) => {
     setSelectedCategories(event.target.value as string[]);
-};
+  };
 
-const uniqueCategories = Array.from(new Set(questionsData.flatMap(question => question.categories)));
+  const uniqueCategories = Array.from(
+    new Set(questionsData.flatMap((question) => question.categories))
+  );
 
-const filteredQuestions = questionsData.filter(question => 
-    selectedCategories.length === 0 || 
-    selectedCategories.some(cat => question.categories.includes(cat))
-);
+  const filteredQuestions = questionsData.filter((question) =>
+    selectedCategories.length === 0
+      ? true
+      : selectedCategories.some((cat) => question.categories.includes(cat))
+  );
 
   const handlePageChange = (event: unknown, newPage: number) => {
     setCurrentPage(newPage);
@@ -79,6 +87,16 @@ const filteredQuestions = questionsData.filter(question =>
     indexOfFirstQuestion,
     indexOfLastQuestion
   );
+
+  const openQuestionModal = (question: Question) => {
+    setSelectedQuestion(question);
+    setIsQuestionModalOpen(true);
+  };
+
+  const closeQuestionModal = () => {
+    setSelectedQuestion(null);
+    setIsQuestionModalOpen(false);
+  };
 
   return (
     <>
@@ -107,32 +125,29 @@ const filteredQuestions = questionsData.filter(question =>
                 <TableCell>Title</TableCell>
                 <TableCell>Tags</TableCell>
                 <TableCell>Categories</TableCell>
-                {/* <TableCell>Constraints</TableCell> */}
                 <TableCell>Difficulty</TableCell>
-                {/* <TableCell>Description</TableCell> */}
               </TableRow>
             </TableHead>
             <TableBody>
               {currentQuestions.map((question: Question, index: number) => (
                 <TableRow key={index}>
                   <TableCell>
-                    <Link
-                      to={`/question/${question.id}`}
+                    <Button
+                      onClick={() => openQuestionModal(question)}
                       style={{
                         textDecoration: "none",
                         color: "inherit",
-                        fontSize: "16px", // Adjust to your preference
+                        fontSize: "16px",
                         fontWeight: "bold",
+                        textTransform: "initial"
                       }}
                     >
                       {question.title}
-                    </Link>
+                    </Button>
                   </TableCell>
                   <TableCell>{question.tags.join(", ")}</TableCell>
                   <TableCell>{question.categories.join(", ")}</TableCell>
-                  {/* <TableCell>{question.constraints.join(', ')}</TableCell> */}
                   <TableCell>{question.difficulty}</TableCell>
-                  {/* <TableCell>{question.description}</TableCell> */}
                 </TableRow>
               ))}
             </TableBody>
@@ -161,6 +176,42 @@ const filteredQuestions = questionsData.filter(question =>
           onPageChange={handlePageChange}
         />
       </div>
+      <Dialog
+        open={isQuestionModalOpen}
+        onClose={closeQuestionModal}
+        fullWidth
+        maxWidth="md"
+      >
+        {selectedQuestion && (
+          <>
+            <DialogTitle>{selectedQuestion.title}</DialogTitle>
+            <DialogContent >
+              <Typography variant="body2" style={{padding: "5px"}}>
+              <b>Categories:</b> {selectedQuestion.categories.join(", ")}
+              </Typography>
+              <Typography variant="body2" style={{padding: "5px"}}>
+                <b>Difficulty:</b> {selectedQuestion.difficulty}
+              </Typography>
+              <Typography variant="body2" style={{padding: "5px"}}>
+                <b>Description</b>: {selectedQuestion.description}
+              </Typography>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={closeQuestionModal} color="primary">
+                Close
+              </Button>
+              <Link
+                to={`/question/${selectedQuestion.id}`}
+                style={{ textDecoration: "none" }}
+              >
+                <Button color="primary" variant="contained">
+                  Solve Question
+                </Button>
+              </Link>
+            </DialogActions>
+          </>
+        )}
+      </Dialog>
     </>
   );
 };

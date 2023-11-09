@@ -44,6 +44,7 @@ function ProblemSolver() {
           minHeight: "100vh",
           minWidth: "100vw",
           paddingY: 4,
+          overflowX: 'hidden'
         }}
       >
         <CircularProgress />
@@ -60,6 +61,7 @@ function ProblemSolver() {
           minHeight: "100vh",
           minWidth: "100vw",
           paddingY: 4,
+          overflowX: 'hidden'
         }}
       >
         <SentimentVeryDissatisfiedIcon sx={{ fontSize: 64, color: "blue" }} />
@@ -82,7 +84,7 @@ function ProblemSolver() {
 
   return (
     <>
-      <Box>
+      <Box style={{overflowX: 'hidden'}}>
         <CssBaseline />
         <Navbar />
       </Box>
@@ -93,6 +95,7 @@ function ProblemSolver() {
           minHeight: "100vh",
           minWidth: "100vw",
           paddingY: 4,
+          overflowX: 'hidden'
         }}
       >
         <Grid container spacing={1} sx={{ flex: 1 }}>
