@@ -12,6 +12,7 @@ export function initializeMatchingService(io: Server) {
     socket.on('startMatching', (preferences: any) => {
       // Add the user to the list of active users with their preferences
       activeUsers.push({ socket, preferences });
+      //console.log('user is in queue to match with another user');
 
       // Attempt to find a match for the user
       tryMatchForUser(socket, preferences);
@@ -61,6 +62,7 @@ export function initializeMatchingService(io: Server) {
       removeUserFromActiveList(matchedUser.socket);
       const randomSeed = Date.now();
       // Emit "matchFound" to both users
+      //console.log('match found');
       socket.emit('matchFound', {matchedUserPreferences: matchedUser.preferences, seed: randomSeed});
       matchedUser.socket.emit('matchFound', {matchedUserPreferences: preferences, seed: randomSeed});
     } else {
