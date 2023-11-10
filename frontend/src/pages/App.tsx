@@ -15,6 +15,8 @@ export default function App() {
       <CenteredContainer>
         <Home />
         <QuestionsTable />
+        <AddQuestionTab />
+        <EditQuestionsTab />
       </CenteredContainer>
     </Box>
   );
