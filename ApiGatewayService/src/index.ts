@@ -28,7 +28,6 @@ app.use("/userservice", (req, res) => {
   proxy.web(req, res, { target: "http://user-service:3004" });
 });
 
-
 // Start the server
 app.listen(3001, () => {
   console.log("API Gateway listening on port 3001");

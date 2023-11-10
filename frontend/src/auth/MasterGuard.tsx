@@ -8,7 +8,7 @@ interface AuthGuardProps {
 
 export default function MasterGuard({ children }: AuthGuardProps) {
   const { user } = useAuth();
-  if (user?.role !== 'master') {
+  if (user?.role !== "master") {
     return <Navigate to="/login" />;
   }
   return <>{children}</>;

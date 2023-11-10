@@ -1,5 +1,16 @@
 import { initializeApp } from "firebase/app";
-import { doc, getDoc, getFirestore, setDoc, updateDoc, where, query, collection, getDocs, deleteDoc } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  getFirestore,
+  setDoc,
+  updateDoc,
+  where,
+  query,
+  collection,
+  getDocs,
+  deleteDoc,
+} from "firebase/firestore";
 import { firebaseConfig } from "../firebase/firebase.config";
 import { getAuth } from "firebase/auth";
 const app = initializeApp(firebaseConfig);
@@ -13,9 +24,10 @@ interface User {
   major?: string;
   role?: string;
   completed?: number;
+  token?: string;
 }
 
-export async function createUser(email: string): Promise<User> {
+export async function createUser(email: string, token: string): Promise<User> {
   try {
     await setDoc(doc(db, "users", email), {
       email: email,
@@ -24,6 +36,7 @@ export async function createUser(email: string): Promise<User> {
       major: "-",
       role: "user",
       completed: 0,
+      token: token,
     });
     return Promise.resolve({
       email: email,
@@ -32,13 +45,17 @@ export async function createUser(email: string): Promise<User> {
       major: "-",
       role: "user",
       completed: 0,
+      token: token,
     });
   } catch (error) {
     return Promise.reject(error);
   }
 }
 
-export async function createAdminUser(email: string): Promise<User> {
+export async function createAdminUser(
+  email: string,
+  token: string
+): Promise<User> {
   try {
     await setDoc(doc(db, "users", email), {
       email: email,
@@ -47,6 +64,7 @@ export async function createAdminUser(email: string): Promise<User> {
       major: "-",
       role: "admin",
       completed: 0,
+      token: token,
     });
     return Promise.resolve({
       email: email,
@@ -55,6 +73,7 @@ export async function createAdminUser(email: string): Promise<User> {
       major: "-",
       role: "admin",
       completed: 0,
+      token: token,
     });
   } catch (error) {
     return Promise.reject(error);
@@ -73,6 +92,7 @@ export async function getUser(email: string): Promise<User> {
         major: user.major ? user.major : undefined,
         role: user.role,
         completed: user.completed,
+        token: user.token,
       });
     }
     return Promise.reject("no such user");
@@ -85,23 +105,25 @@ export async function getAdminUsers(): Promise<User[]> {
   try {
     const q = query(collection(db, "users"), where("role", "==", "admin"));
     const querySnapshot = await getDocs(q);
-    let adminsArray: (User)[];
-    adminsArray = []
-    querySnapshot.forEach((doc) =>  {
-      const user = doc.data()
-      adminsArray = adminsArray.concat([{
-        email: user.email,
-        name: user.name ? user.name : undefined,
-        year: user.year ? user.year : undefined,
-        major: user.major ? user.major : undefined,
-        role: user.role,
-        completed: user.completed,
-      }])
-    })
+    let adminsArray: User[];
+    adminsArray = [];
+    querySnapshot.forEach((doc) => {
+      const user = doc.data();
+      adminsArray = adminsArray.concat([
+        {
+          email: user.email,
+          name: user.name ? user.name : undefined,
+          year: user.year ? user.year : undefined,
+          major: user.major ? user.major : undefined,
+          role: user.role,
+          completed: user.completed,
+          token: user.token,
+        },
+      ]);
+    });
 
     if (querySnapshot) {
       return Promise.resolve(adminsArray);
-
     }
     return Promise.reject("no such user");
   } catch (error) {
@@ -116,8 +138,8 @@ export async function updateUser(email: string, params: any): Promise<User> {
       name: params.name,
       year: params.year,
       major: params.major,
-      role: params.role
-    })
+      role: params.role,
+    });
     const data = await getDoc(doc(db, "users", email));
     const user = data.data();
     if (user) {
@@ -128,6 +150,7 @@ export async function updateUser(email: string, params: any): Promise<User> {
         major: user.major ? user.major : undefined,
         role: user.role,
         completed: user.completed,
+        token: user.token,
       });
     }
     return Promise.reject("no such user");

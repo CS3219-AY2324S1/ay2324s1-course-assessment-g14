@@ -1,9 +1,13 @@
 import { Request, Response } from "express";
-import {addQuestion, db, deleteQuestion, updateQuestion} from "./question.service";
 import {
-  getDocs,
-  collection,
-} from "firebase/firestore";
+  addQuestion,
+  db,
+  deleteQuestion,
+  isValidToken,
+  updateQuestion,
+} from "./question.service";
+import { getDocs, collection } from "firebase/firestore";
+import axios from "axios";
 
 interface Question {
   title: string;
@@ -22,8 +26,19 @@ interface Example {
 
 export async function handleGetQuestions(req: Request, res: Response) {
   try {
-    //   console.log(req.query.email);
-    //   const { email } = req.query;
+    console.log("getting questions");
+    const { token } = req.query;
+    if (!token) {
+      res.status(500).send("unauthorized access");
+    }
+    if (typeof token === "string") {
+      const response = await isValidToken(token);
+      if (!response) {
+        res.status(500).send("unauthorized access");
+      }
+    } else {
+      res.status(500).send("invalid params");
+    }
     const query = await getDocs(collection(db, "questions"));
     const result = await Promise.all(
       query.docs.map(async (d) => {
@@ -96,7 +111,7 @@ export async function handleUpdateQuestion(req: Request, res: Response) {
       examples,
     } = req.body;
     console.log(`updating question ${questionId}: ${title}`);
-    const question = await updateQuestion(questionId,{
+    const question = await updateQuestion(questionId, {
       title: title,
       tags: tags,
       categories: categories,

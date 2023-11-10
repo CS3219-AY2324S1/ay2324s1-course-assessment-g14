@@ -158,8 +158,6 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-         
-
         }}
       >
         <MuiAlert

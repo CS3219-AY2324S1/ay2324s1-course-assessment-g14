@@ -12,17 +12,26 @@ import { firebaseConfig } from "../firebase/firebase.config";
 initializeApp(firebaseConfig);
 const auth = getAuth();
 
+interface SignupCredential {
+  user: UserCredential;
+  token: string;
+}
+
 export async function signUp(
   email: string,
   password: string
-): Promise<UserCredential> {
+): Promise<SignupCredential> {
   try {
     const user: UserCredential = await createUserWithEmailAndPassword(
       auth,
       email,
       password
     );
-    return Promise.resolve(user);
+    const token: string = await user.user.getIdToken();
+    return Promise.resolve({
+      user: user,
+      token: token,
+    });
   } catch (error: any) {
     return Promise.reject(error);
   }

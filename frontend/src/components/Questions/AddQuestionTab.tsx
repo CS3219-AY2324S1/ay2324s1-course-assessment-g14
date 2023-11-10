@@ -8,12 +8,10 @@ import { AxiosError } from "axios";
 
 const AddQuestionTab: React.FC = () => {
   const [addQuestions, setAddQuestions] = useState(false);
-  
 
   const handleAddQuestionClick = () => {
     setAddQuestions(true);
   };
-
   const onSubmit = async (question: Question) => {
     console.log(question);
     let questionToAdd = new Question(question);
@@ -39,22 +37,20 @@ const AddQuestionTab: React.FC = () => {
   };
 
   return (
-    <React.Fragment>
-      <Box component="span" padding={2} width="80%">
-        {addQuestions ? (
-          <React.Fragment>
-            <Typography variant="h5" gutterBottom>
-              Add Question
-            </Typography>
-            <QuestionForm onSubmit={onSubmit} onCancel={onCancel} />
-          </React.Fragment>
-        ) : (
-          <Button variant="contained" onClick={handleAddQuestionClick}>
+    <Box component="span" padding={2} width="80%">
+      {addQuestions ? (
+        <React.Fragment>
+          <Typography variant="h5" gutterBottom>
             Add Question
-          </Button>
-        )}
-      </Box>
-    </React.Fragment>
+          </Typography>
+          <QuestionForm onSubmit={onSubmit} onCancel={onCancel} />
+        </React.Fragment>
+      ) : (
+        <Button variant="contained" onClick={handleAddQuestionClick}>
+          Add Question
+        </Button>
+      )}
+    </Box>
   );
 };
 

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 
 import {
@@ -40,9 +39,9 @@ export default function Profile() {
     if (edit) {
       try {
         await updateUser(value);
-        setUser(value)
+        setUser(value);
       } catch (e) {
-        console.log(e)
+        console.log(e);
       }
     }
     setEdit(!edit);
@@ -80,8 +79,8 @@ export default function Profile() {
             ))}
           </Grid>
         </Grid>
-        <DeleteButtonModal/>
-        {user?.role === 'master' && <AdminUsersTable/>}
+        <DeleteButtonModal />
+        {user?.role === "master" && <AdminUsersTable />}
       </Container>
     </Box>
   );
