@@ -13,8 +13,8 @@ RUN npm install
 # Bundle your app source code into the container
 COPY . .
 
-# Expose the port on which your Auth service will run
+# Expose the port on which your Question service will run
 # EXPOSE 3002
 
-# Define the command to start your Auth service
+# Define the command to start your Question service
 CMD [ "npm", "run", "dev"]
