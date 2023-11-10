@@ -81,7 +81,7 @@ export default function Profile() {
           </Grid>
         </Grid>
         <DeleteButtonModal/>
-        {user?.role == 'maintainer' && <AdminUsersTable/>}
+        {user?.role == 'master' && <AdminUsersTable/>}
       </Container>
     </Box>
   );
