@@ -16,7 +16,6 @@ import MenuIcon from "@mui/icons-material/Menu";
 import AdbIcon from "@mui/icons-material/Adb";
 import { useAuth } from "../auth/auth.context";
 import { useNavigate } from "react-router-dom";
-import { useData } from "../data/data.context";
 
 const pages = [
   {

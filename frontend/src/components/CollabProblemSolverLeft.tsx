@@ -1,6 +1,5 @@
 // ProblemSolverLeft.jsx
 import React, {useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import {
   Paper,
   Typography,
@@ -18,8 +17,6 @@ function CollabProblemSolverLeft({questionNumber}: {questionNumber: string}) {
   // Find the question that matches the questionId
   const question = questions.find((q) => q.id === questionId);
   console.log(question)
-//   console.log(questions)
-  // console.log(question)
   useEffect(() => {
     // Fetch initial code or other data as needed
     // You can set the initial code or other data here

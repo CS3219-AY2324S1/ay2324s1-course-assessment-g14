@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   CssBaseline,
-  Link,
   TextField,
   Typography,
 } from "@mui/material";
@@ -13,7 +12,7 @@ import PasswordField from "../components/PasswordField";
 import { useAuth } from "../auth/auth.context";
 
 export default function CreateAdmin() {
-  const { user, error, signUpAdmin } = useAuth();
+  const { error, signUpAdmin } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [creation, setCreation] = useState(false);

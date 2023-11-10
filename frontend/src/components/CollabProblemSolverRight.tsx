@@ -8,7 +8,6 @@ import { v4 as uuidv4 } from "uuid";
 
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 import PartySocket from "partysocket";
-import socket from "./MatchingService/socket";
 
 interface ChatMessage {
   id: string;
