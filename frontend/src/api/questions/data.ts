@@ -1,4 +1,4 @@
-import { questionhttpClient }from "../axios/config";
+import { questionhttpClient } from "../axios/config";
 import { QuestionDTO } from "./dto";
 // import { AuthDTO } from "./dto";
 // import { UserCredential } from "firebase/auth";
@@ -11,7 +11,8 @@ import { QuestionDTO } from "./dto";
 
 // export const signOut = () => httpClient.delete("/logout");
 
-export const getAllQuestions = () => questionhttpClient.get("/questions");
+export const getAllQuestions = (token: string) =>
+  questionhttpClient.get("/questions", { params: { token: token } });
 
 export const addQuestion = (params: QuestionDTO) =>
   questionhttpClient.post("/questions", params);

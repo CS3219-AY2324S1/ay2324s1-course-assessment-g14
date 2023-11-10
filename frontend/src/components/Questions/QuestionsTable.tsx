@@ -35,7 +35,7 @@ interface Question {
 const ITEMS_PER_PAGE_OPTIONS = [5, 10]; // Number of items to display per page
 
 const InterviewQuestionsTable: React.FC = () => {
-  const [questionsData, setQuestions] = useState<Question[]>([]);
+  const [questionsData, setQuestionsData] = useState<Question[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [itemsPerPage, setItemsPerPage] = useState<number>(
@@ -52,10 +52,11 @@ const InterviewQuestionsTable: React.FC = () => {
       getQuestions();
     }
     getInterviewQuestions();
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
-    setQuestions(questions);
+    setQuestionsData(questions);
   }, [questions]);
 
   const handleCategoriesChange = (event: SelectChangeEvent<unknown>) => {
@@ -110,9 +111,9 @@ const InterviewQuestionsTable: React.FC = () => {
           if (selected.length === 0) {
             return <em>Filter by category</em>;
           } else {
-            return (selected as string[]).join(", ")}
+            return (selected as string[]).join(", ");
           }
-        }
+        }}
         style={{ marginTop: "10px", marginBottom: "10px", width: "80%" }}
       >
         {uniqueCategories.map((category) => (
@@ -146,7 +147,7 @@ const InterviewQuestionsTable: React.FC = () => {
                         color: "inherit",
                         fontSize: "16px",
                         fontWeight: "bold",
-                        textTransform: "initial"
+                        textTransform: "initial",
                       }}
                     >
                       {question.title}
@@ -192,14 +193,14 @@ const InterviewQuestionsTable: React.FC = () => {
         {selectedQuestion && (
           <>
             <DialogTitle>{selectedQuestion.title}</DialogTitle>
-            <DialogContent >
-              <Typography variant="body2" style={{padding: "5px"}}>
-              <b>Categories:</b> {selectedQuestion.categories.join(", ")}
+            <DialogContent>
+              <Typography variant="body2" style={{ padding: "5px" }}>
+                <b>Categories:</b> {selectedQuestion.categories.join(", ")}
               </Typography>
-              <Typography variant="body2" style={{padding: "5px"}}>
+              <Typography variant="body2" style={{ padding: "5px" }}>
                 <b>Difficulty:</b> {selectedQuestion.difficulty}
               </Typography>
-              <Typography variant="body2" style={{padding: "5px"}}>
+              <Typography variant="body2" style={{ padding: "5px" }}>
                 <b>Description</b>: {selectedQuestion.description}
               </Typography>
             </DialogContent>

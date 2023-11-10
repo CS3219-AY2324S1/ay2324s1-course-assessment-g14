@@ -9,7 +9,7 @@ interface AuthGuardProps {
 export default function AuthGuard({ children }: AuthGuardProps) {
   const { user } = useAuth();
   if (!user) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/login" state={{ showAlert: true }} />;
   }
   return <>{children}</>;
 }
