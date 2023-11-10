@@ -26,6 +26,7 @@ const EditQuestionsTab: React.FC = () => {
         `Question ${editedQuestion.id} updated: ${editedQuestion.title}`
       );
       setEditQuestions(false);
+      window.location.reload();
     } catch (e) {
       if (e instanceof AxiosError && e.response) {
         console.log(e.response.data.code);
@@ -34,7 +35,6 @@ const EditQuestionsTab: React.FC = () => {
       }
     }
   };
-
   const onDelete = async (questionToDelete: Question) => {
     console.log("Question to Delete: ", questionToDelete);
 
@@ -44,6 +44,7 @@ const EditQuestionsTab: React.FC = () => {
         `Question ${questionToDelete.id} deleted: ${questionToDelete.title}`
       );
       setEditQuestions(false);
+      window.location.reload();
     } catch (e) {
       if (e instanceof AxiosError && e.response) {
         console.log(e.response.data.code);

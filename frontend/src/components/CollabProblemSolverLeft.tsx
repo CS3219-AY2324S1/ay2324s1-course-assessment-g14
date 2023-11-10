@@ -45,7 +45,9 @@ function CollabProblemSolverLeft({
       </Typography>
       <Divider sx={{ marginBottom: 2, marginTop: 5 }} />
       <Typography variant="body1" sx={{ marginBottom: 2, fontSize: "18px" }}>
-        {question.description}
+        {question.description.split("\\n").map((s, key) => {
+          return <p key={key}>{s}</p>;
+        })}
       </Typography>
       <Divider sx={{ marginBottom: 10 }} />
       <Typography variant="h6" gutterBottom sx={{ fontSize: "18px" }}>

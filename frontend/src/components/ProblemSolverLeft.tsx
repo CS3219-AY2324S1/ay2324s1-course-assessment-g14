@@ -1,5 +1,5 @@
 // ProblemSolverLeft.jsx
-import React, {useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import {
   Paper,
@@ -31,22 +31,24 @@ const ProblemSolverLeft = () => {
     // If the question is not found, display a message
     return (
       <Paper elevation={3} sx={{ flex: 1, display: 'flex', flexDirection: 'column', padding: 2 }}>
-      <Typography variant="h4" gutterBottom>
-        Question not found
-        {questionId}
-      </Typography>
-    </Paper>
-  );
-}
+        <Typography variant="h4" gutterBottom>
+          Question not found
+          {questionId}
+        </Typography>
+      </Paper>
+    );
+  }
 
   return (
-    <Paper elevation={3} sx={{ flex: 1, display: 'flex', flexDirection: 'column', padding: 2 }}>
+    <Paper elevation={3} sx={{ flex: 1, display: 'flex', flexDirection: 'column', padding: 2}}>
       <Typography variant="h4" gutterBottom sx={{ fontSize: '24px' }}>
         {question.title}
       </Typography>
       <Divider sx={{ marginBottom: 2, marginTop: 5 }} />
       <Typography variant="body1" sx={{ marginBottom: 2, fontSize: '18px' }}>
-        {question.description}
+        {question.description.split("\\n").map((s, key) => {
+          return <p key={key}>{s}</p>;
+        })}
       </Typography>
       <Divider sx={{ marginBottom: 10 }} />
       <Typography variant="h6" gutterBottom sx={{ fontSize: '18px' }}>
@@ -61,7 +63,7 @@ const ProblemSolverLeft = () => {
             <CardMedia
               component="img"
               alt={`Example ${index + 1}`}
-              sx={{maxHeight: '100%', width: 'auto' }}
+              sx={{ maxHeight: '100%', width: 'auto' }}
               height="140"
               image={example.image}
             />

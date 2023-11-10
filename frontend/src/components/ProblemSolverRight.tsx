@@ -1,14 +1,19 @@
-import React, { useState } from 'react';
-import { Paper, Typography, TextField, MenuItem, Button } from '@mui/material';
+import React, { useState } from "react";
+import { Paper, Typography, TextField, MenuItem, Button } from "@mui/material";
+import { Link } from "react-router-dom";
+
 import Editor from "@monaco-editor/react";
 
-const languages: string[] = ['C++', 'Java', 'JavaScript', 'Python'];
+const languages: string[] = ["C++", "Java", "JavaScript", "Python"];
 
 function ProblemSolverRight() {
-  const [selectedLanguage, setSelectedLanguage] = useState<string>('JavaScript');
+  const [selectedLanguage, setSelectedLanguage] =
+    useState<string>("JavaScript");
   // const [code, setCode] = useState<string>('class Solution:');
-  const code = "class Solution:"
-  const handleLanguageChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const code = "class Solution:";
+  const handleLanguageChange = (
+    event: React.ChangeEvent<{ value: unknown }>
+  ) => {
     setSelectedLanguage(event.target.value as string);
   };
 
@@ -22,7 +27,10 @@ function ProblemSolverRight() {
   };
 
   return (
-    <Paper elevation={3} style={{ flex: 1, padding: 16, display: 'flex', flexDirection: 'column' }}>
+    <Paper
+      elevation={3}
+      style={{ flex: 1, padding: 16, display: "flex", flexDirection: "column" }}
+    >
       <Typography variant="h6" gutterBottom>
         Select a Language:
       </Typography>
@@ -31,7 +39,7 @@ function ProblemSolverRight() {
         fullWidth
         value={selectedLanguage}
         onChange={handleLanguageChange}
-        style={{ width: '50%' }}
+        style={{ width: "50%" }}
       >
         {languages.map((language, index) => (
           <MenuItem key={index} value={language}>
@@ -39,25 +47,26 @@ function ProblemSolverRight() {
           </MenuItem>
         ))}
       </TextField>
-      <Typography variant="h6" gutterBottom style={{ marginTop: '16px' }}>
+      <Typography variant="h6" gutterBottom style={{ marginTop: "16px" }}>
         Code Editor:
       </Typography>
       <Editor
-      height="900px"
-      language={selectedLanguage.toLowerCase()}
-      theme="vs-dark"
-      value={code}
-     
-    />
-      <Button
-        variant="contained"
-        color="primary"
-        fullWidth
-        onClick={handleSubmit}
-        style={{ marginTop: '16px' }}
-      >
-        Submit
-      </Button>
+        height="900px"
+        language={selectedLanguage.toLowerCase()}
+        theme="vs-dark"
+        value={code}
+      />
+      <Link to={`/home`} style={{ textDecoration: "none" }}>
+        <Button
+          variant="contained"
+          color="primary"
+          fullWidth
+          onClick={handleSubmit}
+          style={{ marginTop: "16px" }}
+        >
+          Submit
+        </Button>
+      </Link>
     </Paper>
   );
 }

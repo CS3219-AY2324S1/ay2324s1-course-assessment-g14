@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import QuestionForm from "./QuestionForm";
 import { Box, Button } from "@mui/material";
 import Question from "./Question";
@@ -7,7 +7,7 @@ import { addQuestion } from "../../api/questions/data";
 import { AxiosError } from "axios";
 
 const AddQuestionTab: React.FC = () => {
-  const [addQuestions, setAddQuestions] = React.useState(false);
+  const [addQuestions, setAddQuestions] = useState(false);
 
   const handleAddQuestionClick = () => {
     setAddQuestions(true);
@@ -20,6 +20,9 @@ const AddQuestionTab: React.FC = () => {
       const questionAdded = await addQuestion(questionToAdd);
       console.log(questionAdded);
       setAddQuestions(false);
+
+      // Navigate to the current location to refresh the page
+      window.location.reload();
     } catch (e) {
       if (e instanceof AxiosError && e.response) {
         console.log(e.response.data.code);
