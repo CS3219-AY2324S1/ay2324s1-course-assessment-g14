@@ -7,7 +7,7 @@ services:
     image: frontend-image
     ports:
       - "3000:3000"
-
+      
   api-gateway:
     container_name: api-gateway
     build:
@@ -16,20 +16,37 @@ services:
     ports:
       - "3001:3001"
 
-  question-service:
-    container_name: question-service
-    build:
-      context: ./QuestionService
-    image: question-service-image
-
   auth-service:
     container_name: auth-service
     build:
       context: ./AuthService
     image: auth-service-image
 
+  question-service:
+    container_name: question-service
+    build:
+      context: ./QuestionService
+    image: question-service-image
+
   user-service:
     container_name: user-service
     build:
       context: ./UserService
     image: user-service-image
+
+  matching-service:
+    container_name: matching-service
+    build:
+      context: ./MatchingService
+    image: matching-service-image
+    ports:
+      - "3005:3005"
+    stdin_open: true
+    
+  chat-service:
+    container_name: chat-service
+    build:
+      context: ./ChatService
+    image: chat-service-image
+    ports:
+      - "3007:3007"
