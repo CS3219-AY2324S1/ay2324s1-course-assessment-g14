@@ -25,87 +25,13 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Router>
-      <AuthContextProvider>
+      {/* <AuthContextProvider> */}
         <DataContextProvider>
-          <Routes>
-            <Route path="/" element={<Landing />} />
-            <Route path="/landing" element={<Landing />} />
-            <Route
-              path="/login"
-              element={
-                <RedirectIfLoggedIn>
-                  <Login />
-                </RedirectIfLoggedIn>
-              }
-            />
-            <Route
-              path="/signup"
-              element={
-                <RedirectIfLoggedIn>
-                  <SignUp />
-                </RedirectIfLoggedIn>
-              }
-            />
-            <Route
-              path="/home"
-              element={
-                <AuthGuard>
+         
                   <App />
-                </AuthGuard>
-              }
-            />
-            <Route
-              path="/question/:questionId"
-              element={
-                <AuthGuard>
-                  <ProblemSolver />
-                </AuthGuard>
-              }
-            />
-            <Route
-              path="/collab/question/:questionId/:user1/:user2"
-              element={
-                <AuthGuard>
-                  <CollabProblemSolver />
-                </AuthGuard>
-              }
-            />
             
-            <Route
-              path="/profile"
-              element={
-                <AuthGuard>
-                  <Profile />
-                </AuthGuard>
-              }
-            />
-            <Route
-              path="/createadmin"
-              element={
-                <MaintainerGuard>
-                  <CreateAdmin />
-                </MaintainerGuard>
-              }
-            />
-            <Route
-              path="/view-questions"
-              element={
-                <AuthGuard>
-                  <QuestionsView />
-                </AuthGuard>
-              }
-            />
-            <Route
-              path="/manage-questions"
-              element={
-                <AdminAuthGuard>
-                  <QuestionsManage />
-                </AdminAuthGuard>
-              }
-            />
-          </Routes>
         </DataContextProvider>
-      </AuthContextProvider>
+      {/* </AuthContextProvider> */}
     </Router>
   </React.StrictMode>
 );
