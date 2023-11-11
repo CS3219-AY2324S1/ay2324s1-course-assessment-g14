@@ -29,15 +29,18 @@ export async function handleGetQuestions(req: Request, res: Response) {
     console.log("getting questions");
     const { token } = req.query;
     if (!token) {
-      res.status(500).send("unauthorized access");
+      console.log("unauthorized access");
+      return res.status(401).send("unauthorized access");
     }
     if (typeof token === "string") {
       const response = await isValidToken(token);
       if (!response) {
-        res.status(500).send("unauthorized access");
+        console.log("unauthorized access");
+        return res.status(401).send("unauthorized access");
       }
     } else {
-      res.status(500).send("invalid params");
+      console.log("invalid params");
+      return res.status(500).send("invalid params");
     }
     const query = await getDocs(collection(db, "questions"));
     const result = await Promise.all(
@@ -59,13 +62,15 @@ export async function handleGetQuestions(req: Request, res: Response) {
     );
 
     if (result.length > 0) {
-      res.status(200).send(result);
+      console.log("questions retrieved");
+      return res.status(200).send(result);
     } else {
-      res.status(500).send("no questions");
+      console.log("no questions");
+      return res.status(500).send("no questions");
     }
   } catch (error) {
     console.error(error);
-    res.status(500).send(error);
+    return res.status(500).send(error);
   }
 }
 
