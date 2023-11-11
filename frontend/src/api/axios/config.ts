@@ -16,16 +16,4 @@ export const UserHttpClient = axios.create({
   baseURL: process.env.REACT_APP_USER_BASE_URL,
 });
 
-export const MatchingHttpClient = axios.create({
-  baseURL: process.env.REACT_APP_MATCHING_BASE_URL,
-});
-
-export const CollabHttpClient = axios.create({
-  baseURL: process.env.REACT_APP_COLLAB_BASE_URL,
-});
-
-export const ChatHttpClient = axios.create({
-  baseURL: process.env.REACT_APP_COLLAB_BASE_URL,
-});
-
 // export default httpClient;

@@ -9,7 +9,6 @@ import AuthGuard from "./auth/AuthGuard";
 import AdminGuard from "./auth/AdminGuard";
 import RedirectIfLoggedIn from "./auth/RedirectIfLoggedIn";
 import { DataContextProvider } from "./data/data.context";
-import CollabProblemSolver from "./pages/CollabProblemSolver";
 import ProblemSolver from "./pages/ProblemSolver";
 
 import Landing from "./pages/landing";
@@ -59,14 +58,6 @@ root.render(
               element={
                 <AuthGuard>
                   <ProblemSolver />
-                </AuthGuard>
-              }
-            />
-            <Route
-              path="/collab/question/:questionId/:user1/:user2"
-              element={
-                <AuthGuard>
-                  <CollabProblemSolver />
                 </AuthGuard>
               }
             />
