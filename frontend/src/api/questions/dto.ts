@@ -8,4 +8,5 @@ export interface QuestionDTO {
   difficulty: string;
   description: string;
   examples: Example[];
+  token: string;
 }

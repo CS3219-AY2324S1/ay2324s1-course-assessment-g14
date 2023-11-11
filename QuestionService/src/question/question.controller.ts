@@ -7,7 +7,6 @@ import {
   updateQuestion,
 } from "./question.service";
 import { getDocs, collection } from "firebase/firestore";
-import axios from "axios";
 
 interface Question {
   title: string;
@@ -87,8 +86,20 @@ const getExamples = async (id: string) => {
 };
 
 export async function handleDeleteQuestion(req: Request, res: Response) {
-  const questionId = req.params.questionId;
+  const { questionId } = req.params;
+  const { token } = req.query;
   try {
+    if (!token) {
+      res.status(500).send("unauthorized access");
+    }
+    if (typeof token === "string") {
+      const response = await isValidToken(token);
+      if (!response) {
+        res.status(500).send("unauthorized access");
+      }
+    } else {
+      res.status(500).send("invalid params");
+    }
     console.log(`deleting question with id ${questionId}`);
     await deleteQuestion(questionId);
     res.status(200).send(`question with id "${questionId}" deleted`);
@@ -99,7 +110,7 @@ export async function handleDeleteQuestion(req: Request, res: Response) {
 }
 
 export async function handleUpdateQuestion(req: Request, res: Response) {
-  const questionId = req.params.questionId;
+  const { questionId } = req.params;
   try {
     const {
       title,
@@ -109,7 +120,19 @@ export async function handleUpdateQuestion(req: Request, res: Response) {
       difficulty,
       description,
       examples,
+      token,
     } = req.body;
+    if (!token) {
+      res.status(500).send("unauthorized access");
+    }
+    if (typeof token === "string") {
+      const response = await isValidToken(token);
+      if (!response) {
+        res.status(500).send("unauthorized access");
+      }
+    } else {
+      res.status(500).send("invalid params");
+    }
     console.log(`updating question ${questionId}: ${title}`);
     const question = await updateQuestion(questionId, {
       title: title,
@@ -137,7 +160,19 @@ export async function handleAddQuestion(req: Request, res: Response) {
       difficulty,
       description,
       examples,
+      token,
     } = req.body;
+    if (!token) {
+      res.status(500).send("unauthorized access");
+    }
+    if (typeof token === "string") {
+      const response = await isValidToken(token);
+      if (!response) {
+        res.status(500).send("unauthorized access");
+      }
+    } else {
+      res.status(500).send("invalid params");
+    }
     console.log(`adding question ${title}`);
     const question = await addQuestion({
       title: title,

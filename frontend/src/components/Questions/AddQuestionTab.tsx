@@ -5,8 +5,10 @@ import Question from "./Question";
 import Typography from "@mui/material/Typography";
 import { addQuestion } from "../../api/questions/data";
 import { AxiosError } from "axios";
+import { useAuth } from "../../auth/auth.context";
 
 const AddQuestionTab: React.FC = () => {
+  const { user } = useAuth();
   const [addQuestions, setAddQuestions] = useState(false);
 
   const handleAddQuestionClick = () => {
@@ -17,12 +19,17 @@ const AddQuestionTab: React.FC = () => {
     let questionToAdd = new Question(question);
 
     try {
-      const questionAdded = await addQuestion(questionToAdd);
-      console.log(questionAdded);
-      setAddQuestions(false);
+      if (user) {
+        const questionAdded = await addQuestion({
+          ...questionToAdd,
+          token: user.token,
+        });
+        console.log(questionAdded);
+        setAddQuestions(false);
 
-      // Navigate to the current location to refresh the page
-      window.location.reload();
+        // Navigate to the current location to refresh the page
+        window.location.reload();
+      }
     } catch (e) {
       if (e instanceof AxiosError && e.response) {
         console.log(e.response.data.code);

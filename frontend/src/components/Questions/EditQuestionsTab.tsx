@@ -6,8 +6,10 @@ import Question from "./Question";
 import { deleteQuestion, updateQuestion } from "../../api/questions/data";
 import { AxiosError } from "axios";
 import Typography from "@mui/material/Typography";
+import { useAuth } from "../../auth/auth.context";
 
 const EditQuestionsTab: React.FC = () => {
+  const { user } = useAuth();
   const [editQuestions, setEditQuestions] = React.useState(false);
 
   const handleStartEdit = () => {
@@ -21,12 +23,17 @@ const EditQuestionsTab: React.FC = () => {
     console.log("Edited Question: ", editedQuestion);
 
     try {
-      await updateQuestion(editedQuestion.id, editedQuestion);
-      console.log(
-        `Question ${editedQuestion.id} updated: ${editedQuestion.title}`
-      );
-      setEditQuestions(false);
-      window.location.reload();
+      if (user) {
+        await updateQuestion(editedQuestion.id, {
+          ...editedQuestion,
+          token: user.token,
+        });
+        console.log(
+          `Question ${editedQuestion.id} updated: ${editedQuestion.title}`
+        );
+        setEditQuestions(false);
+        window.location.reload();
+      }
     } catch (e) {
       if (e instanceof AxiosError && e.response) {
         console.log(e.response.data.code);
@@ -39,12 +46,14 @@ const EditQuestionsTab: React.FC = () => {
     console.log("Question to Delete: ", questionToDelete);
 
     try {
-      await deleteQuestion(questionToDelete.id);
-      console.log(
-        `Question ${questionToDelete.id} deleted: ${questionToDelete.title}`
-      );
-      setEditQuestions(false);
-      window.location.reload();
+      if (user) {
+        await deleteQuestion(questionToDelete.id, user.token);
+        console.log(
+          `Question ${questionToDelete.id} deleted: ${questionToDelete.title}`
+        );
+        setEditQuestions(false);
+        window.location.reload();
+      }
     } catch (e) {
       if (e instanceof AxiosError && e.response) {
         console.log(e.response.data.code);
