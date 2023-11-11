@@ -1,4 +1,3 @@
-// ProblemSolverLeft.jsx
 import { useEffect } from "react";
 import { Paper, Typography, Divider, CardMedia } from "@mui/material";
 import { useData } from "../data/data.context";

@@ -26,6 +26,7 @@ export default function Profile() {
     year: user?.year ? user?.year : "",
     major: user?.major ? user.major : "",
     role: user?.role ? user.role : "",
+    token: user?.token ? user.token : "",
   });
 
   const profileFields = [

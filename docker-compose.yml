@@ -1,5 +1,13 @@
 version: '3'
 services:
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+    image: frontend-image
+    ports:
+      - "3000:3000"
+      
   api-gateway:
     container_name: api-gateway
     build:
@@ -13,8 +21,18 @@ services:
     build:
       context: ./AuthService
     image: auth-service-image
-    # ports:
-    #   - "3001:3001"
+
+  question-service:
+    container_name: question-service
+    build:
+      context: ./QuestionService
+    image: question-service-image
+
+  user-service:
+    container_name: user-service
+    build:
+      context: ./UserService
+    image: user-service-image
 
   matching-service:
     container_name: matching-service
@@ -24,33 +42,7 @@ services:
     ports:
       - "3005:3005"
     stdin_open: true
-
-  question-service:
-    container_name: question-service
-    build:
-      context: ./QuestionService
-    image: question-service-image
-    # ports:
-    #   - "3001:3001"
-
-  user-service:
-    container_name: user-service
-    build:
-      context: ./UserService
-    image: user-service-image
-    # ports:
-    #   - "3001:3001"
-  
-  # collab-service:
-  #   container_name: collab-service
     
-  #   build:
-  #     context: ./CollabService
-  #   image: collab-service-image
-  #   ports:
-  #     - "3006:3006"
-    
-
   chat-service:
     container_name: chat-service
     build:
@@ -58,11 +50,3 @@ services:
     image: chat-service-image
     ports:
       - "3007:3007"
-
-  frontend:
-    container_name: frontend
-    build:
-      context: ./frontend
-    image: frontend-image
-    ports:
-      - "3000:3000"
