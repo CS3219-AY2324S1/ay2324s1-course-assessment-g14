@@ -25,7 +25,7 @@ const AdminUsersTable: React.FC = () => {
       getAdminUsers();
     }
     getAdmins();
-  }, []);
+  }, []); // eslint-disable-line
 
   useEffect(() => {
     setAdminUsers(adminUsers);

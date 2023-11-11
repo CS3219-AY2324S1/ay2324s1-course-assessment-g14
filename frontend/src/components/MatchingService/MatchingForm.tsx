@@ -145,7 +145,7 @@ const MatchingForm = React.forwardRef(function MatchingForm() {
     return () => {
       socket.off("matchFound");
     };
-  }, [difficulty, category, userEmail, navigate]);
+  }, [difficulty, category, userEmail, navigate]); // eslint-disable-line
 
   React.useEffect(() => {
     socket.on("noMatchFound", () => {

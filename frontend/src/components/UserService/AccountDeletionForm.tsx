@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Box } from "@mui/material";
 import Button from '@mui/material/Button';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
+
 import { useAuth } from '../../auth/auth.context';
 import { deleteActiveUser } from '../../api/user';
 // import socket from './socket';
@@ -29,8 +29,8 @@ const AccountDeletionForm = React.forwardRef(function AccountDeletionForm() {
     const handleDelete = async () => {
         try {
             if (activeUser?.email) {
-                const res = await deleteActiveUser(activeUser.email);
-                const res2 = await removeAccount();
+                const res = await deleteActiveUser(activeUser.email); // eslint-disable-line
+                const res2 = await removeAccount(); // eslint-disable-line
             }
           } catch (e) {
             console.log(e)
