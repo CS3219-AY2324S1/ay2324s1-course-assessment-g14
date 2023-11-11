@@ -1,5 +1,5 @@
 # Use an official Node.js runtime as a parent image
-FROM node:bookworm-slim
+FROM node:14
 
 # Set the working directory in the container
 WORKDIR /usr/src/api-gateway
@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 3001
 
 # Define the command to start your API gateway
-CMD [ "npm", "run", "dev"]
+CMD [ "npm", "run", "dev" ]
