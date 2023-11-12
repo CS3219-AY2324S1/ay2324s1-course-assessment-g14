@@ -144,7 +144,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
         setError(e.message);
       }
     }
-  }, [setUser, navigate, activeUser]);
+  }, [setUser, navigate]);
 
   const authContextProviderValue = useMemo(
     () => ({
