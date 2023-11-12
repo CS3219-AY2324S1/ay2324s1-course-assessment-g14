@@ -24,12 +24,12 @@ const style = {
 };
 
 const AccountDeletionForm = React.forwardRef(function AccountDeletionForm() {
-    const { activeUser, removeAccount } = useAuth();
+    const { user, removeAccount } = useAuth();
 
     const handleDelete = async () => {
         try {
-            if (activeUser?.email) {
-                const res = await deleteActiveUser(activeUser.email);
+            if (user?.email) {
+                const res = await deleteActiveUser(user.email);
                 const res2 = await removeAccount();
             }
           } catch (e) {

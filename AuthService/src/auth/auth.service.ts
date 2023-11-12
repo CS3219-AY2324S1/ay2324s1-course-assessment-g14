@@ -11,7 +11,13 @@ import { firebaseConfig } from "../firebase/firebase.config";
 
 initializeApp(firebaseConfig);
 const auth = getAuth();
-
+auth.onAuthStateChanged(function(user) {
+  if (user) {
+    // User is signed in.
+  } else {
+    // No user is signed in.
+  }
+});
 export async function signUp(
   email: string,
   password: string

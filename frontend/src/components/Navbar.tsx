@@ -16,7 +16,6 @@ import MenuIcon from "@mui/icons-material/Menu";
 import AdbIcon from "@mui/icons-material/Adb";
 import { useAuth } from "../auth/auth.context";
 import { useNavigate } from "react-router-dom";
-import { useData } from "../data/data.context";
 
 const pages = [
   {
@@ -130,8 +129,7 @@ export default function Navbar() {
                   <Typography textAlign="center">{page.name}</Typography>
                 </MenuItem>
               ))}
-              {(user?.role === "admin" || user?.role === "master")
-                && adminPages.map((page) => (
+              {user && adminPages.map((page) => (
                 <MenuItem key={page.name} onClick={() => navigate(page.link)}>
                   <Typography textAlign="center">{page.name}</Typography>
                 </MenuItem>
@@ -172,8 +170,7 @@ export default function Navbar() {
                 {page.name}
               </Button>
             ))}
-            {(user?.role === "admin" || user?.role === "master")
-              && adminPages.map((page) => (
+            {adminPages.map((page) => (
               <Button
                 key={page.name}
                 href={page.link}

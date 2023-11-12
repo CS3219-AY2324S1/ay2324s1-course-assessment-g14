@@ -6,7 +6,6 @@ import App from "./pages/App";
 import Login from "./pages/login";
 import SignUp from "./pages/signup";
 import AuthGuard from "./auth/AuthGuard";
-import AdminGuard from "./auth/AdminGuard";
 import RedirectIfLoggedIn from "./auth/RedirectIfLoggedIn";
 import { DataContextProvider } from "./data/data.context";
 import CollabProblemSolver from "./pages/CollabProblemSolver";
@@ -98,9 +97,7 @@ root.render(
             <Route
               path="/manage-questions"
               element={
-                <AdminGuard>
-                  <QuestionsManage />
-                </AdminGuard>
+                <QuestionsManage />
               }
             />
           </Routes>
