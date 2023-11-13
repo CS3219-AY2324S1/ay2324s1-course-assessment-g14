@@ -25,6 +25,7 @@ const NormalUsersTable: React.FC = () => {
       getNormalUsers();
     }
     getUsers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
