@@ -7,6 +7,7 @@ export const createUser = (email: string, token: string) =>
 export const getAllAdminUsers = () =>
   UserHttpClient.get<UserModel[]>("/adminusers");
 
+export const getAllNormalUsers = () => UserHttpClient.get<UserModel[]>("/normalusers");
 export const createAdminUser = (email: string, token: string) =>
   UserHttpClient.post<UserModel>("/useradmin", { email: email, token: token });
 

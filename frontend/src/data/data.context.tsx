@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useContext, useMemo, useState } from "react";
 
 import { getAllQuestions } from "../api/questions/data";
-import { getAllAdminUsers } from "../api/user";
+import { getAllAdminUsers, getAllNormalUsers } from "../api/user";
 import { useAuth } from "../auth/auth.context";
 
 interface Response {
@@ -21,7 +21,7 @@ interface Question {
   examples: Example[];
 }
 
-export interface AdminUser {
+interface User {
   email: string;
   name?: string;
   year?: string;
@@ -40,9 +40,11 @@ interface DataContextData {
   loading: boolean;
   response: Response;
   questions: Question[];
-  getQuestions: () => void;
-  adminUsers: AdminUser[];
+  getQuestions: () => void;  
+  adminUsers: User[];
   getAdminUsers: () => void;
+  normalUsers: User[];
+  getNormalUsers: () => void;
   // getExamples: (id: string) => void;
 }
 
@@ -62,6 +64,8 @@ const DataContext = createContext<DataContextData>({
   getQuestions: () => undefined,
   adminUsers: [],
   getAdminUsers: () => undefined,
+  normalUsers: [],
+  getNormalUsers: () => undefined,
   // getExamples: (id: string) => undefined,
 });
 
@@ -70,7 +74,8 @@ export function DataContextProvider({ children }: DataContextProviderProps) {
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState<Response>(emptyResponse);
   const [questions, setQuestions] = useState<Question[]>([]);
-  const [adminUsers, setAdminUsers] = useState<AdminUser[]>([]);
+  const [adminUsers, setAdminUsers] = useState<User[]>([]);
+  const [normalUsers, setNormalUsers] = useState<User[]>([]);
 
   const getQuestions = async () => {
     try {
@@ -116,6 +121,25 @@ export function DataContextProvider({ children }: DataContextProviderProps) {
     }
   };
 
+  const getNormalUsers = async () => {
+    try {
+      setLoading(true);
+      const result = await (await getAllNormalUsers()).data;
+      setLoading(false);
+      setNormalUsers(result);
+      setResponse({
+        type: "success",
+        message: "successfully retrieved normal users",
+      });
+    } catch (e) {
+      setLoading(false);
+      setResponse({
+        type: "error",
+        message: e,
+      });
+    }
+  };
+
   const dataContextProviderValue = useMemo(
     () => ({
       loading,
@@ -124,9 +148,11 @@ export function DataContextProvider({ children }: DataContextProviderProps) {
       getQuestions,
       adminUsers,
       getAdminUsers,
+      normalUsers,
+      getNormalUsers
     }),
     //eslint-disable-next-line react-hooks/exhaustive-deps
-    [loading, response, questions, adminUsers]
+    [loading, response, questions, adminUsers, normalUsers]
   );
 
   return (

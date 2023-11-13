@@ -16,6 +16,7 @@ import { Values } from "../components/DropDownOrTextField";
 import { updateUser } from "../api/user";
 import AdminUsersTable from "../components/AdminUsersTable";
 import DeleteButtonModal from "../components/UserService/DeleteButton";
+import NormalUsersTable from "../components/NormalUsersTable";
 
 export default function Profile() {
   const { user, setUser } = useAuth();
@@ -82,6 +83,7 @@ export default function Profile() {
         </Grid>
         <DeleteButtonModal />
         {user?.role === "master" && <AdminUsersTable />}
+        {user?.role === "master" && <NormalUsersTable />}
       </Container>
     </Box>
   );

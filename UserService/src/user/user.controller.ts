@@ -7,6 +7,7 @@ import {
   getAdminUsers,
   getUser,
   updateUser,
+  getNormalUsers
 } from "./user.service";
 
 export async function handleCreateUser(req: Request, res: Response) {
@@ -55,6 +56,17 @@ export async function handleGetAdminUsers(req: Request, res: Response) {
   try {
     console.log(`getting admin users`);
     const result = await getAdminUsers();
+    res.status(200).send(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
+  }
+}
+
+export async function handleGetNormalUsers(req: Request, res: Response) {
+  try {
+    console.log(`getting normal users`);
+    const result = await getNormalUsers();
     res.status(200).send(result);
   } catch (error) {
     console.error(error);

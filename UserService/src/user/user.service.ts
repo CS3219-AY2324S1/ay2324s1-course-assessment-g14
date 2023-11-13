@@ -131,6 +131,34 @@ export async function getAdminUsers(): Promise<User[]> {
   }
 }
 
+export async function getNormalUsers(): Promise<User[]> {
+  try {
+    const q = query(collection(db, "users"), where("role", "==", "user"));
+    const querySnapshot = await getDocs(q);
+    let userArray: (User)[];
+    userArray = []
+    querySnapshot.forEach((doc) =>  {
+      const user = doc.data()
+      userArray = userArray.concat([{
+        email: user.email,
+        name: user.name ? user.name : undefined,
+        year: user.year ? user.year : undefined,
+        major: user.major ? user.major : undefined,
+        role: user.role,
+        completed: user.completed,
+      }])
+    })
+
+    if (querySnapshot) {
+      return Promise.resolve(userArray);
+
+    }
+    return Promise.reject("no such user");
+  } catch (error) {
+    return Promise.reject(error);
+  }
+}
+
 export async function updateUser(email: string, params: any): Promise<User> {
   try {
     const document = doc(db, "users", email);
