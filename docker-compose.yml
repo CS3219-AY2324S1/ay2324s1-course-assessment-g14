@@ -4,7 +4,7 @@ services:
     container_name: frontend
     build:
       context: ./frontend
-    image: szelongq/peerprep-frontend-image:latest
+    image: szelongq/peerprep-frontend:latest
     ports:
       - "3000:3000"
     platform: linux/amd64
@@ -23,21 +23,21 @@ services:
     container_name: auth-service
     build:
       context: ./AuthService
-    image: szelongq/peerprep-auth-service-image:latest
+    image: szelongq/peerprep-auth-service:latest
     platform: linux/amd64
 
   question-service:
     container_name: question-service
     build:
       context: ./QuestionService
-    image: szelongq/peerprep-question-service-image:latest
+    image: szelongq/peerprep-question-service:latest
     platform: linux/amd64
 
   user-service:
     container_name: user-service
     build:
       context: ./UserService
-    image: szelongq/peerprep-user-service-image:latest
+    image: szelongq/peerprep-user-service:latest
     platform: linux/amd64
 
   matching-service:
