@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: env-config
+  namespace: peerprep
+data:
+  REACT_APP_BASE_URL: http://34.87.54.67:3001
+  REACT_APP_QUESTION_BASE_URL: http://34.87.54.67:3001/questionservice
+  REACT_APP_USER_BASE_URL: http://34.87.54.67:3001/userservice
+  REACT_APP_AUTH_BASE_URL: http://34.87.54.67:3001/authservice
+  REACT_APP_MATCHING_BASE_URL: http://34.124.158.43:3005
+  REACT_APP_CHAT_BASE_URL: http://34.126.93.28:3007
+  REACT_APP_COLLAB_BASE_URL: https://collab-service.charltonator.partykit.dev

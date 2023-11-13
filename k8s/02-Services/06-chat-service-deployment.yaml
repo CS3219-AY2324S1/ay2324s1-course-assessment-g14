@@ -1,20 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-service-deployment
+  name: chat-service-deployment
+  namespace: peerprep
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: auth-service
+      app: chat-service
   template:
     metadata:
       labels:
-        app: auth-service
+        app: chat-service
     spec:
       containers:
-      - name: auth-service
-        image: szelongq/peerprep-auth-service:latest
+      - name: chat-service
+        image: szelongq/peerprep-chat-service:latest
         imagePullPolicy: IfNotPresent
         resources:
           limits:
@@ -25,3 +26,5 @@ spec:
             cpu: 500m
             ephemeral-storage: 1Gi
             memory: 2Gi
+        ports:
+        - containerPort: 3007

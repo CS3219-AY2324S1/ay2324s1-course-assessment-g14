@@ -1,20 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: matching-service-deployment
+  name: api-gateway-service-deployment
+  namespace: peerprep
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
-      app: matching-service
+      app: api-gateway-service
   template:
     metadata:
       labels:
-        app: matching-service
+        app: api-gateway-service
     spec:
       containers:
-      - name: matching-service
-        image: szelongq/peerprep-matching-service:latest
+      - name: api-gateway-service
+        image: szelongq/peerprep-api-gateway:latest
         imagePullPolicy: IfNotPresent
         resources:
           limits:
@@ -26,4 +27,4 @@ spec:
             ephemeral-storage: 1Gi
             memory: 2Gi
         ports:
-        - containerPort: 3005
+        - containerPort: 3001

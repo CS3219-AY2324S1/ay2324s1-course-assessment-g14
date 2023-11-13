@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: frontend-deployment
+  namespace: peerprep
 spec:
   replicas: 1
   selector:
@@ -20,13 +21,13 @@ spec:
         - configMapRef:
             name: env-config
         resources:
+          requests:
+            cpu: 1.25
+            ephemeral-storage: 1Gi
+            memory: 3Gi
           limits:
-            cpu: 1Gi
+            cpu: 2
             ephemeral-storage: 1Gi
             memory: 4Gi
-          requests:
-            cpu: 500m
-            ephemeral-storage: 1Gi
-            memory: 2Gi
         ports:
         - containerPort: 3000
