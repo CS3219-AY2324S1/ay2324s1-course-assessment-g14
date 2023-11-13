@@ -5,10 +5,10 @@ import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import { useNavigate } from "react-router-dom";
 import socket from "./socket";
-import { getAllQuestions } from "../../api/questions/data";
 import { useAuth } from "../../auth/auth.context";
 import { sha256 } from "js-sha256";
 import Question from "../Questions/Question";
+import { useData } from "../../data/data.context";
 
 const style = {
   position: "absolute" as "absolute",
@@ -18,7 +18,7 @@ const style = {
   width: "50%",
   display: "flex-wrap",
   // Remove or adjust the maxHeight value
-  //maxHeight: "60%",  
+  //maxHeight: "60%",
   justifyContent: "center",
   textAlign: "center",
   bgcolor: "background.paper",
@@ -31,31 +31,28 @@ const snackbarStyle = {
   position: "absolute" as "absolute",
   top: 3,
   left: "50%",
-  transform: "translate(-50%, 0)"
+  transform: "translate(-50%, 0)",
 };
 
-
-
 const titleStyle = {
-    fontSize: "2rem"    // Increase the title size
-  };
-  
-  const subtitleStyle = {
-    fontSize: "1.5rem",
-    padding:'10px',
-    
-    // Increase the subtitle size
-  };
+  fontSize: "2rem", // Increase the title size
+};
 
-  
+const subtitleStyle = {
+  fontSize: "1.5rem",
+  padding: "10px",
+
+  // Increase the subtitle size
+};
+
 const dropdownStyle = {
-    fontSize: "1.5rem", // Increase the font size
-    padding: "10px",    // Add padding for a bigger and more clickable area
-    margin: "10px 0"    // Space out the dropdowns a bit more
-  };
-  
+  fontSize: "1.5rem", // Increase the font size
+  padding: "10px", // Add padding for a bigger and more clickable area
+  margin: "10px 0", // Space out the dropdowns a bit more
+};
 
 const MatchingForm = React.forwardRef(function MatchingForm() {
+  const { questions, getQuestions } = useData();
   const [difficulty, setDifficulty] = React.useState("Easy");
   const [category, setCategory] = React.useState("Strings");
   const [categoryList, setCategoryList] = React.useState<string[]>([]);
@@ -65,6 +62,26 @@ const MatchingForm = React.forwardRef(function MatchingForm() {
   const userEmail = user?.email;
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
   const [snackbarMessage, setSnackbarMessage] = React.useState("");
+  const [remainingTime, setRemainingTime] = React.useState(0); // State for the countdown timer
+  const [timerId, setTimerId] = React.useState<NodeJS.Timeout | null>(null); // State to keep track of the timer
+
+
+  const startCountdown = () => {
+    setRemainingTime(30); // Start the timer at 30 seconds
+    setIsMatching(true);
+    // Clear any existing timer
+    if (timerId) clearInterval(timerId);
+    // Start a new timer
+    const id = setInterval(() => {
+      setRemainingTime((time) => time - 1);
+    }, 1000);
+    setTimerId(id);
+  };
+
+  React.useEffect(() => {
+    getQuestions();
+    // eslint-disable-next-line
+  }, []);
 
   const handleConnect = async () => {
     const preferences = {
@@ -75,28 +92,44 @@ const MatchingForm = React.forwardRef(function MatchingForm() {
     // if no such question with difficulty and category, show a pop up saying no question
     // matching the requirements
 
-    const questions = await getAllQuestions();
-    const filteredQuestions = questions.data.filter((q: any) => {
+    const filteredQuestions = questions.filter((q: any) => {
       return q.categories.includes(category) && q.difficulty === difficulty;
     });
 
     if (filteredQuestions.length === 0) {
-      setSnackbarMessage("No questions match the selected difficulty and category.");
+      setSnackbarMessage(
+        "No questions match the selected difficulty and category."
+      );
       setOpenSnackbar(true);
       return;
     }
 
     socket.emit("startMatching", preferences);
     setIsMatching(true);
+    startCountdown();
   };
+
+  React.useEffect(() => {
+    if (remainingTime === 0 && timerId) {
+      clearInterval(timerId);
+      setIsMatching(false); // Update isMatching state to false as matching ends
+      setSnackbarMessage("Matching timed out after 30 seconds.");
+      setOpenSnackbar(true);
+    }
+  }, [remainingTime, timerId]);
+
+  React.useEffect(() => {
+    return () => {
+      if (timerId) clearInterval(timerId);
+    };
+  }, [timerId]);
 
   const generateConsistentRandomIndex = (seed: any, arrayLength: number) => {
     return seed % arrayLength;
   };
 
-  const getQuestions = async (seed: any) => {
-    const questions = await getAllQuestions();
-    const filteredQuestions = questions.data.filter((q: any) => {
+  const getRandomQuestion = async (seed: any) => {
+    const filteredQuestions = questions.filter((q: any) => {
       return q.categories.includes(category) && q.difficulty === difficulty;
     });
 
@@ -114,8 +147,8 @@ const MatchingForm = React.forwardRef(function MatchingForm() {
 
   React.useEffect(() => {
     async function getCategories() {
-      const questionsData = (await getAllQuestions()) as { data: Question[] };
-      const allCategories = questionsData.data.reduce(
+      // const questionsData = (await getAllQuestions()) as { data: Question[] };
+      const allCategories = questions.reduce(
         (acc: string[], question: Question) => {
           return [...acc, ...question.categories];
         },
@@ -125,7 +158,10 @@ const MatchingForm = React.forwardRef(function MatchingForm() {
       setCategoryList(uniqueCategories);
     }
     getCategories();
-  }, []);
+    // eslint-disable-next-line
+  }, [questions]);
+
+  
 
   React.useEffect(() => {
     socket.on("matchFound", async (matchedUserPreferences) => {
@@ -133,7 +169,7 @@ const MatchingForm = React.forwardRef(function MatchingForm() {
       const seed = matchedUserPreferences.seed;
       const matchedUser = matchedUserPreferences.matchedUserPreferences;
       setIsMatching(false);
-      const qId = await getQuestions(seed);
+      const qId = await getRandomQuestion(seed);
       const emails = [userEmail, matchedUser.userEmail].sort();
 
       // Hash the sorted emails
@@ -145,6 +181,7 @@ const MatchingForm = React.forwardRef(function MatchingForm() {
     return () => {
       socket.off("matchFound");
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [difficulty, category, userEmail, navigate]);
 
   React.useEffect(() => {
@@ -153,7 +190,6 @@ const MatchingForm = React.forwardRef(function MatchingForm() {
       setIsMatching(false);
       setSnackbarMessage("No eligible match found within the given timeframe.");
       setOpenSnackbar(true);
-
     });
 
     return () => {
@@ -173,7 +209,9 @@ const MatchingForm = React.forwardRef(function MatchingForm() {
         </center>
       </h4>
       <div>
-        <label htmlFor="difficulty" style={subtitleStyle}>Difficulty:</label>
+        <label htmlFor="difficulty" style={subtitleStyle}>
+          Difficulty:
+        </label>
         <select
           id="difficulty"
           value={difficulty}
@@ -187,7 +225,9 @@ const MatchingForm = React.forwardRef(function MatchingForm() {
         </select>
       </div>
       <div>
-        <label htmlFor="category" style={subtitleStyle}>Category:</label>
+        <label htmlFor="category" style={subtitleStyle}>
+          Category:
+        </label>
         <select
           id="category"
           value={category}
@@ -203,7 +243,10 @@ const MatchingForm = React.forwardRef(function MatchingForm() {
         </select>
       </div>
       {isMatching ? (
-        <div>Loading...</div>
+        <div>Loading... 
+        <p>Time remaining: {remainingTime} seconds</p>
+        </div>
+        
       ) : (
         <Button sx={{ mt: "5%" }} variant="contained" onClick={handleConnect}>
           Connect

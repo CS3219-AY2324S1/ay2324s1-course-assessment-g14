@@ -1,28 +1,20 @@
 import { useState } from "react";
-import {
-  Box,
-  Button,
-  CssBaseline,
-  Link,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, CssBaseline, TextField, Typography } from "@mui/material";
 import CenteredContainer from "../components/CenteredContainer";
 import Navbar from "../components/Navbar";
 import PasswordField from "../components/PasswordField";
 import { useAuth } from "../auth/auth.context";
 
 export default function CreateAdmin() {
-  const { user, error, signUpAdmin } = useAuth();
+  const { error, signUpAdmin } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [creation, setCreation] = useState(false);
 
-
   const handleClickSignUp = async () => {
     await signUpAdmin(email, password);
     setCreation(true);
-  }
+  };
   return (
     <Box height="100vh">
       <CssBaseline />
@@ -43,11 +35,7 @@ export default function CreateAdmin() {
           Create
         </Button>
         {error && <Typography>{error}</Typography>}
-        {creation && (
-          <Typography>
-            Admin account created!
-          </Typography>
-        )}
+        {creation && <Typography>Admin account created!</Typography>}
       </CenteredContainer>
     </Box>
   );

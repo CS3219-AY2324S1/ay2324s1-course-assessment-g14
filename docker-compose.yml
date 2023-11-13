@@ -1,5 +1,13 @@
 version: '3'
 services:
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+    image: frontend-image
+    ports:
+      - "3000:3000"
+      
   api-gateway:
     container_name: api-gateway
     build:
@@ -14,10 +22,22 @@ services:
     container_name: auth-service
     build:
       context: ./AuthService
-    image: szelongq/peerprep-auth-service:latest
+    image: szelongq/peerprep-auth-service-image
     platform: linux/amd64
-    # ports:
-    #   - "3001:3001"
+
+  question-service:
+    container_name: question-service
+    build:
+      context: ./QuestionService
+    image: szelongq/peerprep-question-service-image
+    platform: linux/amd64
+
+  user-service:
+    container_name: user-service
+    build:
+      context: ./UserService
+    image: szelongq/peerprep-user-service-image
+    platform: linux/amd64
 
   matching-service:
     container_name: matching-service
@@ -28,38 +48,7 @@ services:
       - "3005:3005"
     stdin_open: true
     platform: linux/amd64
-
-
-  question-service:
-    container_name: question-service
-    build:
-      context: ./QuestionService
-    image: szelongq/peerprep-question-service:latest
-    platform: linux/amd64
-    # ports:
-    #   - "3001:3001"
-
-  user-service:
-    container_name: user-service
-    build:
-      context: ./UserService
-    image: szelongq/peerprep-user-service:latest
-    platform: linux/amd64
-    # ports:
-    #   - "3001:3001"
     
-  
-  # collab-service:
-  #   container_name: collab-service
-    
-  #   build:
-  #     context: ./CollabService
-  #   image: szelongq/peerprep-collab-service:latest
-  #   ports:
-  #     - "3006:3006"
-  #     platform: linux/amd64
-    
-
   chat-service:
     container_name: chat-service
     build:
@@ -67,13 +56,4 @@ services:
     image: szelongq/peerprep-chat-service:latest
     ports:
       - "3007:3007"
-    platform: linux/amd64
-
-  frontend:
-    container_name: frontend
-    build:
-      context: ./frontend
-    image: szelongq/peerprep-frontend:latest
-    ports:
-      - "3000:3000"
     platform: linux/amd64

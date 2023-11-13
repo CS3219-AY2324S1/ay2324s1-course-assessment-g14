@@ -5,6 +5,7 @@ export interface UserModel {
   major?: string;
   role: string;
   completed: number;
+  token: string;
 }
 
 export interface Values {

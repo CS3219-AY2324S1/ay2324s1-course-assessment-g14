@@ -15,9 +15,10 @@ import { createAdminUser, createUser, getUser, UserModel } from "../api/user";
 
 interface AuthContextData {
   user: UserModel | undefined;
-  setUser: any | undefined,
+  setUser: any | undefined;
   activeUser: User | undefined;
   error: string;
+  success: boolean;
   signUp: (email: string, password: string) => void;
   signUpAdmin: (email: string, password: string) => void;
   login: (email: string, password: string) => void;
@@ -34,11 +35,12 @@ const AuthContext = createContext<AuthContextData>({
   setUser: undefined,
   activeUser: undefined,
   error: "",
+  success: false,
   signUp: (email: string, password: string) => undefined,
   signUpAdmin: (email: string, password: string) => undefined,
   login: (email: string, password: string) => undefined,
   logout: () => undefined,
-  removeAccount: () => undefined
+  removeAccount: () => undefined,
 });
 
 export function AuthContextProvider({ children }: AuthContextProviderProps) {
@@ -46,58 +48,50 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   const [user, setUser] = useLocalStorage("user", undefined);
   const [activeUser, setActiveUser] = useState<User>();
   const [error, setError] = useState<string>("");
+  const [success, setSuccess] = useState<boolean>(false);
 
-  const signUp = useCallback(
-    async (email: string, password: string) => {
-      try {
-        const response = await registerUser({
-          email: email,
-          password: password,
-        });
-        const u: User = response.data.user;
-        if (!u.email) {
-          throw new Error("user returned without email");
-        }
-        const fetchedUser = await createUser(u.email);
-        setActiveUser(u)
-        setUser(fetchedUser.data);
-      } catch (e) {
-        if (e instanceof AxiosError && e.response) {
-          setError(e.response.data.code);
-        } else if (e instanceof Error) {
-          setError(e.message);
-        }
+  const signUp = useCallback(async (email: string, password: string) => {
+    try {
+      const response = await registerUser({
+        email: email,
+        password: password,
+      });
+      const u: User = response.data.user.user;
+      const token: string = response.data.token;
+      if (!u.email) {
+        throw new Error("user returned without email");
       }
-    },
-    [setUser]
-  );
+      await createUser(u.email, token);
+      setSuccess(true);
+    } catch (e) {
+      if (e instanceof AxiosError && e.response) {
+        setError(e.response.data);
+      } else if (e instanceof Error) {
+        setError(e.message);
+      }
+    }
+  }, []);
 
-  const signUpAdmin = useCallback(
-    async (email: string, password: string) => {
-      try {
-        const response = await registerUser({
-          email: email,
-          password: password,
-        });
-        const u: User = response.data.user;
-        if (!u.email) {
-          throw new Error("user returned without email");
-        }
-        console.log('creating admin')
-        const fetchedUser = await createAdminUser(u.email);
-        console.log('admin created')
-        // setActiveUser(u)
-        // setUser(fetchedUser.data);
-      } catch (e) {
-        if (e instanceof AxiosError && e.response) {
-          setError(e.response.data.code);
-        } else if (e instanceof Error) {
-          setError(e.message);
-        }
+  const signUpAdmin = useCallback(async (email: string, password: string) => {
+    try {
+      const response = await registerUser({
+        email: email,
+        password: password,
+      });
+      const u: User = response.data.user.user;
+      const token: string = response.data.token;
+      if (!u.email) {
+        throw new Error("user returned without email");
       }
-    },
-    [setUser]
-  );
+      await createAdminUser(u.email, token);
+    } catch (e) {
+      if (e instanceof AxiosError && e.response) {
+        setError(e.response.data);
+      } else if (e instanceof Error) {
+        setError(e.message);
+      }
+    }
+  }, []);
 
   const login = useCallback(
     async (email: string, password: string) => {
@@ -107,13 +101,13 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
         if (!u.email) {
           throw new Error("user returned without email");
         }
-        setActiveUser(u)
+        setActiveUser(u);
         const fetchedUser = await getUser(u.email);
         setUser(fetchedUser.data);
         navigate("/home", { replace: true });
       } catch (e) {
         if (e instanceof AxiosError && e.response) {
-          setError(e.response.data.code);
+          setError(e.response.data);
         } else if (e instanceof Error) {
           setError(e.message);
         }
@@ -126,11 +120,11 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     try {
       await signOut();
       setUser(undefined);
-      setActiveUser(undefined)
+      setActiveUser(undefined);
       navigate("/", { replace: true });
     } catch (e) {
       if (e instanceof AxiosError && e.response) {
-        setError(e.response.data.code);
+        setError(e.response.data);
       } else if (e instanceof Error) {
         setError(e.message);
       }
@@ -143,20 +137,42 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
         await deleteUser();
       }
       setUser(undefined);
-      setActiveUser(undefined)
+      setActiveUser(undefined);
       navigate("/", { replace: true });
     } catch (e) {
       if (e instanceof AxiosError && e.response) {
-        setError(e.response.data.code);
+        setError(e.response.data);
       } else if (e instanceof Error) {
         setError(e.message);
       }
     }
-  }, [setUser, navigate]);
+  }, [setUser, navigate, activeUser]);
 
   const authContextProviderValue = useMemo(
-    () => ({ user, setUser, activeUser, error, signUp, signUpAdmin, login, logout, removeAccount }),
-    [user, setUser, activeUser, error, signUp, signUpAdmin, login, logout, removeAccount]
+    () => ({
+      user,
+      setUser,
+      activeUser,
+      error,
+      success,
+      signUp,
+      signUpAdmin,
+      login,
+      logout,
+      removeAccount,
+    }),
+    [
+      user,
+      setUser,
+      activeUser,
+      error,
+      success,
+      signUp,
+      signUpAdmin,
+      login,
+      logout,
+      removeAccount,
+    ]
   );
 
   return (

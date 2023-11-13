@@ -54,7 +54,7 @@ const EditQuestionsTable: React.FC<EditQuestionsTableProps> = ({onEdit, onDelete
         event: SelectChangeEvent<unknown>,
     ) => {
         setItemsPerPage(event.target.value as number);
-        setCurrentPage(1);
+        setCurrentPage(0);
     };
 
     const handleExpandClick = (id: string) => {

@@ -15,8 +15,20 @@ const firestore_1 = require("firebase/firestore");
 function handleGetQuestions(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            //   console.log(req.query.email);
-            //   const { email } = req.query;
+            console.log("getting questions");
+            const { token } = req.query;
+            if (!token) {
+                res.status(500).send("unauthorized access");
+            }
+            if (typeof token === "string") {
+                const response = yield (0, question_service_1.isValidToken)(token);
+                if (!response) {
+                    res.status(500).send("unauthorized access");
+                }
+            }
+            else {
+                res.status(500).send("invalid params");
+            }
             const query = yield (0, firestore_1.getDocs)((0, firestore_1.collection)(question_service_1.db, "questions"));
             const result = yield Promise.all(query.docs.map((d) => __awaiter(this, void 0, void 0, function* () {
                 const q = d.data();

@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addQuestion = exports.updateQuestion = exports.deleteQuestion = exports.db = void 0;
+exports.isValidToken = exports.addQuestion = exports.updateQuestion = exports.deleteQuestion = exports.db = void 0;
 const app_1 = require("firebase/app");
 const firestore_1 = require("firebase/firestore");
 const firebase_config_1 = require("../firebase/firebase.config");
@@ -61,3 +61,24 @@ function addQuestion(question) {
     });
 }
 exports.addQuestion = addQuestion;
+function isValidToken(token) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const q = (0, firestore_1.query)((0, firestore_1.collection)(exports.db, "users"));
+            const querySnapshot = yield (0, firestore_1.getDocs)(q);
+            const tokens = new Set();
+            querySnapshot.forEach((doc) => {
+                const user = doc.data();
+                tokens.add(user.token);
+            });
+            if (tokens.has(token)) {
+                return Promise.resolve(true);
+            }
+            return Promise.resolve(false);
+        }
+        catch (error) {
+            return Promise.reject(error);
+        }
+    });
+}
+exports.isValidToken = isValidToken;

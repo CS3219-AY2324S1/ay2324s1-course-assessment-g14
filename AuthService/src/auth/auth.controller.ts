@@ -8,8 +8,13 @@ export async function handleSignUp(req: Request, res: Response) {
     const signedUp = await signUp(email, password);
     res.status(200).send(signedUp);
   } catch (error) {
-    console.error(error);
-    res.status(500).send(error);
+    if (error instanceof Error) {
+      console.error(error.message);
+      res.status(500).send(error.message);
+    } else {
+      console.error(error);
+      res.status(500).send(error);
+    }
   }
 }
 
@@ -20,8 +25,13 @@ export async function handleLogin(req: Request, res: Response) {
     const loggedIn = await login(email, password);
     res.status(200).send(loggedIn);
   } catch (error) {
-    console.error(error);
-    res.status(500).send(error);
+    if (error instanceof Error) {
+      console.error(error.message);
+      res.status(500).send(error.message);
+    } else {
+      console.error(error);
+      res.status(500).send(error);
+    }
   }
 }
 

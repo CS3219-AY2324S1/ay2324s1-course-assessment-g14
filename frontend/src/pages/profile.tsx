@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 
 import {
@@ -27,6 +26,7 @@ export default function Profile() {
     year: user?.year ? user?.year : "",
     major: user?.major ? user.major : "",
     role: user?.role ? user.role : "",
+    token: user?.token ? user.token : "",
   });
 
   const profileFields = [
@@ -40,9 +40,9 @@ export default function Profile() {
     if (edit) {
       try {
         await updateUser(value);
-        setUser(value)
+        setUser(value);
       } catch (e) {
-        console.log(e)
+        console.log(e);
       }
     }
     setEdit(!edit);
@@ -80,8 +80,8 @@ export default function Profile() {
             ))}
           </Grid>
         </Grid>
-        <DeleteButtonModal/>
-        {user?.role == 'maintainer' && <AdminUsersTable/>}
+        <DeleteButtonModal />
+        {user?.role === "master" && <AdminUsersTable />}
       </Container>
     </Box>
   );
