@@ -4,57 +4,49 @@ services:
     container_name: frontend
     build:
       context: ./frontend
-    image: szelongq/peerprep-frontend:latest
+    image: frontend-image
     ports:
       - "3000:3000"
-    platform: linux/amd64
       
   api-gateway:
     container_name: api-gateway
     build:
       context: ./ApiGatewayService
-    image: szelongq/peerprep-api-gateway:latest
+    image: api-gateway-image
     ports:
       - "3001:3001"
-    platform: linux/amd64
-
 
   auth-service:
     container_name: auth-service
     build:
       context: ./AuthService
-    image: szelongq/peerprep-auth-service:latest
-    platform: linux/amd64
+    image: auth-service-image
 
   question-service:
     container_name: question-service
     build:
       context: ./QuestionService
-    image: szelongq/peerprep-question-service:latest
-    platform: linux/amd64
+    image: question-service-image
 
   user-service:
     container_name: user-service
     build:
       context: ./UserService
-    image: szelongq/peerprep-user-service:latest
-    platform: linux/amd64
+    image: user-service-image
 
   matching-service:
     container_name: matching-service
     build:
       context: ./MatchingService
-    image: szelongq/peerprep-matching-service:latest
+    image: matching-service-image
     ports:
       - "3005:3005"
     stdin_open: true
-    platform: linux/amd64
     
   chat-service:
     container_name: chat-service
     build:
       context: ./ChatService
-    image: szelongq/peerprep-chat-service:latest
+    image: chat-service-image
     ports:
       - "3007:3007"
-    platform: linux/amd64

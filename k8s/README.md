@@ -27,6 +27,8 @@ You should also have a Google Cloud account and be able to use the Google Cloud 
 ## Getting Started
 ### Step 1: Prepare the Docker images
 1. Publish your prepared docker images on the Docker registry.
+   
+   You can use the `docker-compose.yml` in this folder to build the images, just change the target images.
 2. Update the docker images to be used for the main services in each `deployment.yaml`. 
    
    By default, it will be using our prepared images located in `szelongq/peerprep-<SERVICE_NAME>:latest`.
