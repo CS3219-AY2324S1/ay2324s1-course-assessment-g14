@@ -8,7 +8,6 @@ import { v4 as uuidv4 } from "uuid";
 
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 import PartySocket from "partysocket";
-import socket from "./MatchingService/socket";
 
 interface ChatMessage {
   id: string;
@@ -64,8 +63,6 @@ function CollabProblemSolverRight({
   });
   useEffect(() => {
     try {
-      
-      
       socket.addEventListener("message", onIncomingMessage);
       socketRef.current = io(`${process.env.REACT_APP_CHAT_BASE_URL}`);
 
@@ -82,6 +79,7 @@ function CollabProblemSolverRight({
     } catch (err) {
       console.log(err);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleLanguageChange = (
@@ -92,13 +90,11 @@ function CollabProblemSolverRight({
 
   const handleChange = (value: string | undefined) => {
     if (value !== undefined) {
-    socket.send(value);
+      socket.send(value);
     }
   };
 
   const onIncomingMessage = (message: MessageEvent) => {
-    // console.log("message in");
-    // console.log(message.data)
     setEditorValue(message.data);
   };
 
@@ -187,7 +183,7 @@ function CollabProblemSolverRight({
         variant="outlined"
         value={newMessage}
         onChange={handleNewMessageChange}
-        onKeyPress={handleNewMessageKeyPress}
+        onKeyDown={handleNewMessageKeyPress}
       />
       <Button
         variant="contained"

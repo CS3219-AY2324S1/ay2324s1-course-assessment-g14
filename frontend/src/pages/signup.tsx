@@ -13,7 +13,7 @@ import PasswordField from "../components/PasswordField";
 import { useAuth } from "../auth/auth.context";
 
 export default function SignUp() {
-  const { user, error, signUp } = useAuth();
+  const { success, error, signUp } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -39,7 +39,7 @@ export default function SignUp() {
           Sign Up
         </Button>
         {error && <Typography>{error}</Typography>}
-        {user && (
+        {success && (
           <Typography>
             Sign up successful! You may now <Link href="/login">login.</Link>
           </Typography>

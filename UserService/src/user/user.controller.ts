@@ -1,12 +1,20 @@
 import { Request, Response } from "express";
 
-import { createAdminUser, delUser, createUser, getAdminUsers, getUser, updateUser, getNormalUsers } from "./user.service";
+import {
+  createAdminUser,
+  delUser,
+  createUser,
+  getAdminUsers,
+  getUser,
+  updateUser,
+  getNormalUsers
+} from "./user.service";
 
 export async function handleCreateUser(req: Request, res: Response) {
   try {
-    const { email } = req.body;
+    const { email, token } = req.body;
     console.log(`creating user ${email}`);
-    const user = await createUser(email);
+    const user = await createUser(email, token);
     res.status(200).send(user);
   } catch (error) {
     console.error(error);
@@ -16,9 +24,9 @@ export async function handleCreateUser(req: Request, res: Response) {
 
 export async function handleCreateAdminUser(req: Request, res: Response) {
   try {
-    const { email } = req.body;
+    const { email, token } = req.body;
     console.log(`creating admin user ${email}`);
-    const user = await createAdminUser(email);
+    const user = await createAdminUser(email, token);
     res.status(200).send(user);
   } catch (error) {
     console.error(error);
@@ -85,9 +93,9 @@ export async function handleUpdateUser(req: Request, res: Response) {
 export async function handleDeleteUser(req: Request, res: Response) {
   try {
     const user = req.query;
-    if (user && typeof(user.email) === "string") {
+    if (user && typeof user.email === "string") {
       console.log(`deleting user`);
-      await delUser(user.email)
+      await delUser(user.email);
       res.status(200).send("no params");
     } else {
       res.status(500).send("no params");

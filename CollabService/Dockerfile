@@ -1,5 +1,6 @@
 # Use an official Node.js runtime as a parent image
 FROM node:14
+
 # Set the working directory in the container
 WORKDIR /usr/src/collab-service
 
@@ -12,8 +13,8 @@ RUN npm install
 # Bundle your app source code into the container
 COPY . .
 
-# Expose the port on which your Auth service will run
+# Expose the port on which your Collab service will run
 EXPOSE 3006
 
-# Define the command to start your Auth service
+# Define the command to start your Collab service
 CMD [ "npm", "run", "dev"]

@@ -6,9 +6,9 @@ interface AuthGuardProps {
   children: ReactNode;
 }
 
-export default function MaintainerGuard({ children }: AuthGuardProps) {
+export default function MasterGuard({ children }: AuthGuardProps) {
   const { user } = useAuth();
-  if (!(user?.role == 'maintainer')) {
+  if (user?.role !== "master") {
     return <Navigate to="/login" />;
   }
   return <>{children}</>;
