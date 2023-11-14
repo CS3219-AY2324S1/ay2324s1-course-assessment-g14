@@ -122,7 +122,7 @@ const InterviewQuestionsTable: React.FC = () => {
           </MenuItem>
         ))}
       </Select>
-      <div style={{ maxHeight: "300px", overflowY: "auto", width: "80%" }}>
+      <div style={{ maxHeight: "800px", overflowY: "auto", width: "80%" , display: "flex"}}>
         <TableContainer
           component={Paper}
           style={{ margin: "10px", padding: "10px" }}
@@ -148,6 +148,7 @@ const InterviewQuestionsTable: React.FC = () => {
                         fontSize: "16px",
                         fontWeight: "bold",
                         textTransform: "initial",
+                        textAlign: "left",
                       }}
                     >
                       {question.title}
