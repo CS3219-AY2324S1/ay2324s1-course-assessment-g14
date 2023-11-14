@@ -5,6 +5,7 @@ import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import {Box} from "@mui/material";
 import QuestionForm from "./QuestionForm";
+import {parseHtmlDescription} from "../../utils/utils";
 
 interface EditQuestionPreviewProps {
     question: Question;
@@ -47,10 +48,8 @@ const EditQuestionTab: React.FC<EditQuestionPreviewProps> = ({question, onEdit, 
                         <Typography variant="h5" gutterBottom component="div">
                             {question.title}
                         </Typography>
-                        <Typography variant="body2" gutterBottom component="div" sx={{ whiteSpace: 'pre-line'}}>
-                            {question.description.split("\\n").map((s, key) => {
-                                return <p key={key}>{s}</p>;
-                            })}
+                        <Typography variant="body2" gutterBottom component="div">
+                            {parseHtmlDescription(question.description)}
                         </Typography>
                         <br />
                         {question.constraints.length > 0 &&
