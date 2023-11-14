@@ -64,8 +64,6 @@ export default function Navbar() {
 
   let settings = [
     { name: "Profile", onclick: () => navigate("/profile", { replace: true }) },
-    { name: "Account", onclick: handleCloseUserMenu },
-    { name: "Dashboard", onclick: handleCloseUserMenu },
     { name: "Logout", onclick: logout },
   ];
   if (user?.role === "master") {

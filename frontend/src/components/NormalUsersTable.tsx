@@ -61,7 +61,7 @@ const NormalUsersTable: React.FC = () => {
   const currentUsers = normalUsersData.slice(indexOfFirstUser, indexOfLastUser);
 
   return (
-    <><div style={{ maxHeight: '400px', overflowY: 'auto', width: '100%' }}>
+    <><div style={{ maxHeight: '600px', overflowY: 'auto', width: '100%', display: "flex" }}>
 
           <TableContainer component={Paper} style={{ margin: '10px', padding: '10px' }}>
           <Grid container>
@@ -101,7 +101,7 @@ const NormalUsersTable: React.FC = () => {
                   </TableBody>
               </Table>
           </TableContainer>
-      </div><div style={{ display: 'flex', alignItems: 'center' }}>
+      </div><div style={{ display: 'flex', alignItems: 'center', justifyContent: "center"  }}>
               <Select
                   value={itemsPerPage}
                   onChange={handleChangeItemsPerPage}

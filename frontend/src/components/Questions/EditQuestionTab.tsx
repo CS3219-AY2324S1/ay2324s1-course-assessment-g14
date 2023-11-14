@@ -48,7 +48,7 @@ const EditQuestionTab: React.FC<EditQuestionPreviewProps> = ({question, onEdit, 
                         <Typography variant="h5" gutterBottom component="div">
                             {question.title}
                         </Typography>
-                        <Typography variant="body2" gutterBottom component="div">
+                        <Typography variant="body2" gutterBottom component="span">
                             {parseHtmlDescription(question.description)}
                         </Typography>
                         <br />

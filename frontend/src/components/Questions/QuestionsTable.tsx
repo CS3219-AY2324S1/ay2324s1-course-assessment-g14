@@ -202,7 +202,7 @@ const InterviewQuestionsTable: React.FC = () => {
               <Typography variant="body2" style={{ padding: "5px" }}>
                 <b>Difficulty:</b> {selectedQuestion.difficulty}
               </Typography>
-              <Typography variant="body2" style={{ padding: "5px" }}>
+              <Typography component={'span'} variant="body2" style={{ padding: "5px" }}>
                 <b>Description</b>: {parseHtmlDescription(selectedQuestion.description)}
               </Typography>
             </DialogContent>
