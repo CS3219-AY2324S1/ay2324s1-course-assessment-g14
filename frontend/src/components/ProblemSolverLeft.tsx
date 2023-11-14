@@ -8,7 +8,6 @@ import {
   CardMedia,
 } from '@mui/material';
 import { useData } from '../data/data.context';
-import {decode} from "html-entities";
 import {parseHtmlDescription} from "../utils/utils";
 // import { ClosedCaptionDisabledSharp } from '@mui/icons-material';
 

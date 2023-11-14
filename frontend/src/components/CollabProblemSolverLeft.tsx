@@ -1,8 +1,6 @@
 import { useEffect } from "react";
 import { Paper, Typography, Divider, CardMedia } from "@mui/material";
 import { useData } from "../data/data.context";
-import htmr from "htmr";
-import {decode} from "html-entities";
 import {parseHtmlDescription} from "../utils/utils";
 
 function CollabProblemSolverLeft({
