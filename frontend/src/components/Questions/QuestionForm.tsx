@@ -103,12 +103,15 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
     const words1 = description1.split(" ");
     const words2 = description2.split(" ");
 
+  
     const commonWords = words1.filter((word) => words2.includes(word));
 
-    const similarity = commonWords.length / words1.length;
+    const similarityRatio = commonWords.length / words1.length;
+    const sharedWordCount = commonWords.length;
 
-    return similarity;
+    return { similarityRatio, sharedWordCount };
   }
+
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -128,12 +131,13 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
 
     // Check for similar questions
     const similarityThreshold = 0.6; // Adjust as needed
+    const sharedWordCountThreshold = 20;
     const similarQuestions = questions.filter((existingQuestion) => {
-      const similarity = calculateSimilarity(
+      const { similarityRatio, sharedWordCount } = calculateSimilarity(
         existingQuestion.description,
         question.description
       );
-      return similarity >= similarityThreshold;
+      return similarityRatio >= similarityThreshold || sharedWordCount >= sharedWordCountThreshold;
     });
 
     if (similarQuestions.length > 0) {
@@ -144,6 +148,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
       onSubmit(question);
     }
   };
+
 
   const handleCloseDialog = () => {
     setShowSimilarQuestionsDialog(false);
