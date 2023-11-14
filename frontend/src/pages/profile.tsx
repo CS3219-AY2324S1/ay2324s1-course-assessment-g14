@@ -55,35 +55,49 @@ export default function Profile() {
       <Navbar />
       <Container sx={{ mt: 5 }}>
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={4}>
-            <Avatar sx={{ height: 192, width: 192, mb: 2 }}>R</Avatar>
-            {user && <Chip label={user.role} color="primary" />}
+          <Grid item container spacing={2}>
+            <Grid item xs={12} sm={4}>
+              <Grid container direction="column" spacing={2}>
+                <Grid item xs={12} justifyContent={"center"}>
+                  <Avatar sx={{ height: 192, width: 192, mb: 2 }}>R</Avatar>
+                </Grid>
+                <Grid item xs={12} alignItems={"center"}>
+                  {user && <Chip label={user.role} color="primary" />}
+                </Grid>
+                <Grid item xs={12}>
+                  <DeleteButtonModal />
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item xs={12} sm={8}>
+              <Box display="flex" justifyContent="flex-end" width="100%">
+                <Button
+                  variant="contained"
+                  onClick={toggleEdit}
+                  color={edit ? "success" : "primary"}
+                >
+                  {edit ? "Save Details" : "Edit Details"}
+                </Button>
+              </Box>
+              {profileFields.map((field) => (
+                <ProfileField
+                  key={field.title}
+                  title={field.title}
+                  data={field.data}
+                  edit={edit}
+                  value={value}
+                  setValue={setValue}
+                />
+              ))}
+            </Grid>
           </Grid>
-          <Grid item xs={12} sm={8}>
-            <Box display="flex" justifyContent="flex-end" width="100%">
-              <Button
-                variant="contained"
-                onClick={toggleEdit}
-                color={edit ? "success" : "primary"}
-              >
-                {edit ? "Save Details" : "Edit Details"}
-              </Button>
-            </Box>
-            {profileFields.map((field) => (
-              <ProfileField
-                key={field.title}
-                title={field.title}
-                data={field.data}
-                edit={edit}
-                value={value}
-                setValue={setValue}
-              />
-            ))}
+          <Grid item xs={12}>
+            {user?.role === "master" && <AdminUsersTable />}
+          </Grid>
+          <Grid item xs={12}>
+            {user?.role === "master" && <NormalUsersTable />}
           </Grid>
         </Grid>
-        <DeleteButtonModal />
-        {user?.role === "master" && <AdminUsersTable />}
-        {user?.role === "master" && <NormalUsersTable />}
       </Container>
     </Box>
   );
