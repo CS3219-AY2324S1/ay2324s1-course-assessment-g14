@@ -46,7 +46,7 @@ const ProblemSolverLeft = () => {
         {question.title}
       </Typography>
       <Divider sx={{ marginBottom: 2, marginTop: 5 }} />
-      <Typography variant="body1" sx={{ marginBottom: 2, fontSize: '18px', overflowX: 'auto' }}>
+      <Typography component={'span'} variant="body1" sx={{ marginBottom: 2, fontSize: '18px', overflowX: 'auto' }}>
         {parseHtmlDescription(question.description)}
       </Typography>
       <Divider sx={{ marginBottom: 10 }} />
