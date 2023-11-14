@@ -14,6 +14,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import {parseHtmlDescription, parseHtmlDescriptionWithoutExamples} from "../../utils/utils"
 
 interface QuestionFormProps {
   question?: Question;
@@ -103,13 +104,15 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
   function calculateSimilarity(description1: string, description2: string) {
     const words1 = description1.split(" ");
     const words2 = description2.split(" ");
-
+  
     const commonWords = words1.filter((word) => words2.includes(word));
-
-    const similarity = commonWords.length / words1.length;
-
-    return similarity;
+  
+    const similarityRatio = commonWords.length / words1.length;
+    const sharedWordCount = commonWords.length;
+  
+    return { similarityRatio, sharedWordCount };
   }
+
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -129,12 +132,13 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
 
     // Check for similar questions
     const similarityThreshold = 0.6; // Adjust as needed
+    const sharedWordCountThreshold = 20;
     const similarQuestions = questions.filter((existingQuestion) => {
-      const similarity = calculateSimilarity(
+      const { similarityRatio, sharedWordCount } = calculateSimilarity(
         existingQuestion.description,
         question.description
       );
-      return similarity >= similarityThreshold;
+      return similarityRatio >= similarityThreshold || sharedWordCount >= sharedWordCountThreshold;
     });
 
     if (similarQuestions.length > 0) {
@@ -378,7 +382,8 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
             <div key={similarQuestion.id}>
               <Typography variant="h6">{similarQuestion.title}</Typography>
               <Typography variant="body2">
-                {similarQuestion.description}
+              {parseHtmlDescriptionWithoutExamples(similarQuestion.description)}
+                {/* {console.logon(similarQuestion.description))} */}
               </Typography>
             </div>
           ))}

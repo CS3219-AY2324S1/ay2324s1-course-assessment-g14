@@ -20,7 +20,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useData } from "../../data/data.context";
-import {parseHtmlDescription} from "../../utils/utils"
+import {parseHtmlDescription, parseHtmlDescriptionWithoutExamples} from "../../utils/utils"
 
 interface Question {
   id: string;
@@ -203,7 +203,7 @@ const InterviewQuestionsTable: React.FC = () => {
                 <b>Difficulty:</b> {selectedQuestion.difficulty}
               </Typography>
               <Typography variant="body2" style={{ padding: "5px" }}>
-                <b>Description</b>: {parseHtmlDescription(selectedQuestion.description)}
+                <b>Description</b>: {parseHtmlDescriptionWithoutExamples(selectedQuestion.description)}
               </Typography>
             </DialogContent>
             <DialogActions>
