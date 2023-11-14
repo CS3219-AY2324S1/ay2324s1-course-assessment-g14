@@ -1,30 +1,58 @@
-# Assignment 4
-Requirements:
-- Docker
+# Assignment 3
 
-Steps:
-1. Open up your Terminal or command line
-2. Navigate to the project's base directory, where the docker-compose.yml is
-3. Run `docker-compose up --build`
-4. Wait for the containers to finish building and run
-5. Open up your Docker dashboard, the new images and containers should be visible:
-   1. frontend
-   2. api-gateway
-   3. question-service
-   4. user-service
-   5. auth-service
-6. Open your browser and go to the address `http://localhost:3000/`
-7. Login into the website using our admin account
-8. Feel free to test our Questions and User service features. For example:
-   1. Managing Questions
-      1. Click on the 'Manage Questions' button in the NavBar above
-      2. Click on 'Add Question' button
-      3. Type in a dummy question and click 'Submit'
-      4. Go back to the home page to and check that the new question is in the question table
-      5. Check the Terminal/command line/Logs in the question-service container in Docker dashboard to view the message logs
-   2. Managing User Profile
-      1. Click on the top right profile button
-      2. Select 'Profile'
-      3. Click on 'Edit Profile' button
-      4. Change any profile details, then click on 'Save'
-      5. Check the Terminal/command line/Logs in the user-service container in Docker dashboard to view the message logs
+### Features:
+
+- User authentication for accessing questions: frontend and backend.
+- Session management on page refresh, on close browser.
+- Authorization management using 3 roles: master, admin and user.
+- Master role can create and remove admins.
+- Admin role can CRUD questions.
+- User role can read questions.
+
+### Requirements:
+
+- Docker (Optional for assignment submission purposes: assuming docker not implemented since it is in assignment 4, docker only for Quality of Life purposes, all features of assignment 3 still functional)
+
+### Test accounts:
+
+1. user (can create on the sign up page)
+   - email: `test@mail.com`
+   - password: `password1`
+2. admin (can create using the master account)
+   - email: `admin@mail.com`
+   - password: `password1`
+3. master (cannot be created, only one available)
+   - email: `master@gmail.com`
+   - password: `master123`
+
+### Startup using Docker (optional, for quality of life only):
+
+1. Run Docker Daemon
+2. Open new terminal
+3. run `docker-compose up --build`
+4. Wait for docker to build
+5. Access frontend on [http://localhost:3000/](http://localhost:3000/)
+
+### Startup without Docker:
+
+1. Open new terminal
+2. run `cd QuestionService`
+3. run `npm install`
+4. run `npm run dev`
+5. Open new terminal
+6. run `cd AuthService`
+7. run `npm install`
+8. run `npm run dev`
+9. Open new terminal
+10. run `cd UserService`
+11. run `npm install`
+12. run `npm run dev`
+13. Open new terminal
+14. run `cd ApiGatewayService`
+15. run `npm install`
+16. run `npm run dev`
+17. Open new terminal
+18. run `cd frontend`
+19. run `npm install`
+20. run `npm start`
+21. Access frontend on [http://localhost:3000/](http://localhost:3000/)
