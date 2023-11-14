@@ -10,6 +10,7 @@ export function parseHtmlDescription(description: string): ReactNode {
   return htmr(decodedDescription);
   } catch (e) {
     console.log(e)
+    return description;
   }
 }
 
@@ -24,5 +25,6 @@ export function parseHtmlDescriptionWithoutExamples(description: string): ReactN
   return htmr(newDescription);
   } catch(e) {
     console.log(e)
+    return description;
   }
 }
