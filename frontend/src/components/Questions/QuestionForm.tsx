@@ -379,7 +379,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
           {similarQuestions.map((similarQuestion) => (
             <div key={similarQuestion.id}>
               <Typography variant="h6">{similarQuestion.title}</Typography>
-              <Typography variant="body2">
+              <Typography variant="body2" component="span">
                 {parseHtmlDescriptionWithoutExamples(similarQuestion.description)}
               </Typography>
             </div>
