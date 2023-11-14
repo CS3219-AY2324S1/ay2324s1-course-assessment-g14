@@ -14,7 +14,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
-import {parseHtmlDescription, parseHtmlDescriptionWithoutExamples} from "../../utils/utils"
+import {parseHtmlDescriptionWithoutExamples} from "../../utils/utils"
 
 interface QuestionFormProps {
   question?: Question;
@@ -381,7 +381,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
           {similarQuestions.map((similarQuestion) => (
             <div key={similarQuestion.id}>
               <Typography variant="h6">{similarQuestion.title}</Typography>
-              <Typography variant="body2">
+              <Typography variant="body2" component="span">
               {parseHtmlDescriptionWithoutExamples(similarQuestion.description)}
                 {/* {console.logon(similarQuestion.description))} */}
               </Typography>
