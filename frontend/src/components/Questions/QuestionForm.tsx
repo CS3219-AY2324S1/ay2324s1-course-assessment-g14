@@ -138,7 +138,8 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
         existingQuestion.description,
         question.description
       );
-      return similarityRatio >= similarityThreshold || sharedWordCount >= sharedWordCountThreshold;
+      return (similarityRatio >= similarityThreshold || sharedWordCount >= sharedWordCountThreshold)
+      && existingQuestion.id !== question.id;
     });
 
     if (similarQuestions.length > 0) {
