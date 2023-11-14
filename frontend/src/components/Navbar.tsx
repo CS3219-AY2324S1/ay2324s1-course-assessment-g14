@@ -1,78 +1,25 @@
-import { MouseEvent, useState } from "react";
+
 import {
   AppBar,
-  Avatar,
-  Box,
-  Button,
+
   Container,
-  IconButton,
-  Menu,
-  MenuItem,
+
   Toolbar,
-  Tooltip,
+
   Typography,
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import AdbIcon from "@mui/icons-material/Adb";
-import { useAuth } from "../auth/auth.context";
-import { useNavigate } from "react-router-dom";
-import { useData } from "../data/data.context";
 
-const pages = [
-  {
-    name: "Questions",
-    link: "/view-questions",
-  }
-];
-const adminPages = [
-  {
-    name: "Manage Questions",
-    link: "/manage-questions"
-  }
-];
-const authPages = [
-  {
-    name: "Login",
-    link: "/login",
-  },
-  {
-    name: "Sign Up",
-    link: "/signup",
-  },
-];
+import AdbIcon from "@mui/icons-material/Adb";
+
 
 export default function Navbar() {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
-  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
-  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
-  const handleOpenNavMenu = (event: MouseEvent<HTMLElement>) => {
-    setAnchorElNav(event.currentTarget);
-  };
 
-  const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget);
-  };
 
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
 
-  var settings = [
-    { name: "Profile", onclick: () => navigate("/profile", { replace: true }) },
-    { name: "Account", onclick: handleCloseUserMenu },
-    { name: "Dashboard", onclick: handleCloseUserMenu },
-    { name: "Logout", onclick: logout },
-  ];
-  if (user?.role == 'maintainer') {
-    settings = settings.concat({name: "Create Admin", onclick: () => navigate("/createadmin", { replace: true })})
-  }
 
+ 
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
@@ -96,7 +43,7 @@ export default function Navbar() {
             PeerPrep
           </Typography>
 
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+          {/* <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -180,9 +127,9 @@ export default function Navbar() {
                 {page.name}
               </Button>
             ))}
-          </Box>
+          </Box> */}
 
-          <Box sx={{ flexGrow: 0 }}>
+          {/* <Box sx={{ flexGrow: 0 }}>
             {!user && (
               <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
                 {authPages.map((page) => (
@@ -225,7 +172,7 @@ export default function Navbar() {
                 </MenuItem>
               ))}
             </Menu>
-          </Box>
+          </Box> */}
         </Toolbar>
       </Container>
     </AppBar>

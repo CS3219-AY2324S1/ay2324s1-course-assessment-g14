@@ -45,10 +45,10 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
     { value: "Medium", label: "Medium" },
     { value: "Hard", label: "Hard" },
   ];
-  const { questions, getQuestions, loading } = useData();
+  const { questions, getQuestions} = useData();
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [allQuestions, setAllQuestions] = useState();
+  // const [allQuestions, setAllQuestions] = useState();
   const [showSimilarQuestionsDialog, setShowSimilarQuestionsDialog] =
     useState(false);
   const [similarQuestions, setSimilarQuestions] = useState<Question[]>([]);
