@@ -14,6 +14,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import {parseHtmlDescriptionWithoutExamples} from "../../utils/utils"
 
 interface QuestionFormProps {
   question?: Question;
@@ -102,12 +103,15 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
     const words1 = description1.split(" ");
     const words2 = description2.split(" ");
 
+  
     const commonWords = words1.filter((word) => words2.includes(word));
 
-    const similarity = commonWords.length / words1.length;
+    const similarityRatio = commonWords.length / words1.length;
+    const sharedWordCount = commonWords.length;
 
-    return similarity;
+    return { similarityRatio, sharedWordCount };
   }
+
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -127,12 +131,14 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
 
     // Check for similar questions
     const similarityThreshold = 0.6; // Adjust as needed
+    const sharedWordCountThreshold = 20;
     const similarQuestions = questions.filter((existingQuestion) => {
-      const similarity = calculateSimilarity(
+      const { similarityRatio, sharedWordCount } = calculateSimilarity(
         existingQuestion.description,
         question.description
       );
-      return similarity >= similarityThreshold;
+      return (similarityRatio >= similarityThreshold || sharedWordCount >= sharedWordCountThreshold)
+        && existingQuestion.id !== question.id;
     });
 
     if (similarQuestions.length > 0) {
@@ -143,6 +149,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
       onSubmit(question);
     }
   };
+
 
   const handleCloseDialog = () => {
     setShowSimilarQuestionsDialog(false);
@@ -373,8 +380,8 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
           {similarQuestions.map((similarQuestion) => (
             <div key={similarQuestion.id}>
               <Typography variant="h6">{similarQuestion.title}</Typography>
-              <Typography variant="body2">
-                {similarQuestion.description}
+              <Typography variant="body2" component="span">
+                {parseHtmlDescriptionWithoutExamples(similarQuestion.description)}
               </Typography>
             </div>
           ))}
