@@ -8,6 +8,9 @@ import {
   CardMedia,
 } from '@mui/material';
 import { useData } from '../data/data.context';
+import parse from 'html-react-parser';
+import {decode} from "html-entities";
+import {parseHtmlDescription} from "../utils/utils";
 // import { ClosedCaptionDisabledSharp } from '@mui/icons-material';
 
 const ProblemSolverLeft = () => {
@@ -45,10 +48,8 @@ const ProblemSolverLeft = () => {
         {question.title}
       </Typography>
       <Divider sx={{ marginBottom: 2, marginTop: 5 }} />
-      <Typography variant="body1" sx={{ marginBottom: 2, fontSize: '18px' }}>
-        {question.description.split("\\n").map((s, key) => {
-          return <p key={key}>{s}</p>;
-        })}
+      <Typography variant="body1" sx={{ marginBottom: 2, fontSize: '18px', overflowX: 'auto' }}>
+        {parseHtmlDescription(question.description)}
       </Typography>
       <Divider sx={{ marginBottom: 10 }} />
       <Typography variant="h6" gutterBottom sx={{ fontSize: '18px' }}>
