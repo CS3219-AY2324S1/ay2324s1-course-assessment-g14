@@ -11,6 +11,13 @@ import { firebaseConfig } from "../firebase/firebase.config";
 
 initializeApp(firebaseConfig);
 const auth = getAuth();
+auth.onAuthStateChanged(function(user) { // Include to prevent loss of auth.currentUser upon page refresh
+  if (user) {
+    // User is signed in.
+  } else {
+    // No user is signed in.
+  }
+});
 
 interface SignupCredential {
   user: UserCredential;

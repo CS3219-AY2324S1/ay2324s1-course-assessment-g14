@@ -133,9 +133,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
   const removeAccount = useCallback(async () => {
     try {
-      if (activeUser) {
-        await deleteUser();
-      }
+      await deleteUser();
       setUser(undefined);
       setActiveUser(undefined);
       navigate("/", { replace: true });
@@ -146,7 +144,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
         setError(e.message);
       }
     }
-  }, [setUser, navigate, activeUser]);
+  }, [setUser, navigate]);
 
   const authContextProviderValue = useMemo(
     () => ({
