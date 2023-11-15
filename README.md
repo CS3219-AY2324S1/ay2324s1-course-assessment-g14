@@ -1,30 +1,42 @@
-# Assignment 4
-Requirements:
-- Docker
+<p align="center">
+   <img src="frontend/public/logo192.png" alt="PeerPrep Logo" />
+</p>
+<h1 align="center">PeerPrep</h1>
+<p align="center">PeerPrep is a technical interview preparation platform and peer matching system, where students can find peers to practice whiteboard-style interview questions together.</p>
 
-Steps:
-1. Open up your Terminal or command line
-2. Navigate to the project's base directory, where the docker-compose.yml is
-3. Run `docker-compose up --build`
-4. Wait for the containers to finish building and run
-5. Open up your Docker dashboard, the new images and containers should be visible:
-   1. frontend
-   2. api-gateway
-   3. question-service
-   4. user-service
-   5. auth-service
-6. Open your browser and go to the address `http://localhost:3000/`
-7. Login into the website using our admin account
-8. Feel free to test our Questions and User service features. For example:
-   1. Managing Questions
-      1. Click on the 'Manage Questions' button in the NavBar above
-      2. Click on 'Add Question' button
-      3. Type in a dummy question and click 'Submit'
-      4. Go back to the home page to and check that the new question is in the question table
-      5. Check the Terminal/command line/Logs in the question-service container in Docker dashboard to view the message logs
-   2. Managing User Profile
-      1. Click on the top right profile button
-      2. Select 'Profile'
-      3. Click on 'Edit Profile' button
-      4. Change any profile details, then click on 'Save'
-      5. Check the Terminal/command line/Logs in the user-service container in Docker dashboard to view the message logs
+---
+Table of Contents
+===
+- [Table of Contents] (#table-of-contents)
+  - [Introduction] (#introduction)
+  - [Project Setup] (#project-setup)
+     - [Prerequisites] (#prerequisites)
+     - [Setting up environment files] (#setting-up-env-files)
+     - [Running] (#running)
+     - [Running without Docker] (#running-without-docker)
+
+## Introduction
+This project is a full-stack application that is built on a microservices architecture. The backend is built using NodeJS with Express, and the frontend is built using React. PeerPrep is an application that helps students prepare for technical interviews by allowing users to match up with each other to practice and simulate a real interview environment.
+
+These are the following microservices that we built:
+1. API Gateway Service
+2. Auth Service
+3. Chat Service
+4. Collab Service
+5. Matching Service
+6. Question Service
+7. User Service
+
+## Project Setup
+This section will tell you how to run the application locally (either through docker-compose or without docker-compose).
+
+## Prerequisites
+1. [Docker](https://docs.docker.com/get-docker/)
+2. [docker-compose](https://docs.docker.com/compose/install/)
+
+#### Setting up environment files
+There were 2 env files uploaded to Canvas, the instructions are on the README uploaded to Canvas.
+
+#### Running
+For our production/development environment, we use `docker-compose up --build` to build and run all the services; this can be done from the root directory of the project (the same level as you would see the `docker-compose.yml` in. 
+
