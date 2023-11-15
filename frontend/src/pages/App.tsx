@@ -12,7 +12,6 @@ export default function App() {
       <Navbar />    
       <CenteredContainer>
         <Home />
-        <QuestionsTable />
       </CenteredContainer>
     </Box>
   );
