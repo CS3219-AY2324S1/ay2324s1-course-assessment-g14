@@ -1,28 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Box } from "@mui/material";
 import ButtonModal from "./MatchingService/MatchButton";
 import QuestionsTable from "./Questions/QuestionsTable";
 
 export default function Home() {
-  // Sample data for practice questions (you can replace this with actual data)
-  const practiceQuestions = [
-    { difficulty: "Easy", count: 10 },
-    { difficulty: "Medium", count: 20 },
-    { difficulty: "Hard", count: 15 },
-  ];
-  // State to hold the practice questions data
-  // const [questionsData, setQuestionsData] = useState(practiceQuestions);
-
-  // You can fetch the actual data from your API using useEffect
-
-  useEffect(() => {
-    // Fetch practice questions data from your API here and update the state
-    // Example API call:
-    // fetch('/api/practice-questions')
-    //   .then((response) => response.json())
-    //   .then((data) => setQuestionsData(data));
-  }, []);
-
   return (
     <React.Fragment>
       <Box width="80%">
